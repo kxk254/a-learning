@@ -31,3 +31,10 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('order_id','created_at','user','status','items','total_price')
+
+class ProductInfoSerializer(serializers.Serializer):
+    # get all products, cout of products, max price 
+    products = ProductSerializer(many=True)
+    count = serializers.IntegerField()
+    max_price = serializers.FloatField()
+
