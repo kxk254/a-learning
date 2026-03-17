@@ -32,7 +32,7 @@ class Order(models.Model):
 
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    create_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=10, choices=StatusChoices.choices, default=StatusChoices.PENDING
     )
@@ -45,13 +45,13 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE,related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
     @property
     def item_subtotal(self):
-        return self.prduct.price * self.quantity
+        return self.product.price * self.quantity
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} in Order {self.order.order_id}"
