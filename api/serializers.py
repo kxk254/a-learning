@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Order, OrderItem
+from .models import Order, OrderItem, Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -36,6 +36,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    order_id = serializers.UUIDField(read_only=True)
     items = OrderItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField(method_name="total")
 
