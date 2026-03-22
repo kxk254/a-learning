@@ -29,8 +29,8 @@ DELETE http://localhost:8000/products/1/ HTTP/1.1
 
 POST http://localhost:8000/products/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MDk2Nzg0LCJpYXQiOjE3NzQwOTY0ODQsImp0aSI6IjhlYzY0OGYxNGM4ZTRlYzE4MjY5OThkYzM0ZDVlNThkIiwidXNlcl9pZCI6IjIifQ.hrWzM-JlbElWbk8gd2yQaUc_f5sybnAiJgbRXV-gCAI
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MDk2NjQ1LCJpYXQiOjE3NzQwOTYzNDUsImp0aSI6ImIwMDRkZDJjZDY4ZDRjNDNhZGRlNGVhMzc3MDU5NTI2IiwidXNlcl9pZCI6IjEifQ.pEAr2W7JpTD4O63MyOmqpuX2IbHS5Z8WFpmYhZ_kiis
+Authorization: Bearer 
+
 
 {
 	"name": "Television",
