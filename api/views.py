@@ -9,7 +9,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.models import Order, Product
-from api.serializers import OrderSerializer, ProductInfoSerializer, ProductSerializer
+
+from api.serializers import (
+    OrderSerializer,
+    ProductInfoSerializer,
+    ProductSerializer,
+    OrderCreateSerializer,
+)
 
 from .filters import InStockFilterBackend, OrderFilter, ProductFilter
 
@@ -81,6 +87,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     permission_classes = [IsAuthenticated]
     pagination_class = None
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return OrderCreateSerializer
+        return super().get_serializer_class()
 
     def get_queryset(self):
         qs = super().get_queryset()
