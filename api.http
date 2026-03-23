@@ -46,8 +46,8 @@ POST http://localhost:8000/api/token/ HTTP/1.1
 Content-Type: application/json
 
 {
-"username":"yuta",
-"password":"yuta0126"
+"username":"",
+"password":""
 }
 
 
@@ -79,7 +79,7 @@ Authorization: Bearer
 ###
 POST http://localhost:8000/order/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MjY5MzAwLCJpYXQiOjE3NzQyNjkwMDAsImp0aSI6IjM3MDc3OGMyMWQ1YjQyNDlhMTFkMDIxMzZkMGRjOGUzIiwidXNlcl9pZCI6IjQifQ.KH8S9KO-9EtjjrX_GlUAcv5yCnEcIs37NFJvV3s76tw
+Authorization: Bearer 
 
 {
 	"status":"Pending",
