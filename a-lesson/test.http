@@ -1,0 +1,40 @@
+###
+
+GET http://localhost:3000/users/
+Content-Type: application/json
+
+###
+
+GET http://localhost:3000/users/2/
+Content-Type: application/json
+
+###
+
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+"name":"Dave",
+"email":"konno.kenji@gmail.com",
+"role":"ADMIN"
+}
+
+
+###
+
+PATCH http://localhost:3000/users/6
+Content-Type: application/json
+
+{
+"role":"INTERN"
+}
+
+###
+
+DELETE http://localhost:3000/users/6/
+Content-Type: application/json
+
+###
+
+GET http://localhost:3000/users?role=ENGINEER 
+Content-Type: application/json
