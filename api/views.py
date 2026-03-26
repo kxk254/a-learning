@@ -54,7 +54,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         import time
 
-        time.sleep(2)
+        time.sleep(5)
         return super().get_queryset()
 
     def get_permissions(self):
