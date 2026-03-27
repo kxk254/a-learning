@@ -1,0 +1,46 @@
+
+###
+
+GET http://192.168.11.71:3000/users/aa
+Content-Type: application/json
+
+###
+
+GET http://192.168.11.71:3000/users/
+Content-Type: application/json
+
+###
+
+GET http://192.168.11.71:3000/users/99/
+Content-Type: application/json
+
+###
+
+POST http://192.168.11.71:3000/users
+Content-Type: application/json
+
+{
+"name":"BRETT",
+"email":"konno.kenji@gmail.com",
+"role":"INTERN"
+}
+
+
+###
+
+PATCH http://192.168.11.71:3000/users/7
+Content-Type: application/json
+
+{
+"name":""
+}
+
+###
+
+DELETE http://192.168.11.71:3000/users/6/
+Content-Type: application/json
+
+###
+
+GET http://192.168.11.71:3000/users?role=ENGINEdER
+NEERContent-Type: application/json

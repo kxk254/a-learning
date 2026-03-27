@@ -26,7 +26,7 @@ PATCH http://localhost:3000/users/6
 Content-Type: application/json
 
 {
-"role":"INTERN"
+"email":"INTERN"
 }
 
 ###
