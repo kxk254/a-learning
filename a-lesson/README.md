@@ -1,182 +1,98 @@
-🔹 NestJS + PostgreSQL Tutorial (Basic Setup)
-Prerequisites
-Node.js ≥ 18
-npm or yarn
-PostgreSQL running locally (or in VM, 2 GB+ RAM is enough)
-Basic terminal and JS/TS knowledge
-1️⃣ Create a new NestJS project
-```
-npm i -g @nestjs/cli
-nest new nest-postgres-demo
-cd nest-postgres-demo
-```
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-Choose npm or yarn when prompted.
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-2️⃣ Install database dependencies
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-We’ll use TypeORM, which works well with PostgreSQL.
-```
-npm install --save @nestjs/typeorm typeorm pg
-```
-@nestjs/typeorm → NestJS integration
-typeorm → ORM
-pg → PostgreSQL driver
-3️⃣ Configure PostgreSQL connection
+## Description
 
-Edit app.module.ts:
-```
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-@Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',      // your DB user
-      password: 'postgres',      // your DB password
-      database: 'nest_demo',     // your DB name
-      entities: [User],
-      synchronize: true,         // auto-create tables (dev only)
-    }),
-    UsersModule,
-  ],
-})
-export class AppModule {}
+## Project setup
+
+```bash
+$ npm install
 ```
 
-synchronize: true is only for development/testing. Never use in production.
+## Compile and run the project
 
-4️⃣ Create a simple User entity
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
-nest g module users
-nest g service users
-nest g controller users
+
+## Run tests
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-In users/user.entity.ts:
+## Deployment
 
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
 ```
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-  @Column()
-  name: string;
+## Resources
 
-  @Column()
-  email: string;
-}
-```
-5️⃣ Set up the User Service
+Check out a few resources that may come in handy when working with NestJS:
 
-In users/users.service.ts:
-```
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-@Injectable()
-export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
-  ) {}
+## Support
 
-  create(user: Partial<User>) {
-    const newUser = this.usersRepository.create(user);
-    return this.usersRepository.save(newUser);
-  }
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-  findAll() {
-    return this.usersRepository.find();
-  }
+## Stay in touch
 
-  findOne(id: number) {
-    return this.usersRepository.findOneBy({ id });
-  }
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-  remove(id: number) {
-    return this.usersRepository.delete(id);
-  }
-}
-```
-6️⃣ Set up the User Controller
+## License
 
-In users/users.controller.ts:
-```
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { User } from './user.entity';
-
-@Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  create(@Body() user: Partial<User>) {
-    return this.usersService.create(user);
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
-  }
-}
-```
-7️⃣ Update UsersModule
-```
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { User } from './user.entity';
-
-@Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  controllers: [UsersController],
-  providers: [UsersService],
-})
-export class UsersModule {}
-```
-8️⃣ Test Your API
-
-Start the app:
-```
-npm run start:dev
-```
-Create user (POST /users)
-```
-{
-  "name": "Alice",
-  "email": "alice@example.com"
-}
-```
-Get all users (GET /users)
-Get user by id (GET /users/1)
-Delete user (DELETE /users/1)
-✅ Key Points
-NestJS structure: Controller → Service → Entity → Database
-TypeORM handles the database mapping automatically
-Server-side validation (like class-validator) can be added later
-synchronize: true creates tables automatically for dev/testing
-
-If you want, I can also make a diagram of the folder + database flow, so you can visualize NestJS → Service → Entity → Postgres, which makes this super easy to remember.
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
