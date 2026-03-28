@@ -1,17 +1,22 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
 
 @Module({
   imports: [
+	  ConfigModule.forRoot({isGlobal:true}),
     TypeOrmModule.forRot({
-      type: "postgres",
-      host: "192.168.11.71",
-      port: 5432,
-      username: "konno",
-      password: "Dev0126",
-      database: "test01",
+	    imports:[ConfigModule],
+	    inject:[ConfigSerivce],
+	    useFactory:(config:ConfigService)=>({
+      type: config.get<'postgres'>('DB_TYPE'),
+      host: config.get<string>('DB_HOST'),
+      port: config.get<number>('DB_PORT'),
+      username: config.get<string>('DB_USERNAME'),
+      password: config.get<string>('DB_PASSWORD'),
+      database: config.get<string>('DB_NAME'),
       entities: [User],
       synchronize: true,
     }),
