@@ -5,24 +5,27 @@ npm or yarn
 PostgreSQL running locally (or in VM, 2 GB+ RAM is enough)
 Basic terminal and JS/TS knowledge
 1️⃣ Create a new NestJS project
+```
 npm i -g @nestjs/cli
 nest new nest-postgres-demo
 cd nest-postgres-demo
+```
 
 Choose npm or yarn when prompted.
 
 2️⃣ Install database dependencies
 
 We’ll use TypeORM, which works well with PostgreSQL.
-
+```
 npm install --save @nestjs/typeorm typeorm pg
+```
 @nestjs/typeorm → NestJS integration
 typeorm → ORM
 pg → PostgreSQL driver
 3️⃣ Configure PostgreSQL connection
 
 Edit app.module.ts:
-
+```
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
@@ -44,16 +47,20 @@ import { User } from './users/user.entity';
   ],
 })
 export class AppModule {}
+```
 
 synchronize: true is only for development/testing. Never use in production.
 
 4️⃣ Create a simple User entity
+```
 nest g module users
 nest g service users
 nest g controller users
+```
 
 In users/user.entity.ts:
 
+```
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
@@ -67,10 +74,11 @@ export class User {
   @Column()
   email: string;
 }
+```
 5️⃣ Set up the User Service
 
 In users/users.service.ts:
-
+```
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -100,10 +108,11 @@ export class UsersService {
     return this.usersRepository.delete(id);
   }
 }
+```
 6️⃣ Set up the User Controller
 
 In users/users.controller.ts:
-
+```
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
@@ -132,7 +141,9 @@ export class UsersController {
     return this.usersService.remove(+id);
   }
 }
+```
 7️⃣ Update UsersModule
+```
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersService } from './users.service';
@@ -145,16 +156,20 @@ import { User } from './user.entity';
   providers: [UsersService],
 })
 export class UsersModule {}
+```
 8️⃣ Test Your API
 
 Start the app:
-
+```
 npm run start:dev
+```
 Create user (POST /users)
+```
 {
   "name": "Alice",
   "email": "alice@example.com"
 }
+```
 Get all users (GET /users)
 Get user by id (GET /users/1)
 Delete user (DELETE /users/1)
