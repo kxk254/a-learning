@@ -428,6 +428,22 @@ If you want, I can now combine the full tutorial into a single Markdown file wit
 
 # Second Patch
 
+✅ start project in current folder
+
+```
+npx @nestjs/cli new . 
+
+```
+install dependency 
+```
+npm install 
+```
+
+Install Prisma locally
+```
+npm install prisma @prisma/client 
+```
+
 ✅ Enter PostgrePostgreSQL
 ```
 sudo -u postgres psql
@@ -435,9 +451,11 @@ psql -h <remote_host> -p <port> -U <username> -d <database_name>
 ```
 ✅ Create database + user
 ```
-CREATE DATABASE nestdb;
+CREATE DATABASE test02;
 
 CREATE USER nestuser WITH PASSWORD 'password';
+or
+GRANT ALL PRIVILEGES ON DATABASE test02 TO konno;
 
 ALTER ROLE nestuser SET client_encoding TO 'utf8';
 ALTER ROLE nestuser SET default_transaction_isolation TO 'read committed';
@@ -592,6 +610,48 @@ export class UsersController {
   }
 }
 ```
+
+## 3️⃣ Use .env in NestJS for other settings
+
+Install NestJS ConfigModule:
+```
+npm install @nestjs/config
+```
+
+In app.module.ts:
+```
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // loads .env automatically
+  ],
+})
+export class AppModule {}
+Now you can inject ConfigService anywhere:
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class DatabaseService {
+  constructor(private config: ConfigService) {
+    const dbUrl = this.config.get<string>('DATABASE_URL');
+    console.log(dbUrl); // prints the value from .env
+  }
+}
+```
+4️⃣ Prisma Migrate / Generate using .env
+Generate Prisma client:
+```
+npx prisma generate
+```
+Run migrations:
+```
+npx prisma migrate dev --name init
+```
+Both commands will read the DATABASE_URL from .env
+
 
 🚀 1️⃣2️⃣ Run the app 
 
