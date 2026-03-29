@@ -431,6 +431,7 @@ If you want, I can now combine the full tutorial into a single Markdown file wit
 ✅ Enter PostgrePostgreSQL
 ```
 sudo -u postgres psql
+psql -h <remote_host> -p <port> -U <username> -d <database_name>
 ```
 ✅ Create database + user
 ```
