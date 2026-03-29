@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { User } from "./users/user.entity";
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -16,12 +17,13 @@ import { User } from "./users/user.entity";
         port: config.get<number>("DB_PORT"),
         username: config.get<string>("DB_USERNAME"),
         password: config.get<string>("DB_PASSWORD"),
-        database: config.get<string>("DB_NAME"),
+        database: config.get<string>("DB_DATABASE"),
         entities: [User],
         synchronize: true,
       }),
     }),
     UsersModule,
+    PostsModule,
   ],
 })
 export class AppModule {}

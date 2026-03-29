@@ -6,6 +6,7 @@ Basic knowledge of TypeScript and terminal commands
 1️⃣ Create a New NestJS Project
 ```
 npm i -g @nestjs/cli
+npm install --save-dev @nestjs/cli
 nest new nest-postgres-demo
 cd nest-postgres-demo
 ```
@@ -48,9 +49,9 @@ Note: synchronize: true is only for development/testing.
 
 4️⃣ Generate Users Module, Service, Controller
 ```
-nest g module users
-nest g service users
-nest g controller users
+npx nest g module users
+npx nest g service users
+npx nest g controller users
 ```
 5️⃣ Create a User Entity
 
@@ -274,9 +275,9 @@ export class CreatePostDto {
 ```
 🔹 Step 5: Create Post Module, Service, Controller
 ```
-nest g module posts
-nest g service posts
-nest g controller posts
+npx nest g module posts
+npx nest g service posts
+npx nest g controller posts
 ```
 posts/posts.service.ts:
 ```
