@@ -447,6 +447,7 @@ npm install prisma @prisma/client
 ✅ Enter PostgrePostgreSQL
 ```
 sudo -u postgres psql
+psql -h 192.168.11.71 -U postgres
 psql -h <remote_host> -p <port> -U <username> -d <database_name>
 ```
 ✅ Create database + user
