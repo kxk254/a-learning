@@ -1,0 +1,19 @@
+###
+
+GET http://192.168.11.71:3000/users
+
+###
+
+POST http://192.168.11.71:3000/users
+Content-Type: application/json
+
+{
+"name":"Alice",
+"email":"alice@example.com"
+}
+
+###
+GET http://192.168.11.71:3000/users/3
+
+###
+DELETE http://192.168.11.71:3000/users/4
