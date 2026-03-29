@@ -17,3 +17,15 @@ GET http://192.168.11.71:3000/users/3
 
 ###
 DELETE http://192.168.11.71:3000/users/4
+#
+#
+###
+
+POST http://192.168.11.71:3000/posts
+Content-Type: application/json
+
+{
+"userId":1,
+"content":"Hello NestJs!",
+"title":"My First Post"
+}
