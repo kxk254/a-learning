@@ -1,7 +1,7 @@
 https://www.prisma.io/docs/guides/frameworks/nestjs
 
 DATABASE_URL="postgres://konno:Dev0126@192.168.11.71:5432/test01?api_key=e"
-
+```
 tsconfig: 
 {
   "compilerOptions": {
@@ -12,6 +12,7 @@ tsconfig:
     "experimentalDecorators": true
   }
 }
+```
 
 # Second Patch
 
