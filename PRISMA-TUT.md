@@ -1,284 +1,223 @@
-https://www.prisma.io/docs/guides/frameworks/nestjs
 
 DATABASE_URL="postgres://konno:Dev0126@192.168.11.71:5432/test01?api_key=e"
+
+
+NestJS + Drizzle ORM Tutorial
+1. Initialize the NestJS Project
+# Create a new NestJS project
 ```
-tsconfig: 
-{
-  "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "target": "ES2021",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  }
-}
+nest new a-lesson
+cd a-lesson
 ```
 
-# Second Patch
+Choose npm or yarn as you prefer. We'll assume npm.
 
-✅ start project in current folder
+2. Install Dependencies
+Runtime dependencies
+```
+npm i drizzle-orm pg dotenv
+```
+Dev dependencies
+```
+npm i -D drizzle-kit tsx @types/pg
+```
+drizzle-orm → ORM for TypeScript
+pg → PostgreSQL driver
+dotenv → Load .env
+drizzle-kit → CLI for migrations
+tsx → Run TypeScript files without compiling
+@types/pg → TypeScript types for pg
+3. Configure Environment
+
+Create a .env file at the root:
 
 ```
-npx @nestjs/cli new . 
-
-```
-install dependency 
-```
-npm install 
-```
-
-Install Prisma locally
-```
-npm install prisma @prisma/client 
-```
-
-✅ Enter PostgrePostgreSQL
-```
-sudo -u postgres psql
-psql -h 192.168.11.71 -U postgres
-psql -h <remote_host> -p <port> -U <username> -d <database_name>
-```
-✅ Create database + user
-```
-CREATE DATABASE test02;
-
-CREATE USER nestuser WITH PASSWORD 'password';
-or
-GRANT ALL PRIVILEGES ON DATABASE test02 TO konno;
-
-ALTER ROLE nestuser SET client_encoding TO 'utf8';
-ALTER ROLE nestuser SET default_transaction_isolation TO 'read committed';
-ALTER ROLE nestuser SET timezone TO 'UTC';
-
-GRANT ALL PRIVILEGES ON DATABASE nestdb TO nestuser;
-```
-🧪 2️⃣ Test DB connection
-```
-psql -U nestuser -d nestdb -h localhost -W
+DATABASE_URL="postgres://username:password@localhost:5432/test01"
 ```
 
-🚀 3️⃣ Create NestJS project
+Replace username, password, and database name.
+
+4. Create Drizzle Configuration
+
+At root, create drizzle.config.ts:
 ```
-npx @nestjs/cli new nest-prisma-app
-cd nest-prisma-app
+import { defineConfig } from "drizzle-kit";
+
+export default defineConfig({
+  schema: "./src/db/schema.ts",
+  out: "./drizzle/migrations",
+  driver: "pg",
+  dbCredentials: process.env.DATABASE_URL!,
+});
+```
+schema.ts → define tables
+migrations → store generated migration files
+5. Define Schema
+
+Create src/db/schema.ts:
+```
+import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 50 }).notNull(),
+  email: varchar("email", { length: 100 }).notNull(),
+});
+
+export const posts = pgTable("posts", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 200 }).notNull(),
+  content: text("content"),
+  authorId: serial("author_id").references(() => users.id),
+});
 ```
 
-📦 4️⃣ Install Prisma
-```
-npm install prisma @prisma/client
-npx prisma init
-```
+Drizzle uses code-first tables in TypeScript.
 
-⚙️ 5️⃣ Configure database connection
+6. Generate Database Migrations
 ```
-DATABASE_URL="postgresql://nestuser:password@localhost:5432/nestdb"
+npx drizzle-kit generate
 ```
+Creates migration files in drizzle/migrations
+Apply migrations:
+```
+npx drizzle-kit migrate
+```
+This will create users and posts tables in your PostgreSQL database.
+7. Create Prisma Service Equivalent
 
-🧬 6️⃣ Define your schema
-```
-generator client {
-  provider = "prisma-client-js"
-}
+NestJS prefers dependency injection. Create src/db/drizzle.service.ts:
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String  @unique
-}
 ```
-
-🛠️ 7️⃣ Run migration (VERY IMPORTANT)
-```
-npx prisma migrate dev --name init
-```
-
-🔍 Optional: Open DB UI
-```
-npx prisma studio
-```
-
-🧩 8️⃣ Integrate Prisma into NestJS
-```
-npx nest g module prisma
-npx nest g service prisma 
-```
-
-### prisma.service.ts
-```
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable } from "@nestjs/common";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/pg";
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
-  async onModuleInit() {
-    await this.$connect();
+export class DrizzleService {
+  db;
+
+  constructor() {
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+    });
+
+    this.db = drizzle(pool);
   }
 }
 ```
-### prisma.module.ts 
-```
-import { Global, Module } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+DrizzleService now provides access to your database.
+this.db will be used in repositories/services.
+8. Create User Service
 
-@Global()
-@Module({
-  providers: [PrismaService],
-  exports: [PrismaService],
-})
-export class PrismaModule {}
+src/user/user.service.ts:
 ```
-
-👤 9️⃣ Create Users Module 
-```
-npx nest g module users
-npx nest g controller users
-npx nest g service users  
-```
-
-⚙️ 🔟 Users Service (Prisma logic) 
-```
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { DrizzleService } from "../db/drizzle.service";
+import { users } from "../db/schema";
 
 @Injectable()
-export class UsersService {
-  constructor(private prisma: PrismaService) {}
+export class UserService {
+  constructor(private readonly drizzle: DrizzleService) {}
 
-  create(data: { name: string; email: string }) {
-    return this.prisma.user.create({ data });
+  async createUser(name: string, email: string) {
+    return this.drizzle.db.insert(users).values({ name, email }).returning();
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async getUserById(id: number) {
+    return this.drizzle.db.select().from(users).where(users.id.eq(id));
   }
 
-  findOne(id: number) {
-    return this.prisma.user.findUnique({ where: { id } });
-  }
-
-  remove(id: number) {
-    return this.prisma.user.delete({ where: { id } });
+  async getAllUsers() {
+    return this.drizzle.db.select().from(users);
   }
 }
 ```
+9. Create User Controller
 
-
-🌐 1️⃣1️⃣ Users controller
-
+src/user/user.controller.ts:
 ```
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
 
-@Controller('users')
-export class UsersController {
-  constructor(private service: UsersService) {}
+import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { UserService } from "./user.service";
+
+@Controller("users")
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() body: any) {
-    return this.service.create(body);
+  async createUser(@Body() body: { name: string; email: string }) {
+    return this.userService.createUser(body.name, body.email);
+  }
+
+  @Get(":id")
+  async getUser(@Param("id") id: string) {
+    return this.userService.getUserById(Number(id));
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(Number(id));
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(Number(id));
+  async getUsers() {
+    return this.userService.getAllUsers();
   }
 }
 ```
+10. Update App Module
 
-## 3️⃣ Use .env in NestJS for other settings
-
-Install NestJS ConfigModule:
+src/app.module.ts:
 ```
-npm install @nestjs/config
-```
-
-In app.module.ts:
-```
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from "@nestjs/common";
+import { DrizzleService } from "./db/drizzle.service";
+import { UserService } from "./user/user.service";
+import { UserController } from "./user/user.controller";
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }), // loads .env automatically
-  ],
+  imports: [],
+  controllers: [UserController],
+  providers: [DrizzleService, UserService],
 })
 export class AppModule {}
-Now you can inject ConfigService anywhere:
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-
-@Injectable()
-export class DatabaseService {
-  constructor(private config: ConfigService) {
-    const dbUrl = this.config.get<string>('DATABASE_URL');
-    console.log(dbUrl); // prints the value from .env
-  }
-}
 ```
-4️⃣ Prisma Migrate / Generate using .env
-Generate Prisma client:
-```
-npx prisma generate
-```
-Run migrations:
-```
-npx prisma migrate dev --name init
-```
-Both commands will read the DATABASE_URL from .env
-
-
-🚀 1️⃣2️⃣ Run the app 
-
+11. Run the App
 ```
 npm run start:dev
 ```
+POST /users → create user
+GET /users → list users
+GET /users/:id → get user by ID
 
-🧪 1️⃣3️⃣ Test API 
+✅ Advantages of this setup:
 
+Type-safe database with Drizzle
+NestJS-friendly DI structure
+Fully TypeScript-first, no ESM/JS imports issues
+Lightweight and easier to debug than Prisma in some setups
+
+
+# Validation
+
+1. Install Validation Packages
 ```
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-  "name": "Alice",
-  "email": "alice@example.com"
-}
+npm i class-validator class-transformer
 ```
+class-validator → rules for validation (e.g., @IsEmail())
+class-transformer → transforms plain objects to class instances, required for validation to work
+2. Enable Global Validation Pipe
 
-🧱 1️⃣ Install validation packages
-
-```
-npm install class-validator class-transformer
-```
-
-⚙️ 2️⃣ Enable global validation (VERY IMPORTANT)
-### Edit main.ts:
+In src/main.ts:
 ```
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Enable validation globally
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove unknown fields
-      forbidNonWhitelisted: true, // throw error if extra fields
-      transform: true, // auto transform types
+      whitelist: true, // strip unknown properties
+      forbidNonWhitelisted: true, // throw error if unknown prop
+      transform: true, // auto-transform payloads to DTO classes
     }),
   );
 
@@ -286,67 +225,97 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+whitelist + forbidNonWhitelisted ensures only the fields defined in DTOs are accepted.
 
-📦 3️⃣ Create DTO
+3. Create a DTO (Data Transfer Object)
 
-Create file:
+Example: src/user/dto/create-user.dto.ts
 ```
-src/users/dto/create-user.dto.ts
-
-```
-
-### DTO CODE 
-```
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
+  @Length(2, 50)
   name: string;
 
   @IsEmail()
   email: string;
-
-  @MinLength(6)
-  password: string;
 }
 ```
-⚙️ 4️⃣ Update Prisma schema
+@IsNotEmpty() → field must not be empty
+@Length(min, max) → string length limit
+@IsEmail() → must be a valid email
+4. Use DTO in Controller
 
-### Add password field:
+src/user/user.controller.ts:
 ```
-model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-}
-```
-
-### Run Migration 
-```
-npx prisma migrate dev --name add-password
-```
-
-🔧 5️⃣ Update Service 
-```
-create(data: CreateUserDto) {
-  return this.prisma.user.create({ data });
-}
-```
-🌐 6️⃣ Update Controller
-```
+import { Body, Controller, Post } from '@nestjs/common';
+import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
-@Post()
-create(@Body() body: CreateUserDto) {
-  return this.service.create(body);
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Post()
+  async createUser(@Body() body: CreateUserDto) {
+    return this.userService.createUser(body.name, body.email);
+  }
 }
 ```
+Nest automatically validates the body against the CreateUserDto.
+If validation fails, it returns 400 Bad Request with detailed error messages.
+5. Advanced Validation Options
+Custom Validators:
+```
+import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
+@ValidatorConstraint({ async: false })
+export class IsCompanyEmailConstraint implements ValidatorConstraintInterface {
+  validate(email: string) {
+    return email.endsWith('@company.com');
+  }
+}
 
+export function IsCompanyEmail(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: IsCompanyEmailConstraint,
+    });
+  };
+}
+```
+Use in DTO:
+```
+@IsCompanyEmail({ message: 'Email must be a company email' })
+email: string;
+```
+Nested Validation:
+```
+export class AddressDto {
+  @IsNotEmpty()
+  street: string;
 
+  @IsNotEmpty()
+  city: string;
+}
 
+export class UserWithAddressDto {
+  @IsNotEmpty()
+  name: string;
 
-
-
-
+  @ValidateNested()
+  @Type(() => AddressDto)
+  address: AddressDto;
+}
+```
+✅ Summary
+Install class-validator and class-transformer.
+Enable ValidationPipe globally.
+Define DTOs with decorators (@IsNotEmpty(), @IsEmail(), etc.).
+Use DTOs in controller @Body().
+Can add custom validators and nested DTOs.
