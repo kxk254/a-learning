@@ -1,5 +1,5 @@
 {
-  "id": "6641a5dd-35b1-47f4-b3b1-2b33df1fc460",
+  "id": "66593ba8-318e-451d-88ae-416018c56a2c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -30,7 +30,7 @@
           "name": "author_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -45,7 +45,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "CASCADE",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -73,7 +73,7 @@
         },
         "email": {
           "name": "email",
-          "type": "varchar(100)",
+          "type": "varchar(200)",
           "primaryKey": false,
           "notNull": true
         }

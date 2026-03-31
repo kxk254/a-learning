@@ -78,7 +78,7 @@ export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 200 }).notNull(),
   content: text("content"),
-  authorId: integer("author_id").references(() => users.id,{onDelete'CASCADE'}).notNull().
+  authorId: integer("author_id").references(() => users.id,{onDelete:'CASCADE'}).notNull().
 });
 ```
 
