@@ -41,13 +41,14 @@ Replace username, password, and database name.
 
 At root, create drizzle.config.ts:
 ```
+import 'dotenv/config';
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
   schema: "./src/db/schema.ts",
   out: "./drizzle/migrations",
-  driver: "pg",
-  dbCredentials: process.env.DATABASE_URL!,
+  dialect: 'postgresql',
+  dbCredentials: {url: process.env.DATABASE_URL!},
 });
 ```
 schema.ts → define tables
