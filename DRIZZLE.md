@@ -6,6 +6,8 @@ NestJS + Drizzle ORM Tutorial
 1. Initialize the NestJS Project
 # Create a new NestJS project
 ```
+npx nest new .
+npm install @nestjs/cli --save-dev
 nest new a-lesson
 cd a-lesson
 ```
