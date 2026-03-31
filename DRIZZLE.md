@@ -78,8 +78,33 @@ export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 200 }).notNull(),
   content: text("content"),
-  authorId: integer("author_id").references(() => users.id).notNull().onDelete('CASCADE'),
+  authorId: integer("author_id").references(() => users.id,{onDelete'CASCADE'}).notNull().
 });
+```
+
+Create src/db/db.module.ts 
+
+```
+import { Module, Global } from '@nestjs/common';
+import { Pool } from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import 'dotenv/config';
+import { users } from './schema';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+export const db = drizzle(pool);
+
+@Global()
+@Module({
+  providers: [{ provide: 'DB', useValue: db }],
+  exports: ['DB'],
+})
+export class DbModule {}
+
+
 ```
 
 Drizzle uses code-first tables in TypeScript.
@@ -126,21 +151,22 @@ import { Injectable } from "@nestjs/common";
 import { DrizzleService } from "../db/drizzle.service";
 import { users } from "../db/schema";
 import { eq } from 'drizzle-orm';
+import { db } from '../db/db.module'
 
 @Injectable()
 export class UserService {
   constructor(private readonly drizzle: DrizzleService) {}
 
   async createUser(name: string, email: string) {
-    return this.drizzle.db.insert(users).values({ name, email }).returning();
+    return db.insert(users).values({ name, email }).returning();
   }
 
   async getUserById(id: number) {
-    return this.drizzle.db.select().from(users).where(eq(users.id, id));
+    return db.select().from(users).where(eq(users.id, id));
   }
 
   async getAllUsers() {
-    return this.drizzle.db.select().from(users);
+    return db.select().from(users);
   }
 }
 ```

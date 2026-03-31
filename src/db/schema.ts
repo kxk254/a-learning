@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, integer } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -6,12 +6,11 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 100 }).notNull(),
 });
 
-export const posts = pgTables('posts', {
+export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 200 }).notNull(),
   content: text('content'),
-  authorId: integer('author?id')
-    .references(() => user.id)
-    .notNull()
-    .onDelete('CASCADE'),
+  authorId: integer('author_id')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
 });
