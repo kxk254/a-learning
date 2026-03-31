@@ -12,6 +12,13 @@ nest new a-lesson
 cd a-lesson
 ```
 
+```
+npx nest generate application app 
+npx nest generate module users
+npx nest generate controller users
+npx nest generate service users 
+```
+
 Choose npm or yarn as you prefer. We'll assume npm.
 
 2. Install Dependencies
