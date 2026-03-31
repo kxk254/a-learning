@@ -92,7 +92,7 @@ NestJS prefers dependency injection. Create src/db/drizzle.service.ts:
 ```
 import { Injectable } from "@nestjs/common";
 import { Pool } from "pg";
-import { drizzle } from "drizzle-orm/pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 @Injectable()
 export class DrizzleService {
@@ -116,6 +116,7 @@ src/user/user.service.ts:
 import { Injectable } from "@nestjs/common";
 import { DrizzleService } from "../db/drizzle.service";
 import { users } from "../db/schema";
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class UserService {
@@ -126,7 +127,7 @@ export class UserService {
   }
 
   async getUserById(id: number) {
-    return this.drizzle.db.select().from(users).where(users.id.eq(id));
+    return this.drizzle.db.select().from(users).where(eq(users.id, id));
   }
 
   async getAllUsers() {
