@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, integer } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -10,5 +10,7 @@ export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 200 }).notNull(),
   content: text('content'),
-  authorId: serial('author_id').references(() => users.id),
+  authorId: integer('author_id')
+    .notNull()
+    .references(() => users.id),
 });
