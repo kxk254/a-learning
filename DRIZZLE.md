@@ -109,6 +109,34 @@ export class DbModule {}
 
 ```
 
+- 5-2. Alternative way to connect db 
+
+```
+// db.ts
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
+
+// Create a single pool instance
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+// Create a single Drizzle ORM client
+export const db = drizzle(pool);
+
+```
+- inject into service
+```
+// drizzle.service.ts
+import { Injectable } from "@nestjs/common";
+import { db } from "./db";
+
+@Injectable()
+export class DrizzleService {
+  public readonly db = db; // reuse singleton instance
+}
+```
+
 Drizzle uses code-first tables in TypeScript.
 
 6. Generate Database Migrations
