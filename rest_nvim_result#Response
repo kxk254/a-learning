@@ -1,7 +1,0 @@
-### test#11
-GET http://localhost:3000/user
-HTTP/1.1 200 OK
-
-# @_RES
-[{"id":4,"name":"Alice","age":40,"email":"daliceexample.com"},{"id":5,"name":"Alice","age":40,"email":"ealiceexample.com"},{"id":7,"name":"Alice","age":40,"email":"faliceexample.com"},{"id":1,"name":"Tom","age":40,"email":"testfaliceexample.com"},{"id":11,"name":"Tom","age":40,"email":"teStfalic@eeXample.com"}]
-# @_END
