@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
 "name":"Alice",
-"email":"faliceexample.com",
+"email":"fali@:wceexampleceexle.com",
 "age":40
 }
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 GET http://192.168.11.71:3000/user/1
 
 ###
-DELETE http://192.168.11.71:3000/users/4
+DELETE http://localhost:3000/user/10
 #
 #
 ###
@@ -29,4 +29,16 @@ Content-Type: application/json
 "userId":1,
 "content":"Hello NestJs!",
 "title":"My First Post"
+}
+
+###
+
+PATCH http://192.168.11.71:3000/user/1
+Content-Type: application/json
+
+{
+"id":1,
+"name":"Tom",
+"email":"testfaliceexample.com",
+"age":40
 }
