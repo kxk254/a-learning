@@ -8,8 +8,8 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-"name":"AliceA",
-"email":"falidkdk@:wceexampleceexle.com",
+"name":"",
+"email":"faliwceexampleceexle",
 "age":40
 }
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 GET http://192.168.11.71:3000/user/1
 
 ###
-DELETE http://localhost:3000/user/10
+DELETE http://localhost:3000/user/15
 #
 #
 ###

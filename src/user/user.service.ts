@@ -25,8 +25,10 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const { id: _, ...data } = updateUserDto;
-    const upDate = await db.update(users).set(data).where(eq(users.id, id));
+    const upDate = await db
+      .update(users)
+      .set(updateUserDto)
+      .where(eq(users.id, id));
     return upDate;
   }
 
