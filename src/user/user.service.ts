@@ -10,8 +10,8 @@ import { eq } from 'drizzle-orm';
 export class UserService {
   constructor(private drizzleService: DrizzleService) {}
 
-  async create(name: string, age: number, email: string) {
-    return db.insert(users).values({ name, age, email }).returning();
+  async create(createUserDto: CreateUserDto) {
+    return db.insert(users).values(createUserDto).returning();
   }
 
   async findAll() {
@@ -24,10 +24,10 @@ export class UserService {
     return oneUser;
   }
 
-  async update(id: number, name: string, age: number, email: string) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     const upDate = await db
       .update(users)
-      .set({ name: name, age: age, email: email })
+      .set(updateUserDto)
       .where(eq(users.id, id));
     return upDate;
   }
