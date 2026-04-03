@@ -42,3 +42,13 @@ Content-Type: application/json
 "email":"teStfalic@eeXample.com",
 "age":40
 }
+
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+"username":"john",
+"password":"changeme"
+}
