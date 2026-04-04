@@ -1,0 +1,7 @@
+### test#3
+POST http://localhost:3000/auth/login
+HTTP/1.1 401 Unauthorized
+
+# @_RES
+{"message":"Unauthorized","statusCode":401}
+# @_END
