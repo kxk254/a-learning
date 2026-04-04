@@ -9,6 +9,6 @@ export class UsersService {
     { userId: 2, username: 'maria', password: 'pass' },
   ];
   async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.name === username);
+    return this.users.find((user) => user.username === username);
   }
 }
