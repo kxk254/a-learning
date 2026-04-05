@@ -1,0 +1,13 @@
+###
+
+GET http://localhost:3000/cats
+
+###
+
+POST http://localhost:3000/cats
+
+{
+"name":"tess",
+"age":20,
+"breed":"black hair"
+}
