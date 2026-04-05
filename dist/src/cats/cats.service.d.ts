@@ -1,6 +1,6 @@
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { DatabaseService } from '../db/index';
+import { DatabaseService } from '../db/db.service';
 export declare class CatsService {
     private readonly databaseService;
     constructor(databaseService: DatabaseService);
@@ -68,7 +68,7 @@ export declare class CatsService {
                 columnType: "PgVarchar";
                 data: string;
                 driverParam: string;
-                notNull: true;
+                notNull: false;
                 hasDefault: false;
                 isPrimaryKey: false;
                 isAutoincrement: false;
@@ -144,7 +144,7 @@ export declare class CatsService {
             columnType: "PgVarchar";
             data: string;
             driverParam: string;
-            notNull: true;
+            notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
@@ -160,7 +160,7 @@ export declare class CatsService {
         id: number;
         name: string;
         age: number;
-        breed: string;
+        breed: string | null;
     }[], {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
@@ -222,7 +222,7 @@ export declare class CatsService {
             columnType: "PgVarchar";
             data: string;
             driverParam: string;
-            notNull: true;
+            notNull: false;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;

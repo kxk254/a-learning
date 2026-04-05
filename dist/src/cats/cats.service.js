@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CatsService = void 0;
 const common_1 = require("@nestjs/common");
-const index_1 = require("../db/index");
+const db_service_1 = require("../db/db.service");
 const schema_1 = require("../db/schema");
 let CatsService = class CatsService {
     databaseService;
@@ -37,6 +37,6 @@ let CatsService = class CatsService {
 exports.CatsService = CatsService;
 exports.CatsService = CatsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [index_1.DatabaseService])
+    __metadata("design:paramtypes", [db_service_1.DatabaseService])
 ], CatsService);
 //# sourceMappingURL=cats.service.js.map

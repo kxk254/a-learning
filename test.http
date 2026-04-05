@@ -7,7 +7,26 @@ GET http://localhost:3000/cats
 POST http://localhost:3000/cats
 
 {
-"name":"tess",
-"age":20,
-"breed":"black hair"
+"name":"cats",
+"age":30,
+"breed":"white hair"
 }
+
+### 
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+"username":"john",
+"password":"pass"
+}
+
+### 
+
+GET http://localhost:3000/auth/profile
+Content-Type: application/json
+
+### 
+GET http://localhost:3000/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiam9obiIsImlhdCI6MTc3NTM5NDQ3MiwiZXhwIjoxNzc1Mzk0NTMyfQ.cDmwNwWo-Bc9pz_Ns4uo4PuNqB2kWGIRgJcLmPpxjvI

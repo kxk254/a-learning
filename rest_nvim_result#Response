@@ -1,0 +1,7 @@
+### test#16
+GET http://localhost:3000/auth/profile
+HTTP/1.1 200 OK
+
+# @_RES
+{"sub":1,"username":"john","iat":1775394472,"exp":1775394532}
+# @_END
