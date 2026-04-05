@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { DatabaseService } from '../db/index';
+import { cats } from '../db/schema';
 
 @Injectable()
 export class CatsService {
+  constructor(private readonly databaseService: DatabaseService) {}
   create(createCatDto: CreateCatDto) {
-    return 'This action adds a new cat';
+    return this.databaseService.db.insert(cats).values(createCatDto);
   }
 
   findAll() {
-    return `This action returns all cats`;
+    return this.databaseService.db.select().from(cats);
   }
 
   findOne(id: number) {
