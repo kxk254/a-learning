@@ -8,11 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
-const index_1 = require("./index");
+const db_service_1 = require("./db.service");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
 exports.DatabaseModule = DatabaseModule = __decorate([
-    (0, common_1.Module)({ providers: [index_1.DatabaseService], exports: [index_1.DatabaseService] })
+    (0, common_1.Module)({
+        exports: [db_service_1.DatabaseService],
+        providers: [db_service_1.DatabaseService],
+    })
 ], DatabaseModule);
 //# sourceMappingURL=db.module.js.map
