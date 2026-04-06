@@ -4,6 +4,19 @@ GET http://localhost:3000/cats
 
 ###
 
+GET http://localhost:3000/cats/1
+###
+
+PATCH http://localhost:3000/cats/1
+
+{
+"id":1,
+"name":"cats",
+"age":30,
+"breed":"white hair"
+}
+
+###
 POST http://localhost:3000/cats
 
 {
