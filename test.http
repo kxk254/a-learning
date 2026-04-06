@@ -31,7 +31,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-"username":"john",
+"username":"jane",
 "password":"pass"
 }
 
@@ -43,3 +43,12 @@ Content-Type: application/json
 ### 
 GET http://localhost:3000/auth/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiam9obiIsImlhdCI6MTc3NTM5NDQ3MiwiZXhwIjoxNzc1Mzk0NTMyfQ.cDmwNwWo-Bc9pz_Ns4uo4PuNqB2kWGIRgJcLmPpxjvI
+
+###
+POST http://localhost:3000/cats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoiamFuZSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc3NTQ3NDczOCwiZXhwIjoxNzc1NDc0Nzk4fQ.ZZUTfUYiBgXd4F7hHXeYVNGhDEEFh6M9cwCOPzQvJNU
+
+{
+"name":"cats",
+"age":30,
+"breed":"white hair"}
