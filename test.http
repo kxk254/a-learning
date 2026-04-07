@@ -55,5 +55,9 @@ Authorization: Bearer
 
 ### 
 DELETE http://localhost:3000/cats/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoibWFyaWEiLCJyb2xlcyI6WyJ1c2VyIl0sImlhdCI6MTc3NTQ4MTk2OCwiZXhwIjoxNzc1NDgyMDI4fQ.XWOOZlMIIp-sNqGX7BCyBssaR9i92ZpcHgC99cHXL7I
+Authorization: Bearer 
 
+###
+
+GET http://localhost:3000/cats
+Authorization: Bearer 
