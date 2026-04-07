@@ -33,11 +33,11 @@ export class AuthGuard implements CanActivate {
     }
 
     // Step 2: check roles
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const roles = this.reflector.get<string[]>('roles', data.getHandler());
     // if no roles are determined
     if (!roles || roles.length === 0) return true;
     const userRoles = request.user.roles ?? [];
-    const hasRole = roles.come((role) => userRoles.includes(role));
+    const hasRole = roles.some((role) => userRoles.includes(role));
     if (!hasRole) throw new UnauthorizedException();
 
     //Step 3: final authorization to return true
