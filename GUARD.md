@@ -180,7 +180,7 @@ If you want, I can tailor this to your **current sample code** by showing the ex
 
 
 # SAMPLE CODE 
-```
+```ts
 import {
   CanActivate,
   ExecutionContext,
