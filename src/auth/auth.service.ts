@@ -18,7 +18,6 @@ export class AuthService {
     const p = {
       sub: user.id,
       username: user.username,
-      password: user.password,
       roles: user.roles,
     };
     return { access_token: await this.jwtService.signAsync(p) };
