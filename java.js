@@ -11,13 +11,24 @@ const tok = await fetch('http://localhost:3000/auth/login', {
 const token = await tok.json();
 console.log(token.access_token);
 
-const res = await fetch('http://localhost:3000/cats/1', {
+const get = await fetch('http://localhost:3000/cats/1', {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token.access_token}`,
   },
 });
 
-const response = await res.json();
+const response = await get.text();
+console.log(response);
+
+const get = await fetch('http://localhost:3000/cats/1', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token.access_token}`,
+  },
+});
+
+const response = await get.text();
 console.log(response);
