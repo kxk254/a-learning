@@ -1,0 +1,12 @@
+import Image from "next/image";
+
+export default function Home() {
+  function handleClick() {
+    console.log("clicked!");
+  }
+  return (
+    <>
+      <button onClick={handleClick}>Click here</button>
+    </>
+  );
+}
