@@ -1,12 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { Role } from '../auth/role.enum';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/auth.decorator';
 
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
+  @Roles(Role.Admin)
   @Post()
   create(@Body() createCatDto: CreateCatDto) {
     return this.catsService.create(createCatDto);
