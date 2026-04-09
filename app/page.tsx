@@ -1,23 +1,21 @@
 "use client";
 import { useState } from "react";
 
-function Square({ value, onClick }) {
-  return <button onClick={onClick}>{value}</button>;
-}
+export default function MyInput() {
+  const [text, setText] = useState(true);
 
-export default function Home() {
-  const [squres, setSqures] = useState(Array(3).fill(null));
-
-  function handleClick() {
-    const nextSqure = squres.slice();
-    nextSqure[0] = "X";
-    setSqures(nextSqure);
+  function handleChange(e) {
+    setText(e.target.checked);
+    console.log(e.target);
   }
+
   return (
     <>
-      <Square value={squres[0]} onClick={handleClick} />
-      <Square value={squres[1]} onClick={handleClick} />
-      <Square value={squres[2]} onClick={handleClick} />
+      <label>
+        <input type="checkbox" checked={text} onChange={handleChange} />I like
+        this
+      </label>
+      <p>You {text ? "liked" : "did not like"} this.</p>
     </>
   );
 }
