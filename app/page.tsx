@@ -1,21 +1,30 @@
 "use client";
 import { useState } from "react";
 
-export default function MyInput() {
-  const [text, setText] = useState(true);
+export default function MyApp() {
+  const [count, setCount] = useState([0, 0]);
+  return (
+    <div>
+      <h1>Counter</h1>
+      <MyButton count={count[0]} onclick={() => handleClick(0)} />
+      <MyButton count={count[1]} onclick={() => handleClick(1)} />
 
-  function handleChange(e) {
-    setText(e.target.checked);
-    console.log(e.target);
+      <ResetButton onReset={handleReset} />
+    </div>
+  );
+}
+
+function MyButton({ count, onClick }) {
+  function handleClick() {
+    setCount(count + 1);
   }
 
-  return (
-    <>
-      <label>
-        <input type="checkbox" checked={text} onChange={handleChange} />I like
-        this
-      </label>
-      <p>You {text ? "liked" : "did not like"} this.</p>
-    </>
-  );
+  return <button onClick={handleClick}>Clicked {count} times</button>;
+}
+
+function ResetButton({ setCount }) {
+  function handleReset() {
+    setCount(0);
+  }
+  return <button onClick={handleReset}>Reset</button>;
 }
