@@ -1,20 +1,26 @@
 "use client";
 import { useState } from "react";
 
-export default function MyCheckbox() {
-  const [liked, setLiked] = useState(true);
+export default function Form() {
+  const [name, setName] = useState("name");
+  const [age, setAge] = useState(40);
 
-  function handleChange(e) {
-    setLiked(e.target.checked);
+  function handleAge() {
+    base();
+    base();
+    base();
   }
 
+  function base() {
+    setAge((age) => age + 1);
+  }
   return (
     <>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      <button onClick={handleAge}>Age Plus</button>
       <p>
-        <input type="checkbox" checked={liked} onChange={handleChange} />I Liked
-        this
+        Hello, {name}. you are {age} yrs old.
       </p>
-      <p>You {liked ? "liked" : "did not like"}this.</p>
     </>
   );
 }
