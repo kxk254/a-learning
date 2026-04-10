@@ -2,24 +2,43 @@
 import { useState } from "react";
 
 export default function Form() {
-  const [name, setName] = useState("name");
-  const [age, setAge] = useState(40);
+  const [form, setForm] = useState({
+    firstName: "Barbara",
+    lastName: "Hepworth",
+    email: "bhepworth@sculpture.con",
+  });
 
-  function handleAge() {
-    base();
-    base();
-    base();
-  }
-
-  function base() {
-    setAge((age) => age + 1);
-  }
   return (
     <>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
-      <button onClick={handleAge}>Age Plus</button>
+      <label>
+        First Name:
+        <input
+          value={form.firstName}
+          onChange={(e) => {
+            setForm({ ...form, firstName: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Last Name:
+        <input
+          value={form.lastName}
+          onChange={(e) => {
+            setForm({ ...form, lastName: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Email:
+        <input
+          value={form.email}
+          onChange={(e) => {
+            setForm({ ...form, email: e.target.value });
+          }}
+        />
+      </label>
       <p>
-        Hello, {name}. you are {age} yrs old.
+        {form.firstName} {form.lastName} ({form.email})
       </p>
     </>
   );
