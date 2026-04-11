@@ -16,25 +16,24 @@ const initialTodos = [
 export default function TaskApp() {
   const [todos, setTodos] = useState(initialTodos);
 
-  function handleAddTodo(title) {
-    const newTodo = { id: nextId++, title: title, done: false };
-    setTodos([...todos, newTodo]);
-    alert(`ID:${newTodo.id}, Title:${newTodo.title}, done:${newTodo.done}`);
+  function handleAddTodo(addTitle) {
+    setTodos([...todos, { id: nextId++, title: addTitle, done: false }]);
   }
 
-  function handleChangeTodo(chg) {
+  function handleEditTodo(editTitle) {
     setTodos(
-      todos.map((t) => {
-        if (t.id === chg.id) {
-          return chg;
+      todos.map((e) => {
+        if (e.id === editTitle.id) {
+          return editTitle;
         } else {
-          return t;
+          return e;
         }
       }),
     );
   }
-  function handleDeleteTodo(del) {
-    setTodos(todos.filter((t) => t.id !== del));
+
+  function handleDeleteTodo(deleteId) {
+    setTodos(todos.filter((t) => t.id !== deleteId));
   }
 
   return (
@@ -42,7 +41,7 @@ export default function TaskApp() {
       <AddTodo onAddTodo={handleAddTodo} />
       <TaskList
         todos={todos}
-        onChangeTodo={handleChangeTodo}
+        onEditTodo={handleEditTodo}
         onDeleteTodo={handleDeleteTodo}
       />
     </>

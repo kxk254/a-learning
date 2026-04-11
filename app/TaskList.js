@@ -2,49 +2,50 @@
 
 import { useState } from "react";
 
-export default function TaskList({ todos, onChangeTodo, onDeleteTodo }) {
+export default function TaskList({ todos, onEditTodo, onDeleteTodo }) {
   return (
     <ul>
       {todos.map((todo) => (
         <li key={todo.id}>
-          <Task todo={todo} onChange={onChangeTodo} onDelete={onDeleteTodo} />
+          <Task todo={todo} onEdit={onEditTodo} onDelete={onDeleteTodo} />
         </li>
       ))}
     </ul>
   );
 }
 
-function Task({ todo, onChange, onDelete }) {
-  const [isEditing, setIsEditing] = useState(false);
+function Task({ todo, onEdit, onDelete }) {
+  const [isEdit, setIsEdit] = useState(false);
 
   let todoContent;
-  if (isEditing) {
+  if (isEdit) {
     todoContent = (
       <>
         <input
           value={todo.title}
           onChange={(e) => {
-            onChange({ ...todo, title: e.target.value });
+            onEdit({ ...todo, title: e.target.value });
           }}
         />
-        <button onClick={() => setIsEditing(false)}>Save</button>
+        <button onClick={() => setIsEdit(false)}>Save</button>
       </>
     );
   } else {
     todoContent = (
       <>
         {todo.title}
-        <button onClick={() => setIsEditing(true)}>Edit</button>
+        <button onClick={() => setIsEdit(true)}>Edit</button>
       </>
     );
   }
+
   return (
     <label>
       <input
         type="checkbox"
-        checked={todo.done}
+        value={todo.done}
         onChange={(e) => {
-          onChange({ ...todo, done: e.target.checked });
+          onEdit({ ...todo, done: e.target.checked });
         }}
       />
       {todoContent}
