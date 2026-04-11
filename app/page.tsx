@@ -1,39 +1,48 @@
 "use client";
 import { useState } from "react";
 
-export default function MyObject() {
+export default function NestForm() {
   const [form, setForm] = useState({
-    firstName: "Kenji",
-    lastName: "Konno",
-    email: "kkonno@soliton-cm.com",
+    name: "Kenji Konno",
+    status: {
+      address: "abc road",
+      age: 45,
+      email: "abc@de@fg",
+    },
   });
-
-  function fnHandler(e) {
-    setForm({ ...form, firstName: e.target.value });
+  function nameHandler(e) {
+    setForm({ ...form, name: e.target.value });
   }
-  function lnHandler(e) {
-    setForm({ ...form, lastName: e.target.value });
+  function addHandler(e) {
+    setForm({ ...form, status: { ...form.status, address: e.target.value } });
+  }
+  function ageHandler(e) {
+    setForm({ ...form, status: { ...form.status, age: e.target.value } });
   }
   function emHandler(e) {
-    setForm({ ...form, email: e.target.value });
+    setForm({ ...form, status: { ...form.status, email: e.target.value } });
   }
 
   return (
     <>
       <p>
-        FirstName:
-        <input value={form.firstName} onChange={fnHandler} />
+        Name:
+        <input value={form.name} onChange={nameHandler} />
       </p>
       <p>
-        LastName:
-        <input value={form.lastName} onChange={lnHandler} />
+        Address:
+        <input value={form.status.address} onChange={addHandler} />
+      </p>
+      <p>
+        Age:
+        <input value={form.status.age} onChange={ageHandler} />
       </p>
       <p>
         Email:
-        <input value={form.email} onChange={emHandler} />
+        <input value={form.status.email} onChange={emHandler} />
       </p>
       <p>
-        {form.firstName} | {form.lastName} - ({form.email})
+        {form.name} {form.status.address} {form.status.age} {form.status.email}
       </p>
     </>
   );
