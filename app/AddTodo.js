@@ -7,8 +7,19 @@ export default function AddTodo({ onAddTodo }) {
 
   return (
     <>
-      <input />
-      <button>Add</button>
+      <input
+        placeholder="Add todo"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          setTitle("");
+          onAddTodo(title);
+        }}
+      >
+        Add
+      </button>
     </>
   );
 }

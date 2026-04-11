@@ -2,30 +2,53 @@
 
 import { useState } from "react";
 
-export default function TaskList({ todos, onAddTodo, onDeleteTodo }) {
+export default function TaskList({ todos, onEditTodo, onDeleteTodo }) {
   return (
     <ul>
       {todos.map((todo) => (
         <li key={todo.id}>
-          <Task doto={todo} onAdd={onAddTodo} onDelete={onDeleteTodo} />
+          <Task todo={todo} onEdit={onEditTodo} onDelete={onDeleteTodo} />
         </li>
       ))}
     </ul>
   );
 }
 
-function Task({ todo, onAdd, onDelete }) {
+function Task({ todo, onEdit, onDelete }) {
   const [isEdit, setIsEdit] = useState(false);
   let onEditContent;
   if (isEdit) {
-    onEditContent = <>isedit</>;
+    onEditContent = (
+      <>
+        <input
+          value={todo.title}
+          onChange={(e) => {
+            onEdit({ ...todo, title: e.target.value });
+          }}
+        />
+        <button onClick={() => setIsEdit(false)}>Save</button>
+      </>
+    );
   } else {
-    onEditContent = <>noedit</>;
+    onEditContent = (
+      <>
+        {todo.title}
+        <button onClick={() => setIsEdit(true)}>Edit</button>
+      </>
+    );
   }
-  return;
-  <label>
-    <input />
-    {onEditContent}
-    <button>Delete</button>
-  </label>;
+  return (
+    <label>
+      <input
+        type="checkbox"
+        checked={todo.done}
+        onChange={(e) => {
+          onEdit({ ...todo, done: e.target.checked });
+        }}
+      />
+
+      {onEditContent}
+      <button onClick={() => onDelete(todo.id)}>Delete</button>
+    </label>
+  );
 }
