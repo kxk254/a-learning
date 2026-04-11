@@ -4,3 +4,47 @@ import { useState } from "react";
 
 import AddTodo from "./AddTodo.js";
 import TaskList from "./TaskList.js";
+
+let nextId = 3;
+
+const initialTodos = [
+  { id: 0, title: "Buy Milk", done: true },
+  { id: 1, title: "Eat tacos", done: false },
+  { id: 2, title: "Brew tea", done: false },
+];
+
+export default function TaskApp() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  function handleAddTodo(title) {
+    const newTodo = { id: nextId++, title: title, done: false };
+    setTodos([...todos, newTodo]);
+    alert(`ID:${newTodo.id}, Title:${newTodo.title}, done:${newTodo.done}`);
+  }
+
+  function handleChangeTodo(chg) {
+    setTodos(
+      todos.map((t) => {
+        if (t.id === chg.id) {
+          return chg;
+        } else {
+          return t;
+        }
+      }),
+    );
+  }
+  function handleDeleteTodo(del) {
+    setTodos(todos.filter((t) => t.id !== del));
+  }
+
+  return (
+    <>
+      <AddTodo onAddTodo={handleAddTodo} />
+      <TaskList
+        todos={todos}
+        onChangeTodo={handleChangeTodo}
+        onDeleteTodo={handleDeleteTodo}
+      />
+    </>
+  );
+}
