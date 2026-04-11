@@ -1,49 +1,48 @@
 "use client";
+import "./styles.css";
 import { useState } from "react";
 
-export default function NestForm() {
-  const [form, setForm] = useState({
-    name: "Kenji Konno",
-    status: {
-      address: "abc road",
-      age: 45,
-      email: "abc@de@fg",
-    },
-  });
-  function nameHandler(e) {
-    setForm({ ...form, name: e.target.value });
+import AddTodo from "./AddTodo.js";
+import TaskList from "./TaskList.js";
+
+let nextId = 3;
+const initialTodos = [
+  { id: 0, title: "Buy milk", done: true },
+  { id: 1, title: "Eat tacos", done: false },
+  { id: 2, title: "Brew tea", done: false },
+];
+
+export default function TaskApp() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  function handleAddTodo(title) {
+    setTodos([...todos, { id: nextId++, title: title, done: false }]);
   }
-  function addHandler(e) {
-    setForm({ ...form, status: { ...form.status, address: e.target.value } });
+
+  function handleChangeTodo(nextTodo) {
+    setTodos(
+      todos.map((t) => {
+        if (t.id === nextTodo.id) {
+          return nextTodo;
+        } else {
+          return t;
+        }
+      }),
+    );
   }
-  function ageHandler(e) {
-    setForm({ ...form, status: { ...form.status, age: e.target.value } });
-  }
-  function emHandler(e) {
-    setForm({ ...form, status: { ...form.status, email: e.target.value } });
+
+  function handleDeleteTodo(todoId) {
+    setTodos(todos.filter((t) => t.id !== todoId));
   }
 
   return (
     <>
-      <p>
-        Name:
-        <input value={form.name} onChange={nameHandler} />
-      </p>
-      <p>
-        Address:
-        <input value={form.status.address} onChange={addHandler} />
-      </p>
-      <p>
-        Age:
-        <input value={form.status.age} onChange={ageHandler} />
-      </p>
-      <p>
-        Email:
-        <input value={form.status.email} onChange={emHandler} />
-      </p>
-      <p>
-        {form.name} {form.status.address} {form.status.age} {form.status.email}
-      </p>
+      <AddTodo onAddTodo={handleAddTodo} />
+      <TaskList
+        todos={todos}
+        onChangeTodo={handleChangeTodo}
+        onDeleteTodo={handleDeleteTodo}
+      />
     </>
   );
 }
