@@ -16,25 +16,11 @@ const initialTodos = [
 export default function TaskApp() {
   const [todos, setTodos] = useState(initialTodos);
 
-  function handleAddTodo(addTitle) {
-    setTodos([...todos, { id: nextId++, title: addTitle, done: false }]);
-  }
+  function handleAddTodo() {}
 
-  function handleEditTodo(editTitle) {
-    setTodos(
-      todos.map((e) => {
-        if (e.id === editTitle.id) {
-          return editTitle;
-        } else {
-          return e;
-        }
-      }),
-    );
-  }
+  function handleEditTodo() {}
 
-  function handleDeleteTodo(deleteId) {
-    setTodos(todos.filter((t) => t.id !== deleteId));
-  }
+  function handleDeleteTodo() {}
 
   return (
     <>

@@ -2,54 +2,30 @@
 
 import { useState } from "react";
 
-export default function TaskList({ todos, onEditTodo, onDeleteTodo }) {
+export default function TaskList({ todos, onAddTodo, onDeleteTodo }) {
   return (
     <ul>
       {todos.map((todo) => (
         <li key={todo.id}>
-          <Task todo={todo} onEdit={onEditTodo} onDelete={onDeleteTodo} />
+          <Task doto={todo} onAdd={onAddTodo} onDelete={onDeleteTodo} />
         </li>
       ))}
     </ul>
   );
 }
 
-function Task({ todo, onEdit, onDelete }) {
+function Task({ todo, onAdd, onDelete }) {
   const [isEdit, setIsEdit] = useState(false);
-
-  let todoContent;
+  let onEditContent;
   if (isEdit) {
-    todoContent = (
-      <>
-        <input
-          value={todo.title}
-          onChange={(e) => {
-            onEdit({ ...todo, title: e.target.value });
-          }}
-        />
-        <button onClick={() => setIsEdit(false)}>Save</button>
-      </>
-    );
+    onEditContent = <>isedit</>;
   } else {
-    todoContent = (
-      <>
-        {todo.title}
-        <button onClick={() => setIsEdit(true)}>Edit</button>
-      </>
-    );
+    onEditContent = <>noedit</>;
   }
-
-  return (
-    <label>
-      <input
-        type="checkbox"
-        value={todo.done}
-        onChange={(e) => {
-          onEdit({ ...todo, done: e.target.checked });
-        }}
-      />
-      {todoContent}
-      <button onClick={() => onDelete(todo.id)}>Delete</button>
-    </label>
-  );
+  return;
+  <label>
+    <input />
+    {onEditContent}
+    <button>Delete</button>
+  </label>;
 }
