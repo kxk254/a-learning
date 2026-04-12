@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Tasklist({ todos, onEditTodo, onDeleteTodo }) {
+export default function TaskList({ todos, onEditTodo, onDeleteTodo }) {
   return (
     <ul>
       {todos.map((todo) => (
@@ -16,7 +16,6 @@ export default function Tasklist({ todos, onEditTodo, onDeleteTodo }) {
 
 function Task({ todo, onEdit, onDelete }) {
   const [isEdit, setIsEdit] = useState(false);
-
   let onEditContent;
   if (isEdit) {
     onEditContent = (
@@ -37,7 +36,7 @@ function Task({ todo, onEdit, onDelete }) {
     );
   }
   return (
-    <label>
+    <>
       <input
         type="checkbox"
         value={todo.done}
@@ -45,6 +44,6 @@ function Task({ todo, onEdit, onDelete }) {
       />
       {onEditContent}
       <button onClick={() => onDelete(todo.id)}>Delete</button>
-    </label>
+    </>
   );
 }

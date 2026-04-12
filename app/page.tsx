@@ -23,27 +23,27 @@ export default function MyTodo() {
     ]);
   }
 
-  // compare function
-  const sameId = (a, b) => a.id === b.id;
-  // check sameid function
-  const replaceToNew = (newText, oldTodo) =>
-    sameId(newText, oldTodo) ? newText : oldTodo;
-  function handleEditTodo(newText) {
-    setTodos(todos.map((todo) => replaceToNew(newText, todo)));
+  // compare
+  const matchId = (a, b) => a.id === b.id;
+  // update to new
+  const updateTitle = (newTitle, oldTitle) =>
+    matchId(newTitle, oldTitle) ? newTitle : oldTitle;
+  function handleEditTodo(newTitle) {
+    setTodos((prev) => prev.map((todo) => updateTitle(newTitle, todo)));
   }
 
-  function handleDelteTodo(delId) {
+  function handleDeleteTodo(delId) {
     setTodos((prev) => prev.filter((d) => d.id !== delId));
   }
 
   return (
-    <div>
+    <label>
       <AddTodo onAddTodo={handleAddTodo} />
       <TaskList
         todos={todos}
         onEditTodo={handleEditTodo}
-        onDeleteTodo={handleDelteTodo}
+        onDeleteTodo={handleDeleteTodo}
       />
-    </div>
+    </label>
   );
 }

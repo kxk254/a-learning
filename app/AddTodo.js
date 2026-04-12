@@ -4,7 +4,6 @@ import { useState } from "react";
 
 export default function AddTodo({ onAddTodo }) {
   const [title, setTitle] = useState("");
-
   return (
     <label>
       <input
