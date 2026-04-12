@@ -6,8 +6,12 @@ export default function AddTodo({ onAddTodo }) {
   const [title, setTitle] = useState("");
 
   return (
-    <label>
-      <input value={title} onChange={(e) => setTitle(e.target.value)} />
+    <>
+      <input
+        placeholder="Add todo"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <button
         onClick={() => {
           setTitle("");
@@ -16,6 +20,6 @@ export default function AddTodo({ onAddTodo }) {
       >
         Add
       </button>
-    </label>
+    </>
   );
 }

@@ -16,14 +16,20 @@ const initialTodos = [
 export default function MyTodo() {
   const [todos, setTodos] = useState(initialTodos);
 
-  function handleAddTodo() {}
+  function handleAddTodo(addTitle) {
+    setTodos([...todos, { id: nextId++, title: addTitle, done: false }]);
+  }
 
   const sameId = (a, b) => a.id === b.id;
   const updateItem = (target) => (todo) =>
     sameId(todo, target) ? target : todo;
-  function handleEditTodo() {}
+  function handleEditTodo(editTitle) {
+    setTodos(todos.map(updateItem(editTitle)));
+  }
 
-  function handleDeleteTodo() {}
+  function handleDeleteTodo(delId) {
+    setTodos(todos.filter((e) => e.id !== delId));
+  }
 
   return (
     <>
