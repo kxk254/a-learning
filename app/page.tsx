@@ -12,3 +12,27 @@ const initialTodos = [
   { id: 1, title: "Eat tacos", done: false },
   { id: 2, title: "Brew tea", done: false },
 ];
+
+export default function MyTodo() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  function handleAddTodo() {}
+
+  const sameId = (a, b) => a.id === b.id;
+  const updateItem = (target) => (todo) =>
+    sameId(todo, target) ? target : todo;
+  function handleEditTodo() {}
+
+  function handleDeleteTodo() {}
+
+  return (
+    <>
+      <AddTodo onAddTodo={handleAddTodo} />
+      <TaskList
+        todos={todos}
+        onEditTodo={handleEditTodo}
+        onDeleteTodo={handleDeleteTodo}
+      />
+    </>
+  );
+}
