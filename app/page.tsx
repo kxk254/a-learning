@@ -13,32 +13,38 @@ const initialTodos = [
   { id: 2, title: "Brew tea", done: false },
 ];
 
-export default function MyTodo() {
+export default function MyTodos() {
   const [todos, setTodos] = useState(initialTodos);
 
-  function handleAddTodo(addTitle) {
-    setTodos([...todos, { id: nextId++, title: addTitle, done: false }]);
+  //functions
+
+  function handleAddTodo(addTodo) {
+    setTodos([...todos, { id: nextId++, title: addTodo, done: false }]);
   }
 
+  // match id
   const sameId = (a, b) => a.id === b.id;
-  const updateItem = (target) => (todo) =>
-    sameId(todo, target) ? target : todo;
-  function handleEditTodo(editTitle) {
-    setTodos(todos.map(updateItem(editTitle)));
+  // update todo matches id
+  const updateId = (newText, todo) => (sameId(todo, newText) ? newText : todo);
+  function handleEditTodo(newText) {
+    setTodos(todos.map((todo) => updateId(newText, todo)));
   }
 
   function handleDeleteTodo(delId) {
     setTodos(todos.filter((e) => e.id !== delId));
   }
 
+  // html generation
   return (
-    <>
-      <AddTodo onAddTodo={handleAddTodo} />
+    <div>
+      {/* add todo and handleAdd */}
+      <AddTodo todos={todos} onAddTodo={handleAddTodo} />
+      {/* pass todo edit and delete */}
       <TaskList
         todos={todos}
         onEditTodo={handleEditTodo}
         onDeleteTodo={handleDeleteTodo}
       />
-    </>
+    </div>
   );
 }
