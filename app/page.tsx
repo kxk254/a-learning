@@ -1,49 +1,73 @@
 "use client";
 import "./styles.css";
 import { useState } from "react";
+import { useReducer } from "react";
 
-import AddTodo from "./AddTodo.js";
-import TaskList from "./TaskList.js";
+import AddTask from "./AddTask";
+import TaskList from "./TaskList";
 
 let nextId = 3;
-
-const initialTodos = [
-  { id: 0, title: "Buy Milk", done: true },
-  { id: 1, title: "Eat tacos", done: false },
-  { id: 2, title: "Brew tea", done: false },
+const initialTasks = [
+  { id: 0, text: "Visit Kafka Museum", done: true },
+  { id: 1, text: "Watch a puppet show", done: false },
+  { id: 2, text: "Lennon Wall pic", done: true },
 ];
 
-export default function MyTodo() {
-  const [todos, setTodos] = useState(initialTodos);
+function tasksReducer(tasks, action) {
+  switch (action.type) {
+    case "added": {
+      return [...tasks, { id: action.id, text: action.text, done: false }];
+    }
+    case "changed": {
+      return tasks.map((t) => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
+    }
+    default: {
+      throw Error("Unknown action: " + action.type);
+    }
+  }
+}
 
-  function handleAddTodo(addText) {
-    setTodos((prev) => [
-      ...prev,
-      { id: nextId++, title: addText, done: false },
-    ]);
+export default function TaskApp() {
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+
+  function handleAddTodo(text) {
+    dispatch({ type: "added", id: nextId++, text: text });
   }
 
-  // compare
-  const matchId = (a, b) => a.id === b.id;
-  // update to new
-  const updateTitle = (newTitle, oldTitle) =>
-    matchId(newTitle, oldTitle) ? newTitle : oldTitle;
-  function handleEditTodo(newTitle) {
-    setTodos((prev) => prev.map((todo) => updateTitle(newTitle, todo)));
+  function handleEditTodo(task) {
+    dispatch({ type: "changed", task: task });
   }
 
-  function handleDeleteTodo(delId) {
-    setTodos((prev) => prev.filter((d) => d.id !== delId));
+  function handleDeleteTodo(taskId) {
+    dispatch({ type: "deleted", id: taskId });
   }
 
   return (
-    <label>
-      <AddTodo onAddTodo={handleAddTodo} />
+    <>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTodo={handleAddTodo} />
       <TaskList
-        todos={todos}
+        tasks={tasks}
         onEditTodo={handleEditTodo}
         onDeleteTodo={handleDeleteTodo}
       />
-    </label>
+      <ul>
+        <p>------------------------</p>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            ID:: {task.id} - TEXT:: {task.text} - DONE:: {task.done}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

@@ -1,11 +1,10 @@
 "use client";
-
 import { useState } from "react";
 
-export default function TaskList({ todos, onEditTodo, onDeleteTodo }) {
+export default function TaskList({ tasks, onEditTodo, onDeleteTodo }) {
   return (
     <ul>
-      {todos.map((todo) => (
+      {tasks.map((todo) => (
         <li key={todo.id}>
           <Task todo={todo} onEdit={onEditTodo} onDelete={onDeleteTodo} />
         </li>
@@ -21,8 +20,8 @@ function Task({ todo, onEdit, onDelete }) {
     onEditContent = (
       <>
         <input
-          value={todo.title}
-          onChange={(e) => onEdit({ ...todo, title: e.target.value })}
+          value={todo.text}
+          onChange={(e) => onEdit({ ...todo, text: e.target.value })}
         />
         <button onClick={() => setIsEdit(false)}>Save</button>
       </>
@@ -30,7 +29,7 @@ function Task({ todo, onEdit, onDelete }) {
   } else {
     onEditContent = (
       <>
-        {todo.title}
+        {todo.text}
         <button onClick={() => setIsEdit(true)}>Edit</button>
       </>
     );
@@ -40,7 +39,9 @@ function Task({ todo, onEdit, onDelete }) {
       <input
         type="checkbox"
         value={todo.done}
-        onChange={(e) => e.target.checked}
+        onChange={(e) => {
+          onEdit({ ...todo, done: e.target.checked });
+        }}
       />
       {onEditContent}
       <button onClick={() => onDelete(todo.id)}>Delete</button>
