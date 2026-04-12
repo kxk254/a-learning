@@ -13,37 +13,36 @@ const initialTodos = [
   { id: 2, title: "Brew tea", done: false },
 ];
 
-export default function MyTodos() {
+export default function MyTodo() {
   const [todos, setTodos] = useState(initialTodos);
 
-  //functions
-
-  function handleAddTodo(addTodo) {
-    setTodos([...todos, { id: nextId++, title: addTodo, done: false }]);
+  function handleAddTodo(addText) {
+    setTodos((prev) => [
+      ...prev,
+      { id: nextId++, title: addText, done: false },
+    ]);
   }
 
-  // match id
+  // compare function
   const sameId = (a, b) => a.id === b.id;
-  // update todo matches id
-  const updateId = (newText, todo) => (sameId(todo, newText) ? newText : todo);
+  // check sameid function
+  const replaceToNew = (newText, oldTodo) =>
+    sameId(newText, oldTodo) ? newText : oldTodo;
   function handleEditTodo(newText) {
-    setTodos(todos.map((todo) => updateId(newText, todo)));
+    setTodos(todos.map((todo) => replaceToNew(newText, todo)));
   }
 
-  function handleDeleteTodo(delId) {
-    setTodos(todos.filter((e) => e.id !== delId));
+  function handleDelteTodo(delId) {
+    setTodos((prev) => prev.filter((d) => d.id !== delId));
   }
 
-  // html generation
   return (
     <div>
-      {/* add todo and handleAdd */}
-      <AddTodo todos={todos} onAddTodo={handleAddTodo} />
-      {/* pass todo edit and delete */}
+      <AddTodo onAddTodo={handleAddTodo} />
       <TaskList
         todos={todos}
         onEditTodo={handleEditTodo}
-        onDeleteTodo={handleDeleteTodo}
+        onDeleteTodo={handleDelteTodo}
       />
     </div>
   );
