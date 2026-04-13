@@ -21,38 +21,38 @@ function reducer(tasks, action) {
         { id: action.id, text: action.text, done: action.done },
       ];
     case "edit":
-      return tasks.map((task) =>
-        task.id === action.tasks.id ? action.tasks : task,
+      return tasks.map((t) =>
+        t.id === action.task.id ? { ...t, ...action.task } : t,
       );
     case "delete":
-      return tasks.filter((task) => task.id !== action.id);
+      return tasks.filter((t) => t.id !== action.id);
     default:
-      throw Error("Unknown action: " + action.type);
+      throw Error("Unexpected action: " + action.type);
   }
 }
 
 export default function MyTask() {
   const [tasks, dispatch] = useReducer(reducer, initialTasks);
 
-  function handleAddTask(text) {
+  function handleAddTasks(text) {
     dispatch({ type: "add", id: nextId++, text: text, done: false });
   }
 
-  function handleEditTask(edit) {
-    dispatch({ type: "edit", tasks: edit });
+  function handleEditTasks(edit) {
+    dispatch({ type: "edit", task: edit });
   }
 
-  function handleDeleteTask(id) {
+  function handleDeleteTasks(id) {
     dispatch({ type: "delete", id: id });
   }
 
   return (
     <>
-      <AddTask onAddTask={handleAddTask} />
+      <AddTask onAddTask={handleAddTasks} />
       <TaskList
         tasks={tasks}
-        onEditTasks={handleEditTask}
-        onDeleteTasks={handleDeleteTask}
+        onEditTasks={handleEditTasks}
+        onDeleteTasks={handleDeleteTasks}
       />
     </>
   );
