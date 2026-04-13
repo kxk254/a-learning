@@ -19,13 +19,9 @@ function tasksReducer(tasks, action) {
       return [...tasks, { id: action.id, text: action.text, done: false }];
     }
     case "changed": {
-      return tasks.map((t) => {
-        if (t.id === action.task.id) {
-          return action.task;
-        } else {
-          return t;
-        }
-      });
+      return tasks.map((task) =>
+        task.id === action.newtask.id ? action.newtask : task,
+      );
     }
     case "deleted": {
       return tasks.filter((t) => t.id !== action.id);
@@ -36,38 +32,29 @@ function tasksReducer(tasks, action) {
   }
 }
 
-export default function TaskApp() {
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+export default function MyTask() {
+  const [state, dispatch] = useReducer(tasksReducer, initialTasks);
 
-  function handleAddTodo(text) {
-    dispatch({ type: "added", id: nextId++, text: text });
+  function handleAddTask(text) {
+    dispatch({ type: "added", id: nextId++, text: text, done: false });
   }
 
-  function handleEditTodo(task) {
-    dispatch({ type: "changed", task: task });
+  function handleEditTask(task) {
+    dispatch({ type: "changed", newtask: task });
   }
 
-  function handleDeleteTodo(taskId) {
-    dispatch({ type: "deleted", id: taskId });
+  function handleDeleteTask(id) {
+    dispatch({ type: "deleted", id: id });
   }
 
   return (
     <>
-      <h1>Prague itinerary</h1>
-      <AddTask onAddTodo={handleAddTodo} />
+      <AddTask onAddTodo={handleAddTask} />
       <TaskList
-        tasks={tasks}
-        onEditTodo={handleEditTodo}
-        onDeleteTodo={handleDeleteTodo}
+        tasks={state}
+        onEditTodo={handleEditTask}
+        onDeleteTodo={handleDeleteTask}
       />
-      <ul>
-        <p>------------------------</p>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            ID:: {task.id} - TEXT:: {task.text} - DONE:: {task.done}
-          </li>
-        ))}
-      </ul>
     </>
   );
 }

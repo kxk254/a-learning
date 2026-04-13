@@ -38,7 +38,7 @@ function Task({ todo, onEdit, onDelete }) {
     <>
       <input
         type="checkbox"
-        value={todo.done}
+        checked={todo.done}
         onChange={(e) => {
           onEdit({ ...todo, done: e.target.checked });
         }}
