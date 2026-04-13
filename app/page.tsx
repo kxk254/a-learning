@@ -12,3 +12,48 @@ const initialTasks = [
   { id: 1, text: "Watch a puppet show", done: false },
   { id: 2, text: "Lennon Wall pic", done: true },
 ];
+
+function reducer(tasks, action) {
+  switch (action.type) {
+    case "add":
+      return [
+        ...tasks,
+        { id: action.id, text: action.text, done: action.done },
+      ];
+    case "edit":
+      return tasks.map((task) =>
+        task.id === action.tasks.id ? action.tasks : task,
+      );
+    case "delete":
+      return tasks.filter((task) => task.id !== action.id);
+    default:
+      throw Error("Unknown action: " + action.type);
+  }
+}
+
+export default function MyTask() {
+  const [tasks, dispatch] = useReducer(reducer, initialTasks);
+
+  function handleAddTask(text) {
+    dispatch({ type: "add", id: nextId++, text: text, done: false });
+  }
+
+  function handleEditTask(edit) {
+    dispatch({ type: "edit", tasks: edit });
+  }
+
+  function handleDeleteTask(id) {
+    dispatch({ type: "delete", id: id });
+  }
+
+  return (
+    <>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onEditTasks={handleEditTask}
+        onDeleteTasks={handleDeleteTask}
+      />
+    </>
+  );
+}

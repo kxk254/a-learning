@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function AddTask({ onAddTodo }) {
+export default function AddTask({ onAddTask }) {
   const [text, setText] = useState("");
   return (
     <>
@@ -13,7 +13,7 @@ export default function AddTask({ onAddTodo }) {
       <button
         onClick={() => {
           setText("");
-          onAddTodo(text);
+          onAddTask(text);
         }}
       >
         Add

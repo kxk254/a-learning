@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 
-export default function TaskList({ tasks, onEditTodo, onDeleteTodo }) {
+export default function TaskList({ tasks, onEditTasks, onDeleteTasks }) {
   return (
     <ul>
       {tasks.map((todo) => (
         <li key={todo.id}>
-          <Task todo={todo} onEdit={onEditTodo} onDelete={onDeleteTodo} />
+          <Task todo={todo} onEdit={onEditTasks} onDelete={onDeleteTasks} />
         </li>
       ))}
     </ul>
