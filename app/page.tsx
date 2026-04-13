@@ -2,58 +2,35 @@
 import "./styles.css";
 import { useState } from "react";
 import { useReducer } from "react";
+import { useRef } from "react";
 
-import AddTask from "./AddTask";
-import TaskList from "./TaskList";
+export default function Stopwatch() {
+  const [startTime, setStartTime] = useState(null);
+  const [now, setNow] = useState(null);
+  const intervalRef = useRef(null);
 
-let nextId = 3;
-const initialTasks = [
-  { id: 0, text: "Visit Kafka Museum", done: true },
-  { id: 1, text: "Watch a puppet show", done: false },
-  { id: 2, text: "Lennon Wall pic", done: true },
-];
-
-function reducer(tasks, action) {
-  switch (action.type) {
-    case "add":
-      return [
-        ...tasks,
-        { id: action.id, text: action.text, done: action.done },
-      ];
-    case "edit":
-      return tasks.map((t) =>
-        t.id === action.task.id ? { ...t, ...action.task } : t,
-      );
-    case "delete":
-      return tasks.filter((t) => t.id !== action.id);
-    default:
-      throw Error("Unexpected action: " + action.type);
+  function handleStart() {
+    setStartTime(Date.now());
+    setNow(Date.now());
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setNow(Date.now());
+    }, 10);
   }
-}
-
-export default function MyTask() {
-  const [tasks, dispatch] = useReducer(reducer, initialTasks);
-
-  function handleAddTasks(text) {
-    dispatch({ type: "add", id: nextId++, text: text, done: false });
+  function handleStop() {
+    clearInterval(intervalRef.current);
   }
 
-  function handleEditTasks(edit) {
-    dispatch({ type: "edit", task: edit });
-  }
-
-  function handleDeleteTasks(id) {
-    dispatch({ type: "delete", id: id });
+  let secondsPassed = 0;
+  if (startTime != null &
+    secondsPassed = (now - startTime) / 1000;
   }
 
   return (
     <>
-      <AddTask onAddTask={handleAddTasks} />
-      <TaskList
-        tasks={tasks}
-        onEditTasks={handleEditTasks}
-        onDeleteTasks={handleDeleteTasks}
-      />
+      <h1>Time passed:{secondsPassed.toFixed(3)}</h1>
+      <button onClick={handleStart}>start</button>
+      <button onClick={handleStop}>stop</button>
     </>
   );
 }
