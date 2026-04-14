@@ -6,19 +6,18 @@ import { useRef } from "react";
 
 export default function StopWatch() {
   const [seconds, setSeconds] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
+  const intervalRef = useRef(null);
 
   function start() {
-    if (intervalId) return;
-    const id = setInterval(() => {
+    if (intervalRef.current) return;
+    intervalRef.current = setInterval(() => {
       setSeconds((prev) => prev + 1);
     }, 10);
-    setIntervalId(id);
   }
 
   function stopwatch() {
-    clearInterval(intervalId);
-    setIntervalId(null);
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
   }
 
   function reset() {
@@ -29,10 +28,11 @@ export default function StopWatch() {
 
   return (
     <>
-      <h1>{secs}</h1>
+      <h1>{seconds}</h1>
       <button onClick={start}>Start</button>
       <button onClick={stopwatch}>Stop</button>
       <button onClick={reset}>Reset</button>
+      <h1>{intervalRef.current ? intervalRef.current : "null"}</h1>
     </>
   );
 }
