@@ -11,26 +11,25 @@ export default function StopWatch() {
   function start() {
     if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
-      setSeconds((prev) => prev + 1);
+      setSeconds((p) => p + 1);
     }, 10);
   }
 
-  function stopwatch() {
+  function stop() {
     clearInterval(intervalRef.current);
     intervalRef.current = null;
   }
 
   function reset() {
-    stopwatch();
     setSeconds(0);
+    stop();
   }
-  const secs = seconds;
 
   return (
     <>
       <h1>{seconds}</h1>
       <button onClick={start}>Start</button>
-      <button onClick={stopwatch}>Stop</button>
+      <button onClick={stop}>Stop</button>
       <button onClick={reset}>Reset</button>
       <h1>{intervalRef.current ? intervalRef.current : "null"}</h1>
     </>
