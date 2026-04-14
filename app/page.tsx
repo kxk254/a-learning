@@ -4,33 +4,35 @@ import { useState } from "react";
 import { useReducer } from "react";
 import { useRef } from "react";
 
-export default function Stopwatch() {
-  const [startTime, setStartTime] = useState(null);
-  const [now, setNow] = useState(null);
-  const intervalRef = useRef(null);
+export default function StopWatch() {
+  const [seconds, setSeconds] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
-  function handleStart() {
-    setStartTime(Date.now());
-    setNow(Date.now());
-    clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setNow(Date.now());
+  function start() {
+    if (intervalId) return;
+    const id = setInterval(() => {
+      setSeconds((prev) => prev + 1);
     }, 10);
-  }
-  function handleStop() {
-    clearInterval(intervalRef.current);
+    setIntervalId(id);
   }
 
-  let secondsPassed = 0;
-  if (startTime != null &
-    secondsPassed = (now - startTime) / 1000;
+  function stopwatch() {
+    clearInterval(intervalId);
+    setIntervalId(null);
   }
+
+  function reset() {
+    stopwatch();
+    setSeconds(0);
+  }
+  const secs = seconds;
 
   return (
     <>
-      <h1>Time passed:{secondsPassed.toFixed(3)}</h1>
-      <button onClick={handleStart}>start</button>
-      <button onClick={handleStop}>stop</button>
+      <h1>{secs}</h1>
+      <button onClick={start}>Start</button>
+      <button onClick={stopwatch}>Stop</button>
+      <button onClick={reset}>Reset</button>
     </>
   );
 }
