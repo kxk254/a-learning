@@ -10,19 +10,20 @@ export default function App() {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <>
-      <p>
+    <div>
+      <label>
         <input
           type="checkbox"
           checked={isDark}
           onChange={(e) => setIsDark(e.target.checked)}
         />
-      </p>
+        Dark mode
+      </label>
       <ProductPage
-        referredId="wizard_of_oz"
+        referredId="hello-world#"
         productId={123}
         theme={isDark ? "dark" : "light"}
       />
-    </>
+    </div>
   );
 }
