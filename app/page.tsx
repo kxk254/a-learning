@@ -1,29 +1,53 @@
 "use client";
 import "./styles.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useReducer } from "react";
 import { useRef, createContext, useContext, memo, useCallback } from "react";
 
-import ProductPage from "./ProductPage.js";
+import { createConnection } from "./chat.js";
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => {
+      connection.disconnect();
+    };
+  }, [roomId, serverUrl]);
+  return (
+    <>
+      <label>
+        Server Url:{" "}
+        <input
+          value={serverUrl}
+          onChange={(e) => setServerUrl(e.target.value)}
+        />
+      </label>
+      <h1>Welcome to the {roomId} room!</h1>
+    </>
+  );
+}
 
 export default function App() {
-  const [isDark, setIsDark] = useState(false);
+  const [roomId, setRoomId] = useState("general");
+  const [show, setShow] = useState(false);
 
   return (
-    <div>
+    <>
       <label>
-        <input
-          type="checkbox"
-          checked={isDark}
-          onChange={(e) => setIsDark(e.target.checked)}
-        />
-        Dark mode
+        Choose the chat room:
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
+          <option value="general">general</option>
+          <option value="travel">travel</option>
+          <option value="music">music</option>
+        </select>
       </label>
-      <ProductPage
-        referredId="hello-world#"
-        productId={123}
-        theme={isDark ? "dark" : "light"}
-      />
-    </div>
+      <button onClick={() => setShow(!show)}>
+        {show ? "Close chat" : "Open chat"}
+      </button>
+      {show && <hr />}
+      {show && <ChatRoom roomId={roomId} />}
+    </>
   );
 }
