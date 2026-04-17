@@ -1,3 +1,4 @@
+console.log("script is loaded");
 const wrap = (i, l) => ((i % l) + l) % l;
 
 const createImage = () => {
@@ -31,6 +32,7 @@ class Carousel {
   };
 
   constructor(root) {
+    console.log("Carousel constructor called", root);
     this.#root = root;
     this.#track = root.querySelector(".carousel__track");
     this.#buttons = [...(this.#track?.querySelectorAll("button") || [])];
@@ -43,12 +45,14 @@ class Carousel {
     this.#createSlides();
     this.#init();
     this.#render();
+    console.log("Carousel created");
   }
 
   #createSlides() {
     this.#buttons.forEach((btn, i) => {
       const image = createImage();
 
+      console.log("pics :", image.id, image.thumb);
       btn.replaceChildren(
         Object.assign(new Image(), {
           src: image.thumb,
@@ -67,6 +71,7 @@ class Carousel {
     if (!this.#buttons.length) return;
     const next = wrap(index, this.#buttons.length);
     if (next === this.#currentIndex) return;
+    console.log("set called", index);
     this.#currentIndex = next;
     this.#render();
   }
@@ -95,6 +100,7 @@ class Carousel {
   #render() {
     const btn = this.#buttons[this.#currentIndex];
     const image = this.#images[this.#currentIndex];
+    console.log("render running", btn, image);
 
     if (!btn || !image) return;
 
@@ -111,6 +117,7 @@ class Carousel {
     const btn = target.closest("button");
     if (!btn) return;
     const index = this.#indexMap.get(btn);
+    console.log("click :", index);
     if (index !== undefined) this.#set(index);
   };
 
@@ -123,6 +130,7 @@ class Carousel {
 
   #init() {
     const { signal } = this.#controller;
+    console.log("init running");
 
     this.#track.addEventListener("click", this.#handleTrackClick, {
       signal,
