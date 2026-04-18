@@ -6,13 +6,95 @@
     <script src="./script.js" async></script>
   </head>
   <body>
-    <div class="cur" id="cur"></div>
-    <canvas id="c"></canvas>
+    <div class="instrument-panel">
+      <svg
+        class="instrument-panel-drawing"
+        viewBox="0 0 700 460"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="gear-gradient" cx="32%" cy="28%" r="72%">
+            <stop offset="0%" stop-color="#d4a828" />
+            <stop offset="55%" stop-color="#a07018" />
+            <stop offset="100%" stop-color="#6a4010" />
+          </radialGradient>
+          <radialGradient id="hub-gradient" cx="28%" cy="24%" r="76%">
+            <stop offset="0%" stop-color="#f2c840" />
+            <stop offset="100%" stop-color="#a07020" />
+          </radialGradient>
+          <marker
+            id="direction-arrow"
+            markerWidth="7"
+            markerHeight="6"
+            refX="7"
+            refY="3"
+            orient="auto"
+          >
+            <polygon class="arrowhead" points="0,0 7,3 0,6" />
+          </marker>
+        </defs>
 
-    <div class="ui">
-      <div class="ui-title">Bloom</div>
-      <div class="ui-sub">hover to grow flowers</div>
+        <path class="registration-mark" d="M 22,46 22,22 46,22" />
+        <path class="registration-mark" d="M 654,46 654,22 630,22" />
+        <path class="registration-mark" d="M 22,414 22,438 46,438" />
+        <path class="registration-mark" d="M 654,414 654,438 630,438" />
+
+        <line class="rule-primary" x1="58" y1="55" x2="642" y2="55" />
+        <line class="rule" x1="58" y1="59" x2="642" y2="59" />
+        <text class="panel-title" x="350" y="40">OPPOSITE DIRECTIONS</text>
+        <line class="rule" x1="58" y1="401" x2="642" y2="401" />
+        <line class="rule-primary" x1="58" y1="405" x2="642" y2="405" />
+        <text class="panel-caption" x="350" y="430">
+          MECHANISM № II — COUNTER-ROTATING GEAR TRANSMISSION
+        </text>
+
+        <line class="centre-line" x1="96" y1="232" x2="590" y2="232" />
+        <line class="centre-line" x1="255" y1="82" x2="255" y2="390" />
+        <line class="centre-line" x1="437" y1="112" x2="437" y2="356" />
+
+        <circle class="pitch-circle" cx="255" cy="232" r="112" />
+        <circle class="pitch-circle" cx="437" cy="232" r="70" />
+
+        <path
+          class="direction-arc"
+          d="M 178,100 A 153,153 0 0,1 332,100"
+          marker-end="url(#direction-arrow)"
+        />
+
+        <g transform="translate(255,232)">
+          <g class="gear gear-clockwise" id="gear-clockwise">
+            <path class="gear-body" id="gear-clockwise-path" />
+            <circle class="gear-hub" r="22" />
+            <circle class="gear-axle" r="7" />
+            <rect class="gear-keyway" x="-2.5" y="-22" width="5" height="9" />
+            <rect class="gear-keyway" x="-2.5" y="13" width="5" height="9" />
+            <rect class="gear-keyway" x="-22" y="-2.5" width="9" height="5" />
+            <rect class="gear-keyway" x="13" y="-2.5" width="9" height="5" />
+          </g>
+        </g>
+        <text class="gear-label" x="255" y="374">CLOCKWISE</text>
+        <text class="gear-spec" x="255" y="387">
+          16 TEETH · Ø224 · MODULE 14
+        </text>
+
+        <path
+          class="direction-arc"
+          d="M 491,138 A 109,109 0 0,0 383,138"
+          marker-end="url(#direction-arrow)"
+        />
+
+        <g transform="translate(437,232)">
+          <g class="gear gear-counter-clockwise" id="gear-counter-clockwise">
+            <path class="gear-body" id="gear-counter-clockwise-path" />
+            <circle class="gear-hub" r="15" />
+            <circle class="gear-axle" r="5" />
+          </g>
+        </g>
+        <text class="gear-label" x="437" y="341">COUNTER-CLOCKWISE</text>
+        <text class="gear-spec" x="437" y="354">
+          10 TEETH · Ø140 · MODULE 14
+        </text>
+      </svg>
     </div>
-    <div class="hint">✿ &nbsp; move your cursor &nbsp; ✿</div>
   </body>
 </html>

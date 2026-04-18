@@ -1,144 +1,193 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,300&display=swap");
-
 *,
 *::before,
 *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html,
+:root {
+  --bg: #adbba6;
+  --panel: #e6ede0;
+  --border: #a87c1e;
+  --panel-void: #e6ede0;
+  --ink: #1e2a1a;
+  --ink-muted: #5a3e10;
+  --rule: #a87c1e;
+  --centre-line: #4a7250;
+  --direction: #8a5c0a;
+}
+
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  cursor: none;
-}
-
-body {
-  background:
-    radial-gradient(ellipse 120% 80% at 30% 40%, #ff88bb 0%, transparent 55%),
-    radial-gradient(ellipse 100% 90% at 80% 70%, #e0407a 0%, transparent 55%),
-    radial-gradient(ellipse 80% 80% at 60% 20%, #ff6aab 0%, transparent 50%),
-    linear-gradient(145deg, #f9527e 0%, #d63068 40%, #b81f55 100%);
-  animation: bgBreath 8s ease-in-out infinite alternate;
-}
-
-@keyframes bgBreath {
-  0% {
-    filter: brightness(1) saturate(1);
-  }
-  50% {
-    filter: brightness(1.06) saturate(1.1);
-  }
-  100% {
-    filter: brightness(0.96) saturate(0.95);
-  }
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.04;
-  pointer-events: none;
-  z-index: 1;
-}
-
-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-}
-
-.cur {
-  position: fixed;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 0 12px rgba(255, 180, 210, 1),
-    0 0 24px rgba(255, 120, 180, 0.6);
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.15s,
-    height 0.15s;
-  mix-blend-mode: screen;
-}
-
-.ui {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
-  gap: 12px;
+  background: var(--bg);
 }
 
-.ui-title {
-  font-family: "Playfair Display", serif;
-  font-size: clamp(38px, 7vw, 96px);
-  font-weight: 400;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow:
-    0 2px 30px rgba(180, 20, 80, 0.5),
-    0 0 80px rgba(255, 100, 160, 0.3);
-  letter-spacing: 2px;
-  animation: titleIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-  transform: translateY(20px);
+.instrument-panel {
+  width: min(92vw, 920px);
+  aspect-ratio: 700 / 460;
+  background-color: var(--panel);
+  background-image: radial-gradient(
+    circle,
+    rgba(40, 56, 32, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  border: 2px solid var(--border);
+  box-shadow:
+    0 2px 0 #c49828,
+    inset 0 0 0 6px rgba(168, 124, 30, 0.08);
 }
 
-.ui-sub {
-  font-family: "Playfair Display", serif;
-  font-style: italic;
-  font-size: 15px;
-  letter-spacing: 5px;
-  color: rgba(255, 220, 235, 0.55);
-  animation: titleIn 1.2s ease 0.4s forwards;
-  opacity: 0;
-  transform: translateY(14px);
+.instrument-panel-drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes titleIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.registration-mark {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+  stroke-linecap: square;
 }
 
-.hint {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-  font-family: "Playfair Display", serif;
-  font-style: italic;
+.rule {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 0.8;
+  opacity: 0.75;
+}
+
+.rule-primary {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 2;
+  opacity: 0.9;
+}
+
+.centre-line {
+  fill: none;
+  stroke: var(--centre-line);
+  stroke-width: 0.8;
+  stroke-dasharray: 7 5;
+}
+
+.pitch-circle {
+  fill: none;
+  stroke: var(--centre-line);
+  stroke-width: 0.6;
+  stroke-dasharray: 3 8;
+  opacity: 0.6;
+}
+
+.direction-arc {
+  fill: none;
+  stroke: var(--direction);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.arrowhead {
+  fill: var(--direction);
+  opacity: 0.7;
+}
+
+.panel-title {
+  font-family: "Josefin Sans", sans-serif;
   font-size: 13px;
-  letter-spacing: 4px;
-  color: rgba(255, 200, 220, 0.45);
-  pointer-events: none;
-  animation: hintBlink 3s ease-in-out infinite;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
-@keyframes hintBlink {
-  0%,
-  100% {
-    opacity: 0.35;
+.gear-label {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  fill: var(--ink-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.gear-spec {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  fill: var(--ink-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.panel-caption {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  fill: var(--ink-muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.gear-body {
+  fill: var(--panel-void);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  stroke-linejoin: miter;
+  fill-rule: evenodd;
+}
+
+.gear-hub {
+  fill: var(--panel-void);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.gear-axle {
+  fill: var(--panel-void);
+  stroke: var(--ink);
+  stroke-width: 0.75;
+}
+
+.gear-keyway {
+  fill: var(--panel-void);
+}
+
+.gear-clockwise {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spin-clockwise 8s linear infinite;
+}
+
+.gear-counter-clockwise {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spin-counter-clockwise 5s linear infinite;
+}
+
+@keyframes spin-clockwise {
+  to {
+    transform: rotate(360deg);
   }
-  50% {
-    opacity: 0.75;
+}
+
+@keyframes spin-counter-clockwise {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gear-clockwise,
+  .gear-counter-clockwise {
+    animation: none;
   }
 }
