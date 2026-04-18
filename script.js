@@ -6,14 +6,14 @@ let isClick = false;
 
 btn.addEventListener("click", () => {
   if (!isClick) {
-    info.textContent = "Java Script is on!";
-    btn.textContent = "clicked";
-    btn.classList.remove("white");
+    title.textContent = "JavScript a little bit!";
+    info.textContent = "Observe changes!";
     btn.classList.add("black");
-    body.style.backgroundColor = "#8f8f8f";
+    btn.classList.remove("white");
+    body.style.backgroundColor = "#525252";
   } else {
+    title.textContent = "Hello, I am learning JS";
     info.textContent = "Nothing happened yet";
-    btn.textContent = "Click me";
     btn.classList.remove("black");
     btn.classList.add("white");
     body.style.backgroundColor = "#ffffff";
