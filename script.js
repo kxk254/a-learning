@@ -1,18 +1,22 @@
-console.log("reading javascript");
-const btn = document.getElementById("btn");
-const title = document.getElementById("title");
-const info = document.getElementById("info");
-let isClicked = false;
+const title = document.querySelector("#title");
+const btn = document.querySelector("#btn");
+const info = document.querySelector("#info");
+const body = document.body;
+let isClick = false;
 
 btn.addEventListener("click", () => {
-  if (!isClicked) {
-    title.textContent = "You clicked the button!";
-    info.textContent = "JS is working!";
-    document.body.style.backgroundColor = "#f0f8ff";
+  if (!isClick) {
+    info.textContent = "Java Script is on!";
+    btn.textContent = "clicked";
+    btn.classList.remove("white");
+    btn.classList.add("black");
+    body.style.backgroundColor = "#8f8f8f";
   } else {
-    title.textContent = "Hello, I am learning JS";
     info.textContent = "Nothing happened yet";
-    document.body.style.backgroundColor = "#ffffff";
+    btn.textContent = "Click me";
+    btn.classList.remove("black");
+    btn.classList.add("white");
+    body.style.backgroundColor = "#ffffff";
   }
-  isClicked = !isClicked;
+  isClick = !isClick;
 });
