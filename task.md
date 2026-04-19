@@ -13,7 +13,7 @@ let count = 0  / add() reset()
 3. render 
 show state
 
-Event - (action - state change) - render 
+Event - (action - state change) - save - render 
 
 ## Calc
 - + - / *
