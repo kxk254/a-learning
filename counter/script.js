@@ -1,34 +1,26 @@
 let count = 0;
 
-const plus = document.getElementById("plus");
-const text = document.getElementById("text");
-const minus = document.getElementById("minus");
-const p = document.getElementsByTagName("p")[0];
+const input = document.querySelector("#input");
+const plus = document.querySelector("#plus");
+const text = document.querySelector("#text");
+const minus = document.querySelector("#minus");
+const reset = document.querySelector("#reset");
+const body = document.body;
+
+function addCalc(value) {
+  count = count + value;
+  text.textContent = count;
+  body.classList.toggle("red", count >= 10);
+}
 
 plus.addEventListener("click", () => {
-  count = count + 1;
-
-  text.textContent = `Count: ${count}`;
-
-  if (count % 2 === 0) {
-    document.body.style.backgroundColor = "#242424";
-    p.style.color = "#ffffff";
-  } else {
-    document.body.style.backgroundColor = "#ffffff";
-    p.style.color = "#242424";
-  }
+  addCalc(Number(input.value) || 0);
 });
-
 minus.addEventListener("click", () => {
-  count = count - 1;
-
-  text.textContent = `Count: ${count}`;
-  if (count % 2 === 0) {
-    document.body.style.backgroundColor = "#575757";
-
-    p.style.color = "#ffffff";
-  } else {
-    document.body.style.backgroundColor = "#ffffff";
-    p.style.color = "#242424";
-  }
+  addCalc(-Number(input.value) || 0);
+});
+reset.addEventListener("click", () => {
+  count = 0;
+  text.textContent = count;
+  body.classList.toggle("red", false);
 });

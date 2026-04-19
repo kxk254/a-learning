@@ -3,14 +3,21 @@
   <head>
     <title>My Page</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <script src="./script.js" async></script>
   </head>
   <body>
     <label>
+      <span>step value:<input id="input" type="number" value="1" /></span>
       <button id="plus">[+]</button>
-      <p id="text">0</p>
-      <button id="minus">[-]</button></label
-    >
+      <span
+        >Counter:
+        <p id="text">0</p></span
+      >
+      <button id="minus">[-]</button>
+    </label>
+    <button id="reset">[reset]</button>
+
     <a href="../index.html">back</a>
   </body>
 </html>
