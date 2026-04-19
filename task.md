@@ -19,6 +19,8 @@ Event - (action - state change) - save - render
 ## Calc
 - + - / *
 - input valiation
+  empty, letters, symbols but accept -2, 3.5 etc
+  no division by zero
 - keyboard support 
 - history of calculation
 
@@ -43,3 +45,16 @@ Event - (action - state change) - save - render
 - state thinking
 - localStorage
  
+ ## form 
+ - DOM form handling submit, input, change 
+ - preventDefault() 
+ - reading values value, FormData 
+ - basic validation, empty, number, email 
+ - error display
+ - controlled vs uncontrolled inputs 
+ - state concepts isDirty, isNew, isValid
+ - lifecycle initial/editing/dirty/submit/success-reset 
+- data modeling
+- ux behavior -disable submit, autosave, warnings on leave page, inline validation vs submit validation 
+- backent integration concepts, error handling, syncing from state with db 
+- advanced devounced input validation, dynamic forms (add/remove fileds) multi step form, file upload, coputed fields 
