@@ -7,14 +7,13 @@
 - render => UP, update text content, update colors/classes, enable/disable buttons, show hide elements, formatting display
 - do not include 'count change' 'biz logic' 'event handling'
 
-1. State (data) 
-let count = 0 
-2. actions change state 
-add(), reset() 
+1. Event
+2.  State (data) / action - state change
+let count = 0  / add() reset()
 3. render 
 show state
 
-Event - action - state change - render 
+Event - (action - state change) - render 
 
 ## Calc
 - + - / *

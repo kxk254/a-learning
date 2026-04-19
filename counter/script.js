@@ -7,20 +7,13 @@ const minus = document.querySelector("#minus");
 const reset = document.querySelector("#reset");
 const body = document.body;
 
-function addCalc(value) {
-  count = count + value;
-  text.textContent = count;
-  body.classList.toggle("red", count >= 10);
-}
+// Event
+plus.addEventListener("click", () => {});
+minus.addEventListener("click", () => {});
+reset.addEventListener("click", () => {});
 
-plus.addEventListener("click", () => {
-  addCalc(Number(input.value) || 0);
-});
-minus.addEventListener("click", () => {
-  addCalc(-Number(input.value) || 0);
-});
-reset.addEventListener("click", () => {
-  count = 0;
-  text.textContent = count;
-  body.classList.toggle("red", false);
-});
+// Action - state change
+function updateCount(number) {}
+
+// Render
+function render() {}
