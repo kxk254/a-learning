@@ -4,19 +4,25 @@
     <title>My Page</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="../styles.css" />
-    <script src="./script.js" async></script>
+    <script src="./script.js" defer></script>
   </head>
   <body>
+    <button id="retrieve">[retreive data]</button>
+    <hr />
     <label>
       <span>step value:<input id="input" type="number" value="1" /></span>
-      <button id="plus">[+]</button>
+      <hr />
+      <button id="plus">[+]</button><br />
       <span
         >Counter:
         <p id="text">0</p></span
       >
       <button id="minus">[-]</button>
     </label>
+    <hr />
     <button id="reset">[reset]</button>
+    <button id="undo">[undo]</button>
+    <div id="log"></div>
 
     <a href="../index.html">back</a>
   </body>

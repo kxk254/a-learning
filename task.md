@@ -3,6 +3,7 @@
 - toggle, false, >=
 - disable minus when zero or minus 
 - add history log 
+- undo most recent
 - save count using localStorage
 - render => UP, update text content, update colors/classes, enable/disable buttons, show hide elements, formatting display
 - do not include 'count change' 'biz logic' 'event handling'
