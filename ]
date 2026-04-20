@@ -22,54 +22,23 @@ divide.addEventListener("click", () => {
 
 // data update
 function calcValue(operation) {
-  const a = Number(valA.value);
-  const b = Number(valB.value);
-  validateNumber(a);
-  validateNumber(b);
-  let res = 0;
+  const a = valA.value;
+  const b = valB.value;
   switch (operation) {
     case "add":
-      res = a + b;
+      const res = Number(a) + Number(b);
       console.log("answer", res);
-      render(res);
-      break;
     case "minus":
-      res = a - b;
+      res = Number(a) - Number(b);
       console.log("answer", res);
-      render(res);
-      break;
     case "multiple":
-      res = a * b;
+      res = Number(a) * Number(b);
       console.log("answer", res);
-      render(res);
-      break;
     case "divide":
-      res = a / b;
+      res = Number(a) / Number(b);
       console.log("answer", res);
-      render(res);
-      break;
-    default:
-      console.log("error");
   }
 }
 
-function validateNumber(num) {
-  if (Number.isFinite(num) === false) {
-    alert("input valid number");
-  } else if (num.trim().length === 0) {
-    alert("empty");
-  }
-
-  regex(num);
-}
-
-function regex(num) {
-  if (/\..*\./.test(num)) {
-    alert("don't input too many dots");
-  }
-}
 // UP rendering
-function render(res) {
-  validateNumber(res);
-  result.textContent = res;
-}
+function render() {}
