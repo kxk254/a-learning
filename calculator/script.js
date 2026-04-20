@@ -22,10 +22,8 @@ divide.addEventListener("click", () => {
 
 // data update
 function calcValue(operation) {
-  const a = Number(valA.value);
-  const b = Number(valB.value);
-  validateNumber(a);
-  validateNumber(b);
+  const a = convertToNumber(valA.value);
+  const b = convertToNumber(valB.value);
   let res = 0;
   switch (operation) {
     case "add":
@@ -53,23 +51,20 @@ function calcValue(operation) {
   }
 }
 
-function validateNumber(num) {
-  if (Number.isFinite(num) === false) {
+function convertToNumber(str) {
+  let num = Number(str);
+  if (str === "") {
+    alert("empty strings");
+  } else if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(num)) {
+    alert("too many dots");
+  } else if (!Number.isFinite(num)) {
     alert("input valid number");
-  } else if (num.trim().length === 0) {
-    alert("empty");
   }
-
-  regex(num);
+  return num;
 }
 
-function regex(num) {
-  if (/\..*\./.test(num)) {
-    alert("don't input too many dots");
-  }
-}
 // UP rendering
 function render(res) {
-  validateNumber(res);
+  convertToNumber(res);
   result.textContent = res;
 }
