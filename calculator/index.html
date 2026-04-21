@@ -3,17 +3,27 @@
   <head>
     <title>My Page</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <script src="./script.js" async></script>
   </head>
   <body>
     <h1>Calculator</h1>
     <label>Value A:<input type="text" id="valueA" /></label>
     <label>Value B:<input type="text" id="valueB" /></label>
+    <hr />
     <button id="plus">+</button>
     <button id="minus">-</button>
     <button id="multiple">x</button>
     <button id="divide">/</button>
+    <button id="clean">clean</button>
+    <div id="error"></div>
+    <hr />
     <label>Result:<span id="result"></span></label>
-    <div><a href="../index.html">back</a>
+    <hr />
+    <button id="retreive">retreive</button>
+    <button id="pop">delete previous</button>
+    <p>calc history</p>
+    <div id="screen"></div>
+    <div><a href="../index.html">back</a></div>
   </body>
 </html>
