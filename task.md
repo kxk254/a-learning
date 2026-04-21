@@ -1,3 +1,9 @@
+## Layers 
+- data-definition
+- event 
+- state-data 
+- logic 
+- UI 
 ## counter
 - function => updateState,render() breakdown
 - toggle, false, >=
@@ -24,6 +30,7 @@ Event - (action - state change) - save - render
 - keyboard support 
 - history of calculation
 - undo redo using undo/redo stack
+- create object data, redo/undo, logic streamlined
 
 
 ## Random generator
