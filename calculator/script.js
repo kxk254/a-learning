@@ -51,15 +51,24 @@ function calcValue(operation) {
   }
 }
 
-function convertToNumber(str) {
-  let num = Number(str);
-  if (str === "") {
-    alert("empty strings");
-  } else if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(num)) {
-    alert("too many dots");
-  } else if (!Number.isFinite(num)) {
-    alert("input valid number");
+function convertToNumber(value) {
+  validateValue(value);
+  let num = Number(value);
+  return num;
+}
+
+function validateValue(value) {
+  if (typeof value === "string" && value.trim() === "") {
+    alertRender("empty string");
+    return;
   }
+
+  const num = Number(value);
+  if (!Number.isFinite(num)) {
+    alertRender("enter a valid number");
+    return;
+  }
+
   return num;
 }
 
@@ -67,4 +76,9 @@ function convertToNumber(str) {
 function render(res) {
   convertToNumber(res);
   result.textContent = res;
+}
+
+function alertRender(alt) {
+  result.textContent = alt;
+  result.classList.add("red");
 }

@@ -22,3 +22,8 @@ button {
 .background {
   background: gray;
 }
+
+.red {
+  background: red;
+  color: white;
+}
