@@ -23,6 +23,7 @@ Event - (action - state change) - save - render
   no division by zero
 - keyboard support 
 - history of calculation
+- undo redo using undo/redo stack
 
 
 ## Random generator

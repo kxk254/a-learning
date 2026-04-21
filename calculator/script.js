@@ -11,7 +11,7 @@ const pop = document.querySelector("#pop");
 const screen = document.querySelector("#screen");
 const error = document.querySelector("#error");
 
-history = [];
+calcHistory = [];
 //event
 plus.addEventListener("click", () => {
   calcValue("add");
@@ -29,8 +29,12 @@ clean.addEventListener("click", () => {
   cleanLocalStorage();
   cleanScreen();
 });
-retreive.addEventListener("click", () => {});
-pop.addEventListener("click", () => {});
+retreive.addEventListener("click", () => {
+  showScreen();
+});
+pop.addEventListener("click", () => {
+  popHistory();
+});
 
 // data update
 function calcValue(operation) {
@@ -39,35 +43,44 @@ function calcValue(operation) {
   let res = 0;
   if (a.error) {
     render(a);
+    return;
   } else if (b.error) {
     render(b);
+    return;
   }
   switch (operation) {
     case "add":
       res = a.value + b.value;
-      history.push = (a, b, operation, res);
       break;
     case "minus":
       res = a.value - b.value;
-      history.push = (a, b, operation, res);
       break;
     case "multiple":
       res = a.value * b.value;
-      history.push = (a, b, operation, res);
       break;
     case "divide":
       res = a.value / b.value;
-      history.push = (a, b, operation, res);
       break;
     default:
       console.log("error");
   }
-  console.log("result", res);
+  calcHistory.push({
+    a: a.value,
+    b: b.value,
+    operation: operation,
+    result: res,
+  });
+  console.log("result", res, calcHistory, operation);
+  addLocalStorage();
   render({ value: res });
 }
 
 function validateAndConvert(value) {
-  if (typeof value === "string" && value.trim() === "") {
+  if (
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" && value.trim() === "")
+  ) {
     return { error: "string or empty is not allowed" };
   }
 
@@ -78,25 +91,46 @@ function validateAndConvert(value) {
 
   return { value: num };
 }
-// local storage
-function setLocalStorage() {}
-function getLocalStorage() {}
+// local storag
+function addLocalStorage() {
+  localStorage.setItem("history", JSON.stringify(calcHistory));
+}
+function getLocalStorage() {
+  const data = JSON.parse(localStorage.getItem("history"));
+  calcHistory = data || [];
+  return calcHistory;
+}
 function cleanLocalStorage() {
   localStorage.clear();
-  history = [];
+  calcHistory = [];
+}
+
+function popHistory() {
+  if (calcHistory.length === 0) return;
+  calcHistory.pop();
+  screen.innerHTML = "";
+
+  calcHistory.forEach((e) => {
+    const div = document.createElement("div");
+    div.textContent = `a:${e.a} b:${e.b} operation:${e.operation} result:${e.result}`;
+    screen.appendChild(div);
+  });
+  addLocalStorage();
 }
 
 // UP rendering
 function render(res) {
   console.log("res", res);
-  if (res.value) {
-    result.textContent = res.value;
-    error.classList.remove("red");
-    error.textContent = "";
-  } else if (res.error) {
+
+  if (res.error) {
     error.textContent = res.error;
     result.textContent = "";
     error.classList.add("red");
+  } else if (res.value !== undefined) {
+    result.textContent = res.value;
+    error.classList.remove("red");
+    error.textContent = "";
+    showScreen();
   }
 }
 
@@ -104,4 +138,18 @@ function cleanScreen() {
   result.textContent = "";
   error.textContent = "";
   error.classList.remove("red");
+  valA.value = "";
+  valB.value = "";
+  screen.innerHTML = "";
+}
+
+function showScreen() {
+  screenMemory = getLocalStorage();
+  screen.innerHTML = "";
+
+  screenMemory.forEach((e) => {
+    const div = document.createElement("div");
+    div.textContent = `a:${e.a} b:${e.b} operation:${e.operation} result:${e.result}`;
+    screen.appendChild(div);
+  });
 }
