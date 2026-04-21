@@ -12,6 +12,9 @@ const clean = document.querySelector("#clean");
 const pop = document.querySelector("#pop");
 let history = [];
 
+const screen = document.querySelector("#screen");
+
+history = [];
 //event
 plus.addEventListener("click", () => {
   calcValue("add");
@@ -37,93 +40,74 @@ pop.addEventListener("click", () => {
 
 // data update
 function calcValue(operation) {
-  const a = validateValue(valA.value);
-  const b = validateValue(valB.value);
+  const a = validateAndConvert(valA.value);
+  const b = validateAndConvert(valB.value);
   let res = 0;
+  if (a.error) {
+    render(a);
+  } else if (b.error) {
+    render(b);
+  }
   switch (operation) {
     case "add":
       res = a.value + b.value;
-      console.log("answer", res);
-      history.push({ a: a, b: b, operation: "add", result: res });
-      render(res);
-      saveStorage();
+      history.push = (a, b, operation, res);
       break;
     case "minus":
       res = a.value - b.value;
-      console.log("answer", res);
-      history.push({ a: a, b: b, operation: "minus", result: res });
-      render(res);
-      saveStorage();
+      history.push = (a, b, operation, res);
       break;
     case "multiple":
       res = a.value * b.value;
-      console.log("answer", res);
-      history.push({ a: a, b: b, operation: "multiple", result: res });
-      render(res);
-      saveStorage();
+      history.push = (a, b, operation, res);
       break;
     case "divide":
       res = a.value / b.value;
-      console.log("answer", res);
-      history.push({ a: a, b: b, operation: "divide", result: res });
-      render(res);
-      saveStorage();
+      history.push = (a, b, operation, res);
       break;
     default:
       console.log("error");
   }
+  console.log("result", res);
+  render({ value: res });
 }
 
-function validateValue(value) {
+function validateAndConvert(value) {
   if (typeof value === "string" && value.trim() === "") {
-    return { error: "empty string" };
+    return { error: "string or empty is not allowed" };
   }
-
   const num = Number(value);
   if (!Number.isFinite(num)) {
-    return { error: "enter a valid input" };
+    return { error: "input a valid number" };
   }
 
   return { value: num };
 }
 
-function saveStorage() {
-  localStorage.setItem("history", JSON.stringify(history));
-}
-function cleanStorage() {
+// local storage
+function setLocalStorage() {}
+function getLocalStorage() {}
+function cleanLocalStorage() {
   localStorage.clear();
-}
-function retreiveStorage() {
-  const history = JSON.parse(localStorage.getItem("history"));
-  console.log(history);
-  calcLog(history);
-}
-function popStorage() {
-  history.pop();
-  calcLog(history);
+  history = [];
 }
 
 // UP rendering
 function render(res) {
-  const resultObj = validateValue(res);
-  console.log(`"value":${resultObj.value}, "error":${resultObj.error}`);
-
-  if (resultObj.error) {
-    error.textContent = resultObj.error;
-    error.classList.add("red");
-  } else if (resultObj.value !== undefined) {
-    result.textContent = resultObj.value;
+  console.log("res", res);
+  if (res.value) {
+    result.textContent = res.value;
     error.classList.remove("red");
     error.textContent = "";
-    calcLog(history);
+  } else if (res.error) {
+    error.textContent = res.error;
+    result.textContent = "";
+    error.classList.add("red");
   }
 }
 
-function calcLog(history) {
-  console.log("history", history);
-  history.forEach((e) => {
-    const div = document.createElement("div");
-    log.appendChild(div);
-    div.textContent = `a: ${e.a.value} b:${e.b.value} operation:${e.operation} result:${e.result}`;
-  });
+function cleanScreen() {
+  result.textContent = "";
+  error.textContent = "";
+  error.classList.remove("red");
 }
