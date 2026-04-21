@@ -52,6 +52,11 @@ Event - (action - state change) - save - render
 - add delete
 - state thinking
 - localStorage
+- show/hide password toggle
+- dark/light mode toggle 
+- accordion expand/collapse toggle 
+- setting panel toggle 
+- manage state/event/conditional rendering 
  
  ## form 
  - DOM form handling submit, input, change 
