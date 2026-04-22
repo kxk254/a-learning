@@ -3,12 +3,22 @@ const box = document.querySelector("#box");
 const item = document.querySelector("#item");
 const itemList = document.querySelector("#item-list");
 const text = document.getElementById("text");
+const sidebar = document.querySelector("#sidebar");
+const closebtn = document.querySelector(".closebtn");
+const openbtn = document.querySelector(".openbtn");
 
-btn.addEventListener("click", () => {
-  box.classList.toggle("hidden");
+closebtn?.addEventListener("click", () => {
+  hideSidebar();
+});
+openbtn?.addEventListener("click", () => {
+  openSidebar();
 });
 
-item.addEventListener("click", () => {
+btn?.addEventListener("click", () => {
+  box?.classList.toggle("hidden");
+});
+
+item?.addEventListener("click", () => {
   //const title = text.textContent.value;
   console.log(text.value);
   const newDiv = document.createElement("div");
@@ -19,6 +29,14 @@ item.addEventListener("click", () => {
     newDiv.remove();
     newDel.remove();
   });
-  itemList.appendChild(newDiv);
-  itemList.appendChild(newDel);
+  itemList?.appendChild(newDiv);
+  itemList?.appendChild(newDel);
 });
+
+// UI
+function hideSidebar() {
+  sidebar?.classList.add("hidden");
+}
+function openSidebar() {
+  sidebar?.classList.remove("hidden");
+}

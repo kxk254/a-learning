@@ -3,19 +3,28 @@
   <head>
     <title>My Page</title>
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="../styles.css" />
-    <script src="./script.js" async></script>
+    <script src="./script.js" defer></script>
   </head>
   <body>
-    <a href="https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp"
-      >tutorial</a
-    >
-    <button id="btn">button</button>
-    <button id="item">Add Items</button>
-    <input id="text" type="text" />
+    <div id="sidebar" class="sidebar">
+      <a href="#" class="closebtn">&times;</a>
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Contact</a>
+    </div>
 
-    <h1 id="box">BOX</h1>
-    <div id="item-list"></div>
-    <a href="../index.html">back</a>
+    <div id="main">
+      <button class="openbtn">&#9776; Open Sidebar</button>
+      <a href="https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp"
+        >tutorial</a
+      >
+      <button id="btn">button</button>
+      <button id="item">Add Items</button>
+      <input id="text" type="text" />
+
+      <h1 id="box">BOX</h1>
+      <div id="item-list"></div>
+      <a href="../index.html">back</a>
+    </div>
   </body>
 </html>
