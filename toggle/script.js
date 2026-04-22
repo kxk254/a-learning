@@ -6,6 +6,7 @@ const text = document.getElementById("text");
 const sidebar = document.querySelector("#sidebar");
 const closebtn = document.querySelector(".closebtn");
 const openbtn = document.querySelector(".openbtn");
+const main = document.querySelector("#main");
 
 closebtn?.addEventListener("click", () => {
   hideSidebar();
@@ -36,7 +37,9 @@ item?.addEventListener("click", () => {
 // UI
 function hideSidebar() {
   sidebar?.classList.add("hidden");
+  main?.classList.remove("hidden-main");
 }
 function openSidebar() {
   sidebar?.classList.remove("hidden");
+  main?.classList.add("hidden-main");
 }
