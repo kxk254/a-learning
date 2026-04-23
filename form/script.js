@@ -1,15 +1,56 @@
 const inputField = document.querySelector("#inputField");
 const newInputField = document.querySelector("#newInputField");
+const myform = document.querySelector("#myform");
+const save = document.querySelector("#save");
+const deleteBtn = document.querySelector("#delete");
+const retreive = document.querySelector("#retreive");
+
 // object
-let rows = [
-  { id: 1, price: 20, qty: 3 },
-  { id: 2, price: 15, qty: 2 },
-  { id: 3, price: 30, qty: 5 },
-];
+let rows = [];
 
 //  events
+myform.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const row = newInputField.querySelector(".row");
+  const price = row.querySelector("input[name='price']").value;
+  const qty = row.querySelector("input[name='qty']").value;
+
+  const newRow = { id: Date.now(), price: Number(price), qty: Number(qty) };
+  rows.push(newRow);
+  renderData(rows);
+  renderEmptyRow();
+  rows.forEach((e) => {
+    console.log(e.id, e.price, e.qty);
+  });
+});
+save.addEventListener("click", () => {
+  saveStorage();
+});
+deleteBtn.addEventListener("click", () => {
+  deleteStorage();
+  render();
+});
+retreive.addEventListener("click", () => {
+  rows = [];
+  rows = retreiveStorage();
+  render();
+});
 
 // data state
+
+function saveStorage() {
+  localStorage.setItem("rows", JSON.stringify(rows));
+}
+
+function deleteStorage() {
+  localStorage.removeItem("rows");
+  rows = [];
+}
+
+function retreiveStorage() {
+  const retreiveRows = JSON.parse(localStorage.getItem("rows"));
+  return retreiveRows;
+}
 
 // UI
 function renderData(data) {
@@ -36,6 +77,8 @@ function renderEmptyRow() {
 `;
   newInputField.appendChild(div);
 }
-
-renderData(rows);
-renderEmptyRow();
+function render() {
+  renderData(rows);
+  renderEmptyRow();
+}
+render();
