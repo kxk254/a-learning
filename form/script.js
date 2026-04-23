@@ -4,6 +4,7 @@ const myform = document.querySelector("#myform");
 const save = document.querySelector("#save");
 const deleteBtn = document.querySelector("#delete");
 const retreive = document.querySelector("#retreive");
+const sumField = document.querySelector("#sumField");
 
 // object
 let rows = [];
@@ -12,13 +13,13 @@ let rows = [];
 myform.addEventListener("submit", (e) => {
   e.preventDefault();
   const row = newInputField.querySelector(".row");
-  const price = row.querySelector("input[name='price']").value;
-  const qty = row.querySelector("input[name='qty']").value;
+  const price = inputValidate(row.querySelector("input[name='price']").value);
+  const qty = inputValidate(row.querySelector("input[name='qty']").value);
 
   const newRow = { id: Date.now(), price: Number(price), qty: Number(qty) };
   rows.push(newRow);
-  renderData(rows);
-  renderEmptyRow();
+  render();
+  saveStorage();
   rows.forEach((e) => {
     console.log(e.id, e.price, e.qty);
   });
@@ -49,7 +50,30 @@ function deleteStorage() {
 
 function retreiveStorage() {
   const retreiveRows = JSON.parse(localStorage.getItem("rows"));
-  return retreiveRows;
+  return retreiveRows || [];
+}
+
+function sumAll() {
+  return rows.reduce(
+    (acc, e) => {
+      acc.sumA += e.price;
+      acc.sumB += e.qty;
+      return acc;
+    },
+    { sumA: 0, sumB: 0 },
+  );
+}
+
+// data validation
+function inputValidate(input) {
+  if (input.trim() === "") {
+    alert("Input cannot be empty");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    alert("please input valid numbers");
+  }
+  return num;
 }
 
 // UI
@@ -62,8 +86,14 @@ function renderData(data) {
     div.innerHTML = `
 <input name="price" value="${e.price}"/>
 <input name="qty" value="${e.qty}"/>
+<button type="button" class="delete-btn">delete</button>
 `;
     inputField.appendChild(div);
+    div.querySelector(".delete-btn").addEventListener("click", () => {
+      rows = rows.filter((row) => row.id !== e.id);
+      render();
+      saveStorage();
+    });
   });
 }
 
@@ -80,5 +110,15 @@ function renderEmptyRow() {
 function render() {
   renderData(rows);
   renderEmptyRow();
+  sumRender();
+}
+function sumRender() {
+  const sum = sumAll();
+  sumField.innerHTML = "";
+  const spanA = document.createElement("span");
+  spanA.innerHTML = `
+	<span>${sum.sumA}</span>
+	<span>${sum.sumB}</span>`;
+  sumField.appendChild(spanA);
 }
 render();
