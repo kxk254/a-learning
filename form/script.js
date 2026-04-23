@@ -1,4 +1,5 @@
 const inputField = document.querySelector("#inputField");
+const newInputField = document.querySelector("#newInputField");
 // object
 let rows = [
   { id: 1, price: 20, qty: 3 },
@@ -25,5 +26,16 @@ function renderData(data) {
   });
 }
 
+function renderEmptyRow() {
+  newInputField.innerHTML = "";
+  const div = document.createElement("div");
+  div.className = "row";
+  div.innerHTML = `
+<input name="price" value=""/>
+<input name="qty" value=""/>
+`;
+  newInputField.appendChild(div);
+}
+
 renderData(rows);
-renderData([]);
+renderEmptyRow();
