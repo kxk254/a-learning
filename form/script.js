@@ -1,4 +1,4 @@
-const inputField = document.querySelector("#inputField");
+const dataField = document.querySelector("#Field");
 const newInputField = document.querySelector("#newInputField");
 const myform = document.querySelector("#myform");
 const save = document.querySelector("#save");
@@ -9,126 +9,83 @@ const sumField = document.querySelector("#sumField");
 // object
 let rows = [];
 
-//  events
-myform.addEventListener("submit", (e) => {
-  e.preventDefault();
-  try {
-    const price = inputValidate(
-      newInputField.querySelector("[name='price']").value,
-    );
-    const qty = inputValidate(
-      newInputField.querySelector("[name='qty']").value,
-    );
+//  #####  events
 
-    const newRow = { id: Date.now(), price: price, qty: qty };
-    rows.push(newRow);
-    render();
-    saveStorage();
-    rows.forEach((e) => {
-      console.log(e.id, e.price, e.qty);
-    });
-  } catch (err) {
-    alert(err.message);
-    return;
+// ''' submit '''
+myform.addEventListener("submit", () => {});
+// ''' delete  '''
+deleteBtn.addEventListener("click", () => {});
+// ''' retreive '''
+retreive.addEventListener("click", () => {});
+// ''' add delete delegate handler '''
+dataField.addEventListener("click", (e) => {
+  delegateHandler(e);
+});
+
+//  ##### data
+
+// ''' calculate total '''
+function sumTotal() {
+  rows.reduce(
+    (acc, e) => {
+      acc.totalPrice += Number(e.price);
+      acc.totalQty = +Number(e.qty);
+      return acc;
+    },
+    { totalPrice: 0, totalQty: 0 },
+  );
+}
+// ''' add submit data to list '''
+function compileData() {
+  const data = {
+    id: Date.now(),
+    price: validateInput(newInputField.querySelector("[name='price']").value),
+    qty: validateInput(newInputField.querySelector("[name='qty']").value),
+  };
+  return rows.push[data];
+}
+// ''' Validate Data '''
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty Value is now allowed");
   }
-});
-save.addEventListener("click", () => {
-  saveStorage();
-});
-deleteBtn.addEventListener("click", () => {
-  deleteStorage();
-  render();
-});
-retreive.addEventListener("click", () => {
-  rows = retreiveStorage();
-  render();
-});
-inputField.addEventListener("click", (e) => {
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new Error("Input a valid number");
+  }
+  return num;
+}
+// ''' operate delegate handler '''
+function delegateHandler(e) {
   if (e.target.classList.contains("delete-btn")) {
     const id = Number(e.target.closest(".row").dataset.id);
-    rows = rows.filter((row) => row.id !== id);
-    render();
-    saveStorage();
+    rows = rows.filter((row) => row.id !== e.id);
   }
-});
-
-// data state
-
+}
+// ''' Create Storage '''
 function saveStorage() {
-  localStorage.setItem("rows", JSON.stringify(rows));
+  localStorage.setItem("rows", JSON.stringify("rows"));
 }
-
-function deleteStorage() {
-  localStorage.removeItem("rows");
-  rows = [];
-}
-
-function retreiveStorage() {
+// ''' Revrieve Storage '''
+function loadStorage() {
   try {
     return JSON.parse(localStorage.getItem("rows")) || [];
   } catch {
     return [];
   }
 }
-
-function sumAll() {
-  return rows.reduce(
-    (acc, e) => {
-      acc.totalPrice += Number(e.price);
-      acc.totalQty += Number(e.qty);
-      return acc;
-    },
-    { totalPrice: 0, totalQty: 0 },
-  );
+// ''' Delete Storage '''
+function deleteStorage() {
+  localStorage.removeItem("rows");
+  rows = [];
 }
 
-// data validation
-function inputValidate(input) {
-  if (String(input).trim() === "") {
-    throw new Error("Input cannot be empty");
-  }
-  const num = Number(input);
-  if (!Number.isFinite(num)) {
-    throw new Error("Please input a valid number");
-  }
-  return num;
-}
+//  ##### UI
 
-// UI
-function renderData(data) {
-  inputField.innerHTML = "";
-  data.forEach((e) => {
-    const div = document.createElement("div");
-    div.className = "row";
-    div.dataset.id = e.id;
-    div.innerHTML = `
-<input name="price" value="${e.price}"/>
-<input name="qty" value="${e.qty}"/>
-<button type="button" class="delete-btn">delete</button>
-`;
-    inputField.appendChild(div);
-  });
-}
+// ''' show empty cell '''
+function createEmptyCell() {}
+// ''' show data field '''
+function showData() {}
 
-function renderEmptyRow() {
-  newInputField.innerHTML = "";
-  const div = document.createElement("div");
-  div.className = "row";
-  div.innerHTML = `
-<input name="price" value=""/>
-<input name="qty" value=""/>
-`;
-  newInputField.appendChild(div);
-}
-function render() {
-  renderData(rows);
-  renderEmptyRow();
-  sumRender();
-}
-function sumRender() {
-  const sum = sumAll();
-  sumField.innerHTML = `
-	<span>${sum.totalPrice}</span>
-	<span>${sum.totalQty}</span>`;
-}
-renderEmptyRow();
+// ''' show sum field '''
+function showSumTotal() {}
