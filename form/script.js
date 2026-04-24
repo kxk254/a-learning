@@ -12,17 +12,25 @@ let rows = [];
 //  events
 myform.addEventListener("submit", (e) => {
   e.preventDefault();
-  const row = newInputField.querySelector(".row");
-  const price = inputValidate(row.querySelector("input[name='price']").value);
-  const qty = inputValidate(row.querySelector("input[name='qty']").value);
+  try {
+    const price = inputValidate(
+      newInputField.querySelector("[name='price']").value,
+    );
+    const qty = inputValidate(
+      newInputField.querySelector("[name='qty']").value,
+    );
 
-  const newRow = { id: Date.now(), price: Number(price), qty: Number(qty) };
-  rows.push(newRow);
-  render();
-  saveStorage();
-  rows.forEach((e) => {
-    console.log(e.id, e.price, e.qty);
-  });
+    const newRow = { id: Date.now(), price: price, qty: qty };
+    rows.push(newRow);
+    render();
+    saveStorage();
+    rows.forEach((e) => {
+      console.log(e.id, e.price, e.qty);
+    });
+  } catch (err) {
+    alert(err.message);
+    return;
+  }
 });
 save.addEventListener("click", () => {
   saveStorage();
@@ -32,9 +40,16 @@ deleteBtn.addEventListener("click", () => {
   render();
 });
 retreive.addEventListener("click", () => {
-  rows = [];
   rows = retreiveStorage();
   render();
+});
+inputField.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const id = Number(e.target.closest(".row").dataset.id);
+    rows = rows.filter((row) => row.id !== id);
+    render();
+    saveStorage();
+  }
 });
 
 // data state
@@ -49,29 +64,32 @@ function deleteStorage() {
 }
 
 function retreiveStorage() {
-  const retreiveRows = JSON.parse(localStorage.getItem("rows"));
-  return retreiveRows || [];
+  try {
+    return JSON.parse(localStorage.getItem("rows")) || [];
+  } catch {
+    return [];
+  }
 }
 
 function sumAll() {
   return rows.reduce(
     (acc, e) => {
-      acc.sumA += e.price;
-      acc.sumB += e.qty;
+      acc.totalPrice += Number(e.price);
+      acc.totalQty += Number(e.qty);
       return acc;
     },
-    { sumA: 0, sumB: 0 },
+    { totalPrice: 0, totalQty: 0 },
   );
 }
 
 // data validation
 function inputValidate(input) {
-  if (input.trim() === "") {
-    alert("Input cannot be empty");
+  if (String(input).trim() === "") {
+    throw new Error("Input cannot be empty");
   }
   const num = Number(input);
   if (!Number.isFinite(num)) {
-    alert("please input valid numbers");
+    throw new Error("Please input a valid number");
   }
   return num;
 }
@@ -89,11 +107,6 @@ function renderData(data) {
 <button type="button" class="delete-btn">delete</button>
 `;
     inputField.appendChild(div);
-    div.querySelector(".delete-btn").addEventListener("click", () => {
-      rows = rows.filter((row) => row.id !== e.id);
-      render();
-      saveStorage();
-    });
   });
 }
 
@@ -114,11 +127,8 @@ function render() {
 }
 function sumRender() {
   const sum = sumAll();
-  sumField.innerHTML = "";
-  const spanA = document.createElement("span");
-  spanA.innerHTML = `
-	<span>${sum.sumA}</span>
-	<span>${sum.sumB}</span>`;
-  sumField.appendChild(spanA);
+  sumField.innerHTML = `
+	<span>${sum.totalPrice}</span>
+	<span>${sum.totalQty}</span>`;
 }
-render();
+renderEmptyRow();
