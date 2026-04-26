@@ -12,11 +12,19 @@ let rows = [];
 //  #####  events
 
 // ''' submit '''
-myform.addEventListener("submit", () => {});
+myform.addEventListener("submit", (e) => {
+  e.prevendDefault();
+  compileData();
+  saveStorage();
+});
 // ''' delete  '''
-deleteBtn.addEventListener("click", () => {});
+deleteBtn.addEventListener("click", () => {
+  deleteStorage();
+});
 // ''' retreive '''
-retreive.addEventListener("click", () => {});
+retreive.addEventListener("click", () => {
+  loadStorage();
+});
 // ''' add delete delegate handler '''
 dataField.addEventListener("click", (e) => {
   delegateHandler(e);
@@ -26,11 +34,10 @@ dataField.addEventListener("click", (e) => {
 
 // ''' calculate total '''
 function sumTotal() {
-  rows.reduce(
+  return rows.reduce(
     (acc, e) => {
       acc.totalPrice += Number(e.price);
-      acc.totalQty = +Number(e.qty);
-      return acc;
+      acc.totalQty += Number(e.qty);
     },
     { totalPrice: 0, totalQty: 0 },
   );
@@ -83,9 +90,34 @@ function deleteStorage() {
 //  ##### UI
 
 // ''' show empty cell '''
-function createEmptyCell() {}
+function createEmptyCell() {
+  newInputField.innerHTML = `
+<input type="text" name="price" value=""/>
+<input type="text" name="qty" value=""/>
+`;
+  showSumTotal();
+}
 // ''' show data field '''
-function showData() {}
+function showData() {
+  dataField.innerHTML = "";
+  rows.forEach((e) => {
+    const div = document.createElement("div");
+    div.className = "row";
+    div.dataset.id = e.id;
+    div.innerHTML = `
+<input type="text" name="price" value="${e.price}"/>
+<input type="text" name="qty"  value="${e.qty}"/>
+<button type="button" name="delete-btn">DEL</button>
+		`;
+    dataField.appendChild(div);
+  });
+}
 
 // ''' show sum field '''
-function showSumTotal() {}
+function showSumTotal() {
+  const sum = sumTotal();
+  sumField.innerHTML = `
+<p> Total Price: <span>${sum.totalPrice}</span> Total Qty: <span>${sum.totalQty}</span></p>
+`;
+}
+createEmptyCell();
