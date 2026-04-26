@@ -1,6 +1,6 @@
-const dataField = document.querySelector("#Field");
+const dataField = document.querySelector("#dataField");
 const newInputField = document.querySelector("#newInputField");
-const myform = document.querySelector("#myform");
+const myForm = document.querySelector("#myForm");
 const save = document.querySelector("#save");
 const deleteBtn = document.querySelector("#delete");
 const retreive = document.querySelector("#retreive");
@@ -12,9 +12,9 @@ let rows = [];
 //  #####  events
 
 // ''' submit '''
-myform.addEventListener("submit", (e) => {
-  e.prevendDefault();
-  compileData();
+myForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  showData();
   saveStorage();
 });
 // ''' delete  '''
@@ -23,7 +23,7 @@ deleteBtn.addEventListener("click", () => {
 });
 // ''' retreive '''
 retreive.addEventListener("click", () => {
-  loadStorage();
+  rows = loadStorage();
 });
 // ''' add delete delegate handler '''
 dataField.addEventListener("click", (e) => {
