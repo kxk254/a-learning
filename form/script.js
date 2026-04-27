@@ -4,7 +4,7 @@ const myForm = document.querySelector("#myForm");
 const save = document.querySelector("#save");
 const deleteBtn = document.querySelector("#delete");
 const retreive = document.querySelector("#retreive");
-const sumField = document.querySelector("#sumField");
+const totalField = document.querySelector("#totalField");
 
 // object
 let rows = [];
@@ -14,8 +14,9 @@ let rows = [];
 // ''' submit '''
 myForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  showData();
+  compileData();
   saveStorage();
+  showData();
 });
 // ''' delete  '''
 deleteBtn.addEventListener("click", () => {
@@ -49,6 +50,7 @@ function compileData() {
     price: validateInput(newInputField.querySelector("[name='price']").value),
     qty: validateInput(newInputField.querySelector("[name='qty']").value),
   };
+  console.log("data-compile :", data);
   return rows.push[data];
 }
 // ''' Validate Data '''
@@ -71,12 +73,13 @@ function delegateHandler(e) {
 }
 // ''' Create Storage '''
 function saveStorage() {
-  localStorage.setItem("rows", JSON.stringify("rows"));
+  localStorage.setItem("rows", JSON.stringify(rows));
 }
 // ''' Revrieve Storage '''
 function loadStorage() {
   try {
-    return JSON.parse(localStorage.getItem("rows")) || [];
+    rows = JSON.parse(localStorage.getItem("rows") || []);
+    return rows;
   } catch {
     return [];
   }
@@ -99,6 +102,7 @@ function createEmptyCell() {
 }
 // ''' show data field '''
 function showData() {
+  loadStorage();
   dataField.innerHTML = "";
   rows.forEach((e) => {
     const div = document.createElement("div");
@@ -116,7 +120,7 @@ function showData() {
 // ''' show sum field '''
 function showSumTotal() {
   const sum = sumTotal();
-  sumField.innerHTML = `
+  totalField.innerHTML = `
 <p> Total Price: <span>${sum.totalPrice}</span> Total Qty: <span>${sum.totalQty}</span></p>
 `;
 }
