@@ -36,6 +36,7 @@ retreive.addEventListener("click", () => {
 dataField.addEventListener("click", (e) => {
   delegateHandler(e);
   showData();
+  saveStorage();
   createEmptyCell();
 });
 
@@ -78,7 +79,7 @@ function validateInput(input) {
 function delegateHandler(e) {
   if (e.target.classList.contains("delete-btn")) {
     const id = Number(e.target.closest(".row").dataset.id);
-    rows = rows.filter((row) => row.id !== e.id);
+    rows = rows.filter((row) => row.id !== id);
   }
 }
 // ''' Create Storage '''
@@ -113,7 +114,6 @@ function createEmptyCell() {
 }
 // ''' show data field '''
 function showData() {
-  loadStorage();
   dataField.innerHTML = "";
   rows.forEach((e) => {
     const div = document.createElement("div");
@@ -122,7 +122,7 @@ function showData() {
     div.innerHTML = `
 <input type="text" name="price" value="${e.price}"/>
 <input type="text" name="qty"  value="${e.qty}"/>
-<button type="button" name="delete-btn">DEL</button>
+<button type="button" class="delete-btn">DEL</button>
 		`;
     dataField.appendChild(div);
   });
