@@ -16,19 +16,27 @@ myForm.addEventListener("submit", (e) => {
   e.preventDefault();
   compileData();
   saveStorage();
+  showSumTotal();
   showData();
+  createEmptyCell();
 });
 // ''' delete  '''
 deleteBtn.addEventListener("click", () => {
   deleteStorage();
+  showData();
+  createEmptyCell();
 });
 // ''' retreive '''
 retreive.addEventListener("click", () => {
   rows = loadStorage();
+  showData();
+  createEmptyCell();
 });
 // ''' add delete delegate handler '''
 dataField.addEventListener("click", (e) => {
   delegateHandler(e);
+  showData();
+  createEmptyCell();
 });
 
 //  ##### data
@@ -39,6 +47,7 @@ function sumTotal() {
     (acc, e) => {
       acc.totalPrice += Number(e.price);
       acc.totalQty += Number(e.qty);
+      return acc;
     },
     { totalPrice: 0, totalQty: 0 },
   );
@@ -50,8 +59,9 @@ function compileData() {
     price: validateInput(newInputField.querySelector("[name='price']").value),
     qty: validateInput(newInputField.querySelector("[name='qty']").value),
   };
-  console.log("data-compile :", data);
-  return rows.push[data];
+  rows.push(data);
+  console.log("data-compile :", data, "rows :", rows);
+  return data;
 }
 // ''' Validate Data '''
 function validateInput(input) {
@@ -78,11 +88,12 @@ function saveStorage() {
 // ''' Revrieve Storage '''
 function loadStorage() {
   try {
-    rows = JSON.parse(localStorage.getItem("rows") || []);
-    return rows;
+    const stored = localStorage.getItem("rows");
+    rows = stored ? JSON.parse(stored) : [];
   } catch {
-    return [];
+    rows = [];
   }
+  return rows;
 }
 // ''' Delete Storage '''
 function deleteStorage() {
