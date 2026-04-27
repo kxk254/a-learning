@@ -37,6 +37,7 @@ dataField.addEventListener("click", (e) => {
   delegateHandler(e);
   saveStorage();
   showData();
+  saveStorage();
   createEmptyCell();
 });
 
@@ -79,7 +80,6 @@ function validateInput(input) {
 function delegateHandler(e) {
   if (e.target.classList.contains("delete-btn")) {
     const id = Number(e.target.closest(".row").dataset.id);
-    console.log("id--", id);
     rows = rows.filter((row) => row.id !== id);
   }
 }
@@ -115,7 +115,6 @@ function createEmptyCell() {
 }
 // ''' show data field '''
 function showData() {
-  loadStorage();
   dataField.innerHTML = "";
   rows.forEach((e) => {
     const div = document.createElement("div");
