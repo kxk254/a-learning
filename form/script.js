@@ -1,120 +1,103 @@
 const dataField = document.querySelector("#dataField");
-const newInputField = document.querySelector("#newInputField");
+const inputField = document.querySelector("#inputField");
 const myForm = document.querySelector("#myForm");
-const save = document.querySelector("#save");
-const deleteBtn = document.querySelector("#delete");
-const retreive = document.querySelector("#retreive");
+const resetBtn = document.querySelector("#resetBtn");
+const loadBtn = document.querySelector("#loadBtn");
 const totalField = document.querySelector("#totalField");
 
 // object
 let rows = [];
 
-//  #####  events
+// Event
 
-// ''' submit '''
+// submit - input - validation (try error) - save - render
 myForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  compileData();
-  saveStorage();
-  showSumTotal();
-  showData();
-  createEmptyCell();
+  dataInput();
+  render();
 });
-// ''' delete  '''
-deleteBtn.addEventListener("click", () => {
+// reset - delete - render
+resetBtn.addEventListener("click", () => {
   deleteStorage();
-  showData();
-  createEmptyCell();
+  render();
 });
-// ''' retreive '''
-retreive.addEventListener("click", () => {
-  rows = loadStorage();
-  showData();
-  createEmptyCell();
+// load - load - render
+loadBtn.addEventListener("click", () => {
+  loadStorage();
+  render();
 });
-// ''' add delete delegate handler '''
+// event delegation
 dataField.addEventListener("click", (e) => {
   delegateHandler(e);
-  saveStorage();
-  showData();
-  saveStorage();
-  createEmptyCell();
+
+  render();
+
 });
 
-//  ##### data
+// State - Data
 
-// ''' calculate total '''
-function sumTotal() {
-  return rows.reduce(
-    (acc, e) => {
-      acc.totalPrice += Number(e.price);
-      acc.totalQty += Number(e.qty);
-      return acc;
-    },
-    { totalPrice: 0, totalQty: 0 },
-  );
-}
-// ''' add submit data to list '''
-function compileData() {
-  const data = {
-    id: Date.now(),
-    price: validateInput(newInputField.querySelector("[name='price']").value),
-    qty: validateInput(newInputField.querySelector("[name='qty']").value),
-  };
-  rows.push(data);
-  console.log("data-compile :", data, "rows :", rows);
-  return data;
-}
-// ''' Validate Data '''
-function validateInput(input) {
-  if (String(input).trim() === "") {
-    throw new Error("Empty Value is now allowed");
+// input
+function dataInput() {
+  try {
+    const inputPrice = inputField.querySelector("[name='price']").value;
+    const inputQty = inputField.querySelector("[name='qty']").value;
+    const row = { id: Date.now(), price: inputPrice, qty: inputQty };
+    rows = [...rows, row];
+    saveStorage();
+  } catch (err) {
+    alert(err.message);
   }
-  const num = Number(input);
+}
+// validation
+function validateInput(value) {
+  if (String(value).trim() === "") {
+    throw new Error("Do not input empty value");
+  }
+  const num = Number(value);
   if (!Number.isFinite(num)) {
     throw new Error("Input a valid number");
   }
   return num;
 }
-// ''' operate delegate handler '''
+// calculate sum
+function calcTotal() {
+  return rows.reduce(
+    (acc, e) => {
+      ((acc.totalPrice += Number(e.price)), (acc.totalQty += Number(e.qty)));
+      return acc;
+    },
+    { totalPrice: 0, totalQty: 0 },
+  );
+}
+// delegate and delete item
+
 function delegateHandler(e) {
   if (e.target.classList.contains("delete-btn")) {
     const id = Number(e.target.closest(".row").dataset.id);
     rows = rows.filter((row) => row.id !== id);
+    saveStorage();
   }
 }
-// ''' Create Storage '''
+
+// 1. create local Storage
 function saveStorage() {
   localStorage.setItem("rows", JSON.stringify(rows));
 }
-// ''' Revrieve Storage '''
+// 3. load storage
 function loadStorage() {
-  try {
-    const stored = localStorage.getItem("rows");
-    rows = stored ? JSON.parse(stored) : [];
-  } catch {
-    rows = [];
-  }
+  const store = localStorage.getItem("rows");
+  rows = store ? JSON.parse(store) : [];
   return rows;
 }
-// ''' Delete Storage '''
+// 4. delete storage
 function deleteStorage() {
   localStorage.removeItem("rows");
   rows = [];
 }
 
-//  ##### UI
-
-// ''' show empty cell '''
-function createEmptyCell() {
-  newInputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-`;
-  showSumTotal();
-}
-// ''' show data field '''
-function showData() {
+// UI
+// render dataField
+function renderDataField() {
   dataField.innerHTML = "";
   rows.forEach((e) => {
     const div = document.createElement("div");
@@ -122,18 +105,29 @@ function showData() {
     div.dataset.id = e.id;
     div.innerHTML = `
 <input type="text" name="price" value="${e.price}"/>
-<input type="text" name="qty"  value="${e.qty}"/>
+<input type="text" name="price" value="${e.qty}"/>
 <button type="button" class="delete-btn">DEL</button>
 		`;
     dataField.appendChild(div);
   });
 }
-
-// ''' show sum field '''
-function showSumTotal() {
-  const sum = sumTotal();
+// render inputField
+function renderInputField() {
+  inputField.innerHTML = `
+<input type="text" name="price" value=""/>
+<input type="text" name="qty" value=""/>
+		`;
+}
+function renderTotal() {
+  const result = calcTotal();
   totalField.innerHTML = `
-<p> Total Price: <span>${sum.totalPrice}</span> Total Qty: <span>${sum.totalQty}</span></p>
+<p>Total Price: <span>${result.totalPrice}</span> | Total Quantity: <span>${result.totalQty}</span></p>
 `;
 }
-createEmptyCell();
+// render
+function render() {
+  renderDataField();
+  renderInputField();
+  renderTotal();
+}
+render();
