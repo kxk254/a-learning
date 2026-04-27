@@ -29,7 +29,9 @@ loadBtn.addEventListener("click", () => {
 // event delegation
 dataField.addEventListener("click", (e) => {
   delegateHandler(e);
+
   render();
+
 });
 
 // State - Data

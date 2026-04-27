@@ -5,11 +5,14 @@ const plus = document.querySelector("#plus");
 const minus = document.querySelector("#minus");
 const multiple = document.querySelector("#multiple");
 const divide = document.querySelector("#divide");
-const clean = document.querySelector("#clean");
-const retreive = document.querySelector("#retreive");
-const pop = document.querySelector("#pop");
-const screen = document.querySelector("#screen");
 const error = document.querySelector("#error");
+const log = document.querySelector("#log");
+const retreive = document.querySelector("#retreive");
+const clean = document.querySelector("#clean");
+const pop = document.querySelector("#pop");
+let history = [];
+
+const screen = document.querySelector("#screen");
 
 calcHistory = [];
 //event
@@ -26,8 +29,7 @@ divide.addEventListener("click", () => {
   calcValue("divide");
 });
 clean.addEventListener("click", () => {
-  cleanLocalStorage();
-  cleanScreen();
+  cleanStorage();
 });
 retreive.addEventListener("click", () => {
   showScreen();
@@ -83,7 +85,6 @@ function validateAndConvert(value) {
   ) {
     return { error: "string or empty is not allowed" };
   }
-
   const num = Number(value);
   if (!Number.isFinite(num)) {
     return { error: "input a valid number" };
@@ -91,6 +92,7 @@ function validateAndConvert(value) {
 
   return { value: num };
 }
+//
 // local storag
 function addLocalStorage() {
   localStorage.setItem("history", JSON.stringify(calcHistory));
