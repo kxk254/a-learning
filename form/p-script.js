@@ -5,6 +5,12 @@ const resetBtn = document.querySelector("#resetBtn");
 const loadBtn = document.querySelector("#loadBtn");
 const totalField = document.querySelector("#totalField");
 
+// add undo button
+// inline edition without re-render  => updateOnlyThatRowinDOM
+// derived state  total=computed not stored dont assing to let memory
+// prevent invalid states prevent minus
+// persist + restore cleanly
+
 // object
 let rows = [];
 
@@ -12,148 +18,156 @@ let rows = [];
 myForm.addEventListener("submit", (e) => {
   e.preventDefault();
   inputData();
-  render();
 });
-dataField.addEventListener("click", (e) => {
-  delegateHandler(e);
-  saveStorage();
-  renderTotalField();
-});
+// update input
 dataField.addEventListener("change", (e) => {
-  try {
-    const rowEl = e.target.closest(".row");
-    if (!rowEl) return;
-    const id = Number(rowEl.dataset.id);
-    const row = rows.find((row) => row.id === id);
-    const value = validateInput(e.target.value.trim());
-
-    row[e.target.name] = value;
-    saveStorage();
-    renderTotalField();
-  } catch (err) {
-    alert(err.message);
-  }
+  editableInput(e);
+});
+// delete delgator
+dataField.addEventListener("click", (e) => {
+  delegateDeleteButton(e);
 });
 resetBtn.addEventListener("click", () => {
   resetStorage();
-  render();
 });
 loadBtn.addEventListener("click", () => {
   loadStorage();
-  render();
 });
-// Status
-// 0. data layer
-const store = {
-  create(data) {
-    rows = [...rows, data];
-  },
-  read() {
-    return rows;
-  },
-  update(id, changes) {
-    const row = rows.find((row) => row.id === id);
-    if (!row) return;
-    Object.assign(row, changes);
-  },
-  delete(id) {
-    rows = rows.filter((row) => row.id !== id);
-  },
-};
+
+// Data State
 // 1. input data
 function inputData() {
   try {
     let price = validateInput(inputField.querySelector("[name='price']").value);
     let qty = validateInput(inputField.querySelector("[name='qty']").value);
-    let data = { id: Date.now(), price: price, qty: qty };
+    let data = crud.create(price, qty);
     rows = [...rows, data];
     saveStorage();
-    return rows;
+    renderDataField();
+    renderInputField();
+    renderTotalField();
   } catch (err) {
     alert(err.message);
   }
 }
 // 2. validate input
-function validateInput(value) {
-  if (String(value).trim() === "") {
-    throw new Error("Do not input Empty Value");
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty value is not allowed");
   }
-  let num = Number(value);
+  const num = Number(input);
   if (!Number.isFinite(num)) {
-    throw new Error("Please input a valid number");
+    throw new Error("Enter a valid input");
   }
   return num;
 }
-// 3. sum data
-function sumData() {
+// 3. sum total
+function sumTotal() {
   return rows.reduce(
-    (acc, c) => {
-      acc.totalPrice += Number(c.price);
-      acc.totalQty += Number(c.qty);
+    (acc, row) => {
+      acc.totalPrice += Number(row.price);
+      acc.totalQty += Number(row.qty);
       return acc;
     },
     { totalPrice: 0, totalQty: 0 },
   );
 }
-// 4. delegate handler
-function delegateHandler(e) {
+// 4. delegate delete button
+function delegateDeleteButton(e) {
   if (e.target.classList.contains("delete-btn")) {
-    const id = Number(e.target.closest(".row").dataset.id);
-    rows = rows.filter((row) => row.id !== id);
+    const rowEl = e.target.closest(".row");
+    if (!rowEl) return;
+    const id = Number(rowEl.dataset.id);
+    crud.delData(id);
+    saveStorage();
+    renderDataField();
+    renderTotalField();
   }
 }
+// 5. editable input
+function editableInput(e) {
+  const rowEl = e.target.closest(".row");
+  if (!rowEl) return;
+  const id = rowEl.dataset.id;
+  const name = e.target.name;
+  const value = validateInput(e.target.value.trim());
+  console.log("editing id:", id, "name", name, "value", value);
+  crud.update(id, name, value);
+  saveStorage();
+  renderDataField();
+  renderTotalField();
+}
+// 6. data operator
+const crud = {
+  create(p, q) {
+    const temp = { id: Date.now(), price: p, qty: q };
+    const data = temp ? temp : [];
+    return data;
+  },
+  read() {},
+  update(id, name, value) {
+    rows = rows.map((row) =>
+      row.id === Number(id) ? { ...row, [name]: Number(value) } : row,
+    );
+  },
 
-// Storage
+  delData(id) {
+    rows = rows.filter((row) => row.id !== id);
+    return rows;
+  },
+};
+// LOCALSTORAGE
+// 1. save storage
 function saveStorage() {
+  console.log("save store", rows);
   localStorage.setItem("rows", JSON.stringify(rows));
 }
+// 2. load storage
 function loadStorage() {
   let temp = localStorage.getItem("rows");
   rows = temp ? JSON.parse(temp) : [];
-  console.log("load", rows);
+  console.log("load ", rows);
+  renderDataField();
+  renderTotalField();
   return rows;
 }
+// 3. reset storage
 function resetStorage() {
   localStorage.removeItem("rows");
   rows = [];
+  renderDataField();
+  renderTotalField();
   return rows;
 }
 
 // UI
-// 1. render data field
+// 1. daia field
 function renderDataField() {
   dataField.innerHTML = "";
-  rows.forEach((e) => {
+  rows.forEach((row) => {
     const div = document.createElement("div");
     div.className = "row";
-    div.dataset.id = e.id;
+    div.dataset.id = row.id;
     div.innerHTML = `
-	<input type="text" name="price" value="${e.price}"/>
-	<input type="text" name="qty" value="${e.qty}"/>
+	<input type="text" name="price" value="${row.price}"/>
+	<input type="text" name="qty" value="${row.qty}"/>
 	<button type="button" class="delete-btn">DEL</button>
-	`;
+		`;
     dataField.appendChild(div);
   });
 }
-// 2. render input field
+// 2. input field
 function renderInputField() {
   inputField.innerHTML = `
 <input type="text" name="price" value=""/>
 <input type="text" name="qty" value=""/>
 `;
 }
-// 3. render total field
+// 3. total field
 function renderTotalField() {
-  let sum = sumData();
+  let sum = sumTotal();
   totalField.innerHTML = `
-<p>Total Price: <span>${sum.totalPrice}</span> | Total Qty: <span>${sum.totalQty}</span></p>
-`;
+<p>Total Price :<span>${sum.totalPrice}</span> | Total Qty: <span>${sum.totalQty}</span></p>
+	`;
 }
-// 4. total render
-function render() {
-  renderDataField();
-  renderInputField();
-  renderTotalField();
-}
-
-render();
+renderInputField();
