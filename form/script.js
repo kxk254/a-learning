@@ -10,7 +10,14 @@ const totalField = document.querySelector("#totalField");
 // derived state  total=computed not stored dont assing to let memory
 // prevent invalid states prevent minus
 // persist + restore cleanly
-
+/*
+A. Event 1. (form - submit) 2.(data field - del / update) 3. (buttons - reset / load) 
+B. State 1 (Input Data / validate Input) 2. (sumTotal) 3,(delegate - delete / edit) 4. (crud) 
+C. 1. (commit) 2. (history) 3. (currentIndex)
+D. Side effects 
+1. (storage - save/load/reset) 2. (DOM partual updates)
+E. UI 1. (input field) 2. (data field - all by id) 3. (sum total) 
+ */
 // object
 let rows = [];
 
