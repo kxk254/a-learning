@@ -5,6 +5,12 @@ const resetBtn = document.querySelector("#resetBtn");
 const loadBtn = document.querySelector("#loadBtn");
 const totalField = document.querySelector("#totalField");
 
+// add undo button
+// inline edition without re-render  => updateOnlyThatRowinDOM
+// derived state  total=computed not stored dont assing to let memory
+// prevent invalid states prevent minus
+// persist + restore cleanly
+
 // object
 let rows = [];
 
@@ -14,7 +20,9 @@ myForm.addEventListener("submit", (e) => {
   inputData();
 });
 // update input
-dataField.addEventListener("change", (e) => {});
+dataField.addEventListener("change", (e) => {
+  editableInput(e);
+});
 // delete delgator
 dataField.addEventListener("click", (e) => {
   delegateDeleteButton(e);
@@ -32,7 +40,7 @@ function inputData() {
   try {
     let price = validateInput(inputField.querySelector("[name='price']").value);
     let qty = validateInput(inputField.querySelector("[name='qty']").value);
-    let data = { id: Date.now(), price: price, qty: qty };
+    let data = crud.create(price, qty);
     rows = [...rows, data];
     saveStorage();
     renderDataField();
@@ -67,19 +75,47 @@ function sumTotal() {
 // 4. delegate delete button
 function delegateDeleteButton(e) {
   if (e.target.classList.contains("delete-btn")) {
-    let rowEl = e.target.closest(".row");
+    const rowEl = e.target.closest(".row");
     if (!rowEl) return;
     const id = Number(rowEl.dataset.id);
-    rows = rows.filter((row) => row.id !== id);
+    crud.delData(id);
     saveStorage();
     renderDataField();
     renderTotalField();
   }
 }
 // 5. editable input
-function editableInput(e) {}
+function editableInput(e) {
+  const rowEl = e.target.closest(".row");
+  if (!rowEl) return;
+  const id = rowEl.dataset.id;
+  const name = e.target.name;
+  const value = validateInput(e.target.value.trim());
+  console.log("editing id:", id, "name", name, "value", value);
+  crud.update(id, name, value);
+  saveStorage();
+  renderDataField();
+  renderTotalField();
+}
 // 6. data operator
-const ops = {};
+const crud = {
+  create(p, q) {
+    const temp = { id: Date.now(), price: p, qty: q };
+    const data = temp ? temp : [];
+    return data;
+  },
+  read() {},
+  update(id, name, value) {
+    rows = rows.map((row) =>
+      row.id === Number(id) ? { ...row, [name]: Number(value) } : row,
+    );
+  },
+
+  delData(id) {
+    rows = rows.filter((row) => row.id !== id);
+    return rows;
+  },
+};
 // LOCALSTORAGE
 // 1. save storage
 function saveStorage() {
@@ -115,7 +151,7 @@ function renderDataField() {
     div.innerHTML = `
 	<input type="text" name="price" value="${row.price}"/>
 	<input type="text" name="qty" value="${row.qty}"/>
-	<button type="button" class="delete-btn">DEL<b/button>
+	<button type="button" class="delete-btn">DEL</button>
 		`;
     dataField.appendChild(div);
   });
