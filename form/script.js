@@ -38,7 +38,7 @@ const totalField = document.querySelector("#totalField");
 function createApp() {
   let state = { rows: [] };
   function setState(newState) {
-    state = newState;
+    state = { ...state, ...newState };
     renderAll(state);
   }
   return { getState: () => state, setState };
@@ -50,41 +50,43 @@ const app = createApp();
 myForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const state = app.getState();
-  crud.createRow(state);
-  saveStorage(state);
+  let newState = crud.createRow(state);
+  app.setState(newState);
+  saveStorage(app.getState());
 });
 //* - edit
-inputField.addEventListener("change", (e) => {
+dataField.addEventListener("change", (e) => {
   const state = app.getState();
   const rowEl = e.target.closest(".row");
   if (!rowEl) return;
   const id = Number(rowEl.dataset.id);
   const name = e.target.name;
   const value = e.target.value;
-  crud.updateRow(state, id, name, value);
-  saveStorage(state);
+  const newState = crud.updateRow(state, id, name, value);
+  saveStorage(newState);
+  app.setState(newState);
 });
 
 //* - delete
-inputField.addEventListener("click", (e) => {
+dataField.addEventListener("click", (e) => {
   const state = app.getState();
   if (!e.target.classList.contains("delete-btn")) return;
   let rowEl = e.target.closest(".row");
   const id = Number(rowEl.dataset.id);
   const newState = crud.deleteRow(state, id);
   saveStorage(newState);
-  renderAll(newState);
+  app.setState(newState);
 });
 //* - buttons
 resetBtn.addEventListener("click", () => {
   const state = app.getState();
-  resetStorage(state);
-  renderAll(state);
+  const newState = resetStorage(state);
+  app.setState(newState);
 });
 loadBtn.addEventListener("click", () => {
   const state = app.getState();
-  loadStorage(state);
-  renderAll(state);
+  const newState = loadStorage(state);
+  app.setState(newState);
 });
 //* B. State Logic
 //* - validate Input
@@ -118,7 +120,7 @@ const crud = {
   updateRow(state, id, name, value) {
     return {
       ...state,
-      rows: rows.map((row) =>
+      rows: state.rows.map((row) =>
         row.id === Number(id) ? { ...row, [name]: value } : row,
       ),
     };
@@ -126,7 +128,7 @@ const crud = {
   deleteRow(state, id) {
     return {
       ...state,
-      rows: rows.map((row) => row.id !== Number(id)),
+      rows: state.rows.filter((row) => row.id !== Number(id)),
     };
   },
 };
@@ -136,6 +138,7 @@ function sumTotal(state) {
     (acc, row) => {
       acc.totalPrice += Number(row.price);
       acc.totalQty += Number(row.qty);
+      return acc;
     },
     { totalPrice: 0, totalQty: 0 },
   );
@@ -188,7 +191,8 @@ function dataFieldDOM(state) {
 
 function totalFieldDOM(state) {
   const sum = sumTotal(state);
-  toalField.innerHTML = `
+  console.log("totalFieldDom sum", sum);
+  totalField.innerHTML = `
 <p>Total Price: ${sum.totalPrice} | Total Qty: ${sum.totalQty}</p>
 	`;
 }
@@ -198,12 +202,13 @@ function saveStorage(state) {
 }
 function loadStorage(state) {
   const temp = localStorage.getItem("rows");
+  console.log("load storage", temp);
   const newState = temp ? JSON.parse(temp) : { rows: [] };
-  return state.setState(newState);
+  return newState;
 }
 function resetStorage(state) {
   localStorage.removeItem("rows");
   const newState = { rows: [] };
-  return state.setState(newState);
+  return newState;
 }
 renderInput();
