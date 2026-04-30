@@ -213,3 +213,29 @@ function resetStorage(state) {
   return newState;
 }
 renderInput();
+
+////  future function
+function createApp(initialState) {
+  let state = initialState;
+  const listeners = [];
+  const history = [];
+
+  function getState() {
+    return state;
+  }
+  function setState(update) {
+    const nextState = typeof update === "function" ? update(state) : update;
+    history.push(state);
+    state = { ...state, ...nextState };
+    listeners.forEach((l) => l(state));
+  }
+  function undo() {
+    if (history.length === 0) return;
+    state = history.pop();
+    listeners.forEach((l) => l(state));
+  }
+  function subscribe(listener) {
+    listeners.push(listener);
+  }
+  return { getState, setState, undo, subscribe };
+}
