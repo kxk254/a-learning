@@ -4,6 +4,7 @@ const myForm = document.querySelector("#myForm");
 const resetBtn = document.querySelector("#resetBtn");
 const loadBtn = document.querySelector("#loadBtn");
 const totalField = document.querySelector("#totalField");
+const errorField = document.querySelector("#errorField");
 
 // add undo button
 // inline edition without re-render  => updateOnlyThatRowinDOM
@@ -114,7 +115,7 @@ const crud = {
       console.log("create new state", newState);
       return newState;
     } catch (err) {
-      alert(err.message);
+      errorField.textContent = err.message;
     }
   },
   updateRow(state, id, name, value) {
