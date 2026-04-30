@@ -36,106 +36,65 @@ const errorField = document.querySelector("#errorField");
  */
 // object
 //* 0. app state
-function createApp() {
-  let state = { rows: [] };
-  function setState(newState) {
-    state = { ...state, ...newState };
-    renderAll(state);
+function createApp(initialState) {
+  let state = initialState;
+  function getState() {
+    return state;
   }
-  return { getState: () => state, setState };
+  function setState(update) {
+    state = { ...state, ...update };
+    return state;
+  }
+  return { getState, setState };
 }
-const app = createApp();
-
+const app = createApp({ rows: [] });
+renderInputField();
 //* A. Events
 //* - submit
-myForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const state = app.getState();
-  let newState = crud.createRow(state);
-  app.setState(newState);
-  saveStorage(app.getState());
-});
+myForm.addEventListener("submit", (e) => {});
 //* - edit
-dataField.addEventListener("change", (e) => {
-  const state = app.getState();
-  const rowEl = e.target.closest(".row");
-  if (!rowEl) return;
-  const id = Number(rowEl.dataset.id);
-  const name = e.target.name;
-  const value = e.target.value;
-  const newState = crud.updateRow(state, id, name, value);
-  saveStorage(newState);
-  app.setState(newState);
-});
-
+dataField.addEventListener("click", (e) => {});
 //* - delete
-dataField.addEventListener("click", (e) => {
-  const state = app.getState();
-  if (!e.target.classList.contains("delete-btn")) return;
-  let rowEl = e.target.closest(".row");
-  const id = Number(rowEl.dataset.id);
-  const newState = crud.deleteRow(state, id);
-  saveStorage(newState);
-  app.setState(newState);
-});
+dataField.addEventListener("change", (e) => {});
 //* - buttons
-resetBtn.addEventListener("click", () => {
-  const state = app.getState();
-  const newState = resetStorage(state);
-  app.setState(newState);
-});
-loadBtn.addEventListener("click", () => {
-  const state = app.getState();
-  const newState = loadStorage(state);
-  app.setState(newState);
-});
+restBtn.addEventListener("click", () => {});
+loadBtn.addEventListener("click", () => {});
 //* B. State Logic
 //* - validate Input
 function validateInput(input) {
   if (String(input).trim() === "") {
-    throw new Error("Do not input Empty value");
+    throw new Error("Empty value is not allowed");
   }
   const num = Number(input);
   if (!Number.isFinite(num)) {
-    throw new Error("Enter a valid input");
+    throw new Error("Enter a valid number");
   } else if (num < 0) {
-    throw new Error("Negative is not allowed");
+    throw new Error("Negative cannot be allowed, pls input positive number");
   }
   return num;
 }
 //* - CRUD
 const crud = {
   createRow(state) {
-    try {
-      const p = validateInput(inputField.querySelector("[name='price']").value);
-      const q = validateInput(inputField.querySelector("[name='qty']").value);
-      const row = { id: Date.now(), price: p, qty: q };
-      console.log("create row", row);
-      const newState = { ...state, rows: [...state.rows, row] };
-      console.log("create new state", newState);
-      return newState;
-    } catch (err) {
-      errorField.textContent = err.message;
-    }
+    const p = validateInput(inputField.querySelector("[name='price']").value);
+    const q = validateInput(inputField.querySelector("[name='qty']").value);
+    const newRow = { id: Date.now(), price: p, qty: q };
+    return app.setState(newRow);
   },
   updateRow(state, id, name, value) {
-    return {
-      ...state,
-      rows: state.rows.map((row) =>
-        row.id === Number(id) ? { ...row, [name]: value } : row,
-      ),
-    };
+    const update = state.rows.map((row) => {
+      row.id === Number(id) ? { ...row, [name]: value } : row;
+    });
+    return app.setState(update);
   },
   deleteRow(state, id) {
-    return {
-      ...state,
-      rows: state.rows.filter((row) => row.id !== Number(id)),
-    };
+    const update = state.rows.filter((row) => row.id !== Number(id));
+    return app.setState(update);
   },
 };
 //* - sum total
 function sumTotal(state) {
-  return state.rows.reduce(
+  return state.rows(
     (acc, row) => {
       acc.totalPrice += Number(row.price);
       acc.totalQty += Number(row.qty);
@@ -144,43 +103,14 @@ function sumTotal(state) {
     { totalPrice: 0, totalQty: 0 },
   );
 }
-//* C. Commit Layer
-//* - setState
-//* - history
-//* - current Index
 //* D. Render UI
 //* - render rows
-function renderRows(state) {
-  dataFieldDOM(state);
-}
-//* - render total
-function renderTotal(state) {
-  totalFieldDOM(state);
-}
-//* - render input
-function renderInput() {
-  inputFieldDOM();
-}
-function renderAll(state) {
-  dataFieldDOM(state);
-  totalFieldDOM(state);
-  inputFieldDOM();
-}
-//* E. Side Effects
-//* - DOM update
-function inputFieldDOM() {
-  inputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-		`;
-}
-
-function dataFieldDOM(state) {
+function renderDataField(state) {
   dataField.innerHTML = "";
   state.rows.forEach((row) => {
     const div = document.createElement("div");
     div.className = "row";
-    div.dataset.id = Number(row.id);
+    div.dataset.id = row.id;
     div.innerHTML = `
 	<input type="text" name="price" value="${row.price}"/>
 	<input type="text" name="qty" value="${row.qty}"/>
@@ -189,53 +119,36 @@ function dataFieldDOM(state) {
     dataField.appendChild(div);
   });
 }
-
-function totalFieldDOM(state) {
+//* - render total
+function renderTotalField(state) {
   const sum = sumTotal(state);
-  console.log("totalFieldDom sum", sum);
   totalField.innerHTML = `
-<p>Total Price: ${sum.totalPrice} | Total Qty: ${sum.totalQty}</p>
+<p>Total Price :${sum.totalPrice} | Total Qty ${sum.totalQty} </p>
 	`;
 }
+//* - render input
+function renderInputField() {
+  inputField.innerHTML = `
+<label>Price :</label><input type="text" name="price" value="" />
+<label>Qty :</label><input type="text" name="qty" value="" />
+`;
+}
+function renderErrorField(text) {
+  errorField.textContent = text;
+}
+//* E. Side Effects
+//* - DOM update
 //* - local Storage
 function saveStorage(state) {
   localStorage.setItem("rows", JSON.stringify(state));
 }
-function loadStorage(state) {
+function loadStorage() {
   const temp = localStorage.getItem("rows");
-  console.log("load storage", temp);
-  const newState = temp ? JSON.parse(temp) : { rows: [] };
-  return newState;
+  const loadState = temp ? JSON.parse(temp) : { rows: [] };
+  return app.setState(loadState);
 }
-function resetStorage(state) {
+function resetStorage() {
   localStorage.removeItem("rows");
-  const newState = { rows: [] };
-  return newState;
-}
-renderInput();
-
-////  future function
-function createApp(initialState) {
-  let state = initialState;
-  const listeners = [];
-  const history = [];
-
-  function getState() {
-    return state;
-  }
-  function setState(update) {
-    const nextState = typeof update === "function" ? update(state) : update;
-    history.push(state);
-    state = { ...state, ...nextState };
-    listeners.forEach((l) => l(state));
-  }
-  function undo() {
-    if (history.length === 0) return;
-    state = history.pop();
-    listeners.forEach((l) => l(state));
-  }
-  function subscribe(listener) {
-    listeners.push(listener);
-  }
-  return { getState, setState, undo, subscribe };
+  const removeState = { rows: [] };
+  return app.setState(removeState);
 }
