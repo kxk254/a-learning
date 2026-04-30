@@ -39,26 +39,45 @@ const errorField = document.querySelector("#errorField");
 function createApp(initialState) {
   let state = initialState;
   function getState() {
+    renderAll(state);
     return state;
   }
   function setState(update) {
     state = { ...state, ...update };
+    console.log("setState", state, "newState", update);
+    renderAll(state);
     return state;
   }
   return { getState, setState };
 }
 const app = createApp({ rows: [] });
 renderInputField();
+renderTotalField(app.getState());
 //* A. Events
 //* - submit
-myForm.addEventListener("submit", (e) => {});
+myForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  try {
+    const newRow = crud.createRow();
+    app.setState(newRow);
+  } catch (err) {
+    renderErrorField(err.message);
+    errorField.classList.add("red");
+  }
+});
 //* - edit
 dataField.addEventListener("click", (e) => {});
 //* - delete
 dataField.addEventListener("change", (e) => {});
 //* - buttons
-restBtn.addEventListener("click", () => {});
-loadBtn.addEventListener("click", () => {});
+resetBtn.addEventListener("click", () => {
+  resetStorage();
+  app.getState();
+});
+loadBtn.addEventListener("click", () => {
+  loadStorage();
+  app.getState();
+});
 //* B. State Logic
 //* - validate Input
 function validateInput(input) {
@@ -75,10 +94,11 @@ function validateInput(input) {
 }
 //* - CRUD
 const crud = {
-  createRow(state) {
+  createRow() {
     const p = validateInput(inputField.querySelector("[name='price']").value);
     const q = validateInput(inputField.querySelector("[name='qty']").value);
-    const newRow = { id: Date.now(), price: p, qty: q };
+    const tempRow = { id: Date.now(), price: p, qty: q };
+    const newRow = { rows: [...app.getState().rows, tempRow] };
     return app.setState(newRow);
   },
   updateRow(state, id, name, value) {
@@ -94,7 +114,7 @@ const crud = {
 };
 //* - sum total
 function sumTotal(state) {
-  return state.rows(
+  return state.rows.reduce(
     (acc, row) => {
       acc.totalPrice += Number(row.price);
       acc.totalQty += Number(row.qty);
@@ -107,6 +127,7 @@ function sumTotal(state) {
 //* - render rows
 function renderDataField(state) {
   dataField.innerHTML = "";
+  console.log("render data field", state.rows);
   state.rows.forEach((row) => {
     const div = document.createElement("div");
     div.className = "row";
@@ -135,6 +156,16 @@ function renderInputField() {
 }
 function renderErrorField(text) {
   errorField.textContent = text;
+}
+function cleanErrorField() {
+  errorField.textContent = "";
+  errorField.classList.remove("red");
+}
+function renderAll(state) {
+  renderDataField(state);
+  renderInputField();
+  renderTotalField(state);
+  cleanErrorField();
 }
 //* E. Side Effects
 //* - DOM update
