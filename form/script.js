@@ -36,3 +36,68 @@ const errorField = document.querySelector("#errorField");
  */
 // object
 //* 0. app state
+function createApp(initialState) {
+  const state = initialState;
+
+  function getState() {
+    return state;
+  }
+
+  function setState(update) {
+    state = { ...state, ...update };
+    return state;
+  }
+  return { getState, setState };
+}
+
+const app = createApp({ rows: [] });
+//* A. Events
+//* - submit
+myForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+});
+//* - edit
+dataField.addEventListener("change", (e) => {});
+//* - delete
+dataField.addEventListener("click", (e) => {});
+//* - buttons
+resetBtn.addEventListener("click", () => {});
+loadBtn.addEventListener("click", () => {});
+//* B. State Logic
+//* - validate Input
+function validateInput(input) {}
+//* - CRUD
+const crud = {
+  addRow() {},
+  updateRow() {},
+  deleteRow() {},
+};
+//* - sum total
+function sumTotal(state) {
+  return state.rows.reduce(
+    (acc, row) => {
+      acc.totalPrice += Number(row.price);
+      acc.totalQty += Number(row.qty);
+      return acc;
+    },
+    { totalPrice: 0, totalQty: 0 },
+  );
+}
+//* C. Commit Layer
+//* - setState
+//* - history
+//* - current Index
+//* D. Render UI
+//* - render rows
+function renderDataField() {}
+//* - render total
+function renderInputField() {}
+//* - render input
+function renderTotalField() {}
+function renderErrorField() {}
+//* E. Side Effects
+//* - DOM update
+//* - local Storage
+function saveStorage() {}
+function loadStorage() {}
+function resetStorage() {}
