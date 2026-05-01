@@ -37,7 +37,7 @@ const errorField = document.querySelector("#errorField");
 // object
 //* 0. app state
 function createApp(initialState) {
-  const state = initialState;
+  let state = initialState;
 
   function getState() {
     return state;
@@ -55,25 +55,80 @@ const app = createApp({ rows: [] });
 //* - submit
 myForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  try {
+    renderAll(app.setState(crud.addRow(app.getState())));
+  } catch (err) {
+    renderErrorField(err.message);
+  }
 });
 //* - edit
-dataField.addEventListener("change", (e) => {});
+dataField.addEventListener("change", (e) => {
+  const rowEl = e.target.closest(".row");
+  if (!rowEl) return;
+  const id = rowEl.dataset.id;
+  const name = e.target.name;
+  const value = e.target.value;
+  try {
+    renderAll(app.setState(crud.updateRow(app.getState(), id, name, value)));
+  } catch (err) {
+    renderErrorField(err.message);
+  }
+});
 //* - delete
-dataField.addEventListener("click", (e) => {});
+dataField.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const rowEl = e.target.closest(".row");
+    const id = rowEl.dataset.id;
+    renderAll(app.setState(crud.deleteRow(app.getState(), id)));
+  }
+});
 //* - buttons
-resetBtn.addEventListener("click", () => {});
-loadBtn.addEventListener("click", () => {});
+resetBtn.addEventListener("click", () => {
+  renderAll(app.setState(resetStorage()));
+});
+loadBtn.addEventListener("click", () => {
+  renderAll(app.setState(loadStorage()));
+});
 //* B. State Logic
 //* - validate Input
-function validateInput(input) {}
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty is now allowed");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new Error("Enter a valid input");
+  } else if (num < 0) {
+    throw new Error("Negative is not allowed");
+  }
+  return num;
+}
 //* - CRUD
 const crud = {
-  addRow() {},
-  updateRow() {},
-  deleteRow() {},
+  addRow(state) {
+    const p = validateInput(inputField.querySelector("[name='price']").value);
+    const q = validateInput(inputField.querySelector("[name='qty']").value);
+    return {
+      ...state,
+      rows: [...state.rows, { id: Date.now(), price: p, qty: q }],
+    };
+  },
+  updateRow(state, id, name, value) {
+    const newState = state.rows.map((row) =>
+      row.id === Number(id)
+        ? { ...state, row: { [name]: validateInput(value) } }
+        : { ...state, row },
+    );
+    return newState;
+  },
+  deleteRow(state, id) {
+    const newState = state.rows.filter((row) => row.id !== Number(id));
+    return newState;
+  },
 };
 //* - sum total
 function sumTotal(state) {
+  console.log("sum total section", state);
   return state.rows.reduce(
     (acc, row) => {
       acc.totalPrice += Number(row.price);
@@ -89,15 +144,60 @@ function sumTotal(state) {
 //* - current Index
 //* D. Render UI
 //* - render rows
-function renderDataField() {}
+function renderDataField(state) {
+  dataField.innerHTML = "";
+  state.rows.forEach((row) => {
+    const div = document.createElement("div");
+    div.className = "row";
+    div.dataset.id = row.id;
+    div.innerHTML = `
+<input type="text" name="price" value="${row.price}"/>
+<input type="text" name="qty" value="${row.qty}"/>
+<button type="button" class="delete-btn">DEL</button>
+		`;
+    dataField.appendChild(div);
+  });
+}
 //* - render total
-function renderInputField() {}
+function renderInputField() {
+  inputField.innerHTML = `
+<label>Price:</label><input type="text" name="price" value="" />
+<label>Qty:</label><input type="text" name="qty" value="" />
+`;
+}
 //* - render input
-function renderTotalField() {}
-function renderErrorField() {}
+function renderTotalField(state) {
+  const sum = sumTotal(state);
+  totalField.innerHTML = `
+<p>Total Price :${sum.totalPrice} | Total Qty :${sum.totalQty}</p>
+	`;
+}
+function renderErrorField(message) {
+  errorField.textContent = message;
+  errorField.classList.add("red");
+}
+function cleanErrorField() {
+  errorField.classList.remove("red");
+}
+function renderAll(state) {
+  renderTotalField(state);
+  cleanErrorField();
+  renderInputField();
+  renderDataField(state);
+}
+
 //* E. Side Effects
 //* - DOM update
 //* - local Storage
-function saveStorage() {}
-function loadStorage() {}
-function resetStorage() {}
+function saveStorage(state) {
+  localStorage.setItem("rows", JSON.stringify(state));
+}
+function loadStorage() {
+  const temp = localStorage.getItem("rows");
+  return (newState = temp ? JSON.parse(temp) : { rows: [] });
+}
+function resetStorage() {
+  localStorage.removeItem("rows");
+  return { rows: [] };
+}
+renderInputField();
