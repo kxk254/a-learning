@@ -44,7 +44,7 @@ function createApp(initialState) {
   }
   function setState(update) {
     state = { ...state, ...update };
-    console.log("setState", state, "newState", update);
+    console.log("setState ", state);
     saveStorage(state);
     renderAll(state);
     return state;
@@ -67,9 +67,27 @@ myForm.addEventListener("submit", (e) => {
   }
 });
 //* - edit
-dataField.addEventListener("click", (e) => {});
+dataField.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const rowEl = e.target.closest(".row");
+    if (!rowEl) return;
+    const id = rowEl.dataset.id;
+    console.log("delete is clicked", id, rowEl);
+    const newState = crud.deleteRow(app.getState(), id);
+    console.log("newState ", newState);
+    app.setState(newState);
+  }
+});
 //* - delete
-dataField.addEventListener("change", (e) => {});
+dataField.addEventListener("change", (e) => {
+  const rowEl = e.target.closest(".row");
+  if (!rowEl) return;
+  const id = rowEl.dataset.id;
+  const name = e.target.name;
+  const value = e.target.value;
+  const newState = crud.updateRow(app.getState(), id, name, value);
+  app.setState(newState);
+});
 //* - buttons
 resetBtn.addEventListener("click", () => {
   resetStorage();
@@ -103,14 +121,21 @@ const crud = {
     return app.setState(newRow);
   },
   updateRow(state, id, name, value) {
-    const update = state.rows.map((row) => {
-      row.id === Number(id) ? { ...row, [name]: value } : row;
-    });
-    return app.setState(update);
+    const update = {
+      ...state,
+      rows: state.rows.map((row) =>
+        row.id === Number(id) ? { ...row, [name]: value } : row,
+      ),
+    };
+    return update;
   },
   deleteRow(state, id) {
-    const update = state.rows.filter((row) => row.id !== Number(id));
-    return app.setState(update);
+    const update = {
+      ...state,
+      rows: state.rows.filter((row) => row.id !== Number(id)),
+    };
+    console.log("delete row :", state, "update", update);
+    return update;
   },
 };
 //* - sum total
@@ -128,7 +153,6 @@ function sumTotal(state) {
 //* - render rows
 function renderDataField(state) {
   dataField.innerHTML = "";
-  console.log("render data field", state.rows);
   state.rows.forEach((row) => {
     const div = document.createElement("div");
     div.className = "row";
@@ -172,7 +196,6 @@ function renderAll(state) {
 //* - DOM update
 //* - local Storage
 function saveStorage(state) {
-  console.log("save storage", state);
   localStorage.setItem("rows", JSON.stringify(state));
 }
 function loadStorage() {
