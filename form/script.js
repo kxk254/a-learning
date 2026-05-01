@@ -45,6 +45,7 @@ function createApp(initialState) {
   function setState(update) {
     state = { ...state, ...update };
     console.log("setState", state, "newState", update);
+    saveStorage(state);
     renderAll(state);
     return state;
   }
@@ -171,6 +172,7 @@ function renderAll(state) {
 //* - DOM update
 //* - local Storage
 function saveStorage(state) {
+  console.log("save storage", state);
   localStorage.setItem("rows", JSON.stringify(state));
 }
 function loadStorage() {
