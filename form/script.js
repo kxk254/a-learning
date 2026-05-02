@@ -45,6 +45,7 @@ function createApp(initialState) {
 
   function setState(update) {
     state = { ...state, ...update };
+    console.log("set state", state);
     return state;
   }
   return { getState, setState };
@@ -116,19 +117,20 @@ const crud = {
   updateRow(state, id, name, value) {
     const newState = state.rows.map((row) =>
       row.id === Number(id)
-        ? { ...state, row: { [name]: validateInput(value) } }
-        : { ...state, row },
+        ? { ...state, row: [...state.rows, { [name]: value }] }
+        : { ...state.rows, row },
     );
+
+    console.log("update state", newState);
     return newState;
   },
   deleteRow(state, id) {
     const newState = state.rows.filter((row) => row.id !== Number(id));
-    return newState;
+    return { ...state, rows: newState };
   },
 };
 //* - sum total
 function sumTotal(state) {
-  console.log("sum total section", state);
   return state.rows.reduce(
     (acc, row) => {
       acc.totalPrice += Number(row.price);
@@ -201,3 +203,4 @@ function resetStorage() {
   return { rows: [] };
 }
 renderInputField();
+renderTotalField();
