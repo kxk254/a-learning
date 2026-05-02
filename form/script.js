@@ -58,6 +58,7 @@ myForm.addEventListener("submit", (e) => {
   e.preventDefault();
   try {
     renderAll(app.setState(crud.addRow(app.getState())));
+    saveStorage(app.getState());
   } catch (err) {
     renderErrorField(err.message);
   }
@@ -71,6 +72,7 @@ dataField.addEventListener("change", (e) => {
   const value = e.target.value;
   try {
     renderAll(app.setState(crud.updateRow(app.getState(), id, name, value)));
+    saveStorage(app.getState());
   } catch (err) {
     renderErrorField(err.message);
   }
@@ -81,6 +83,7 @@ dataField.addEventListener("click", (e) => {
     const rowEl = e.target.closest(".row");
     const id = rowEl.dataset.id;
     renderAll(app.setState(crud.deleteRow(app.getState(), id)));
+    saveStorage(app.getState());
   }
 });
 //* - buttons
@@ -115,11 +118,12 @@ const crud = {
     };
   },
   updateRow(state, id, name, value) {
-    const newState = state.rows.map((row) =>
-      row.id === Number(id)
-        ? { ...state, row: [...state.rows, { [name]: value }] }
-        : { ...state.rows, row },
-    );
+    const newState = {
+      ...state,
+      rows: state.rows.map((row) =>
+        row.id === Number(id) ? { ...row, [name]: value } : row,
+      ),
+    };
 
     console.log("update state", newState);
     return newState;
@@ -203,4 +207,4 @@ function resetStorage() {
   return { rows: [] };
 }
 renderInputField();
-renderTotalField();
+renderTotalField(app.getState());
