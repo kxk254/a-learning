@@ -18,224 +18,245 @@ const errorField = document.querySelector("#errorField");
  //* - edit 
  //* - delete 
  //* - buttons 
- //* B. State Logic
+ //* B. Dispatch
+ //* C. State Logic
  //* - validate Input 
- //* - CRUD 
+ //* - CRUD  reducer
  //* - sum total 
- //* C. Commit Layer
- //* - setState 
+ //* D. Commit Layer
  //* - history 
- //* - current Index
- //* D. Render UI 
- //* - render rows 
- //* - render total 
- //* - render input 
- //* E. Side Effects
+ //* E. Render UI 
+ //* F. Side Effects
  //* - DOM update 
  //* - local Storage
  */
 // object
 //* 0. app state
-function createApp() {
-  let state = { rows: [] };
-  function setState(newState) {
-    state = { ...state, ...newState };
-    renderAll(state);
-  }
-  return { getState: () => state, setState };
-}
-const app = createApp();
-
-//* A. Events
-//* - submit
-myForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const state = app.getState();
-  let newState = crud.createRow(state);
-  app.setState(newState);
-  saveStorage(app.getState());
-});
-//* - edit
-dataField.addEventListener("change", (e) => {
-  const state = app.getState();
-  const rowEl = e.target.closest(".row");
-  if (!rowEl) return;
-  const id = Number(rowEl.dataset.id);
-  const name = e.target.name;
-  const value = e.target.value;
-  const newState = crud.updateRow(state, id, name, value);
-  saveStorage(newState);
-  app.setState(newState);
-});
-
-//* - delete
-dataField.addEventListener("click", (e) => {
-  const state = app.getState();
-  if (!e.target.classList.contains("delete-btn")) return;
-  let rowEl = e.target.closest(".row");
-  const id = Number(rowEl.dataset.id);
-  const newState = crud.deleteRow(state, id);
-  saveStorage(newState);
-  app.setState(newState);
-});
-//* - buttons
-resetBtn.addEventListener("click", () => {
-  const state = app.getState();
-  const newState = resetStorage(state);
-  app.setState(newState);
-});
-loadBtn.addEventListener("click", () => {
-  const state = app.getState();
-  const newState = loadStorage(state);
-  app.setState(newState);
-});
-//* B. State Logic
-//* - validate Input
-function validateInput(input) {
-  if (String(input).trim() === "") {
-    throw new Error("Do not input Empty value");
-  }
-  const num = Number(input);
-  if (!Number.isFinite(num)) {
-    throw new Error("Enter a valid input");
-  } else if (num < 0) {
-    throw new Error("Negative is not allowed");
-  }
-  return num;
-}
-//* - CRUD
-const crud = {
-  createRow(state) {
-    try {
-      const p = validateInput(inputField.querySelector("[name='price']").value);
-      const q = validateInput(inputField.querySelector("[name='qty']").value);
-      const row = { id: Date.now(), price: p, qty: q };
-      console.log("create row", row);
-      const newState = { ...state, rows: [...state.rows, row] };
-      console.log("create new state", newState);
-      return newState;
-    } catch (err) {
-      errorField.textContent = err.message;
-    }
-  },
-  updateRow(state, id, name, value) {
-    return {
-      ...state,
-      rows: state.rows.map((row) =>
-        row.id === Number(id) ? { ...row, [name]: value } : row,
-      ),
-    };
-  },
-  deleteRow(state, id) {
-    return {
-      ...state,
-      rows: state.rows.filter((row) => row.id !== Number(id)),
-    };
-  },
-};
-//* - sum total
-function sumTotal(state) {
-  return state.rows.reduce(
-    (acc, row) => {
-      acc.totalPrice += Number(row.price);
-      acc.totalQty += Number(row.qty);
-      return acc;
-    },
-    { totalPrice: 0, totalQty: 0 },
-  );
-}
-//* C. Commit Layer
-//* - setState
-//* - history
-//* - current Index
-//* D. Render UI
-//* - render rows
-function renderRows(state) {
-  dataFieldDOM(state);
-}
-//* - render total
-function renderTotal(state) {
-  totalFieldDOM(state);
-}
-//* - render input
-function renderInput() {
-  inputFieldDOM();
-}
-function renderAll(state) {
-  dataFieldDOM(state);
-  totalFieldDOM(state);
-  inputFieldDOM();
-}
-//* E. Side Effects
-//* - DOM update
-function inputFieldDOM() {
-  inputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-		`;
-}
-
-function dataFieldDOM(state) {
-  dataField.innerHTML = "";
-  state.rows.forEach((row) => {
-    const div = document.createElement("div");
-    div.className = "row";
-    div.dataset.id = Number(row.id);
-    div.innerHTML = `
-	<input type="text" name="price" value="${row.price}"/>
-	<input type="text" name="qty" value="${row.qty}"/>
-	<button type="button" class="delete-btn">DEL</button>
-		`;
-    dataField.appendChild(div);
-  });
-}
-
-function totalFieldDOM(state) {
-  const sum = sumTotal(state);
-  console.log("totalFieldDom sum", sum);
-  totalField.innerHTML = `
-<p>Total Price: ${sum.totalPrice} | Total Qty: ${sum.totalQty}</p>
-	`;
-}
-//* - local Storage
-function saveStorage(state) {
-  localStorage.setItem("rows", JSON.stringify(state));
-}
-function loadStorage(state) {
-  const temp = localStorage.getItem("rows");
-  console.log("load storage", temp);
-  const newState = temp ? JSON.parse(temp) : { rows: [] };
-  return newState;
-}
-function resetStorage(state) {
-  localStorage.removeItem("rows");
-  const newState = { rows: [] };
-  return newState;
-}
-renderInput();
-
-////  future function
-function createApp(initialState) {
-  let state = initialState;
-  const listeners = [];
-  const history = [];
-
+function createApp(InitialState) {
+  let state = InitialState;
   function getState() {
     return state;
   }
+
   function setState(update) {
-    const nextState = typeof update === "function" ? update(state) : update;
-    history.push(state);
-    state = { ...state, ...nextState };
-    listeners.forEach((l) => l(state));
+    state = { ...state, ...update };
+    return state;
   }
-  function undo() {
-    if (history.length === 0) return;
-    state = history.pop();
-    listeners.forEach((l) => l(state));
-  }
-  function subscribe(listener) {
-    listeners.push(listener);
-  }
-  return { getState, setState, undo, subscribe };
+
+  return { getState, setState };
 }
+
+let app = createApp({ rows: [] });
+
+document.addEventListener("DOMContentLoaded", () => {
+  myForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    try {
+      const data = new FormData(myForm);
+      const payload = {
+        id: Date.now(),
+        price: validateInput(data.get("price")),
+        qty: validateInput(data.get("qty")),
+      };
+      dispatch({ type: "addRow", payload });
+    } catch (err) {
+      console.log("validation error", err.message);
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("change", (e) => {
+    try {
+      const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
+      const payload = {
+        id: rowEl.dataset.id,
+        value: validateInput(e.target.value),
+        name: e.target.name,
+      };
+      console.log("change data", payload);
+      dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
+      const payload = { id: rowEl.dataset.id };
+      dispatch({ type: "deleteRow", payload });
+    }
+  });
+  resetBtn.addEventListener("click", () => {
+    dispatch({ type: "resetState" });
+  });
+  loadBtn.addEventListener("click", () => {
+    dispatch({ type: "loadState" });
+  });
+});
+
+function dispatch(action) {
+  console.log("dispatch", action);
+  switch (action.type) {
+    case "addRow":
+      console.log("dispatch addrow", action.payload);
+      app.setState(crud.addRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "updateRow":
+      app.setState(crud.updateRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "deleteRow":
+      app.setState(crud.deleteRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "resetState":
+      app.setState(storage.reset());
+      render.renderAll();
+      break;
+    case "loadState":
+      app.setState(storage.load());
+      console.log("load storage", app.getState());
+      render.renderAll();
+      break;
+    default:
+      render.errorField(action.type);
+  }
+}
+
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty value is not allowed");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new "Input a valid number"();
+  } else if (num < 0) {
+    throw new Error("Negative is not allowed, input positive number");
+  }
+  return num;
+}
+
+const crud = {
+  getState() {
+    return app.getState();
+  },
+  addRow(payload) {
+    const state = this.getState();
+    const newState = {
+      ...state,
+      rows: [
+        ...state.rows,
+        { id: payload.id, price: payload.price, qty: payload.qty },
+      ],
+    };
+    return newState;
+  },
+  updateRow(payload) {
+    const state = this.getState();
+    console.log("paylod value", payload.value);
+    const newState = {
+      ...state,
+      rows: state.rows.map((row) =>
+        row.id === Number(payload.id)
+          ? { ...row, [payload.name]: Number(payload.value) }
+          : row,
+      ),
+    };
+    return newState;
+  },
+  deleteRow(payload) {
+    const state = this.getState();
+    const newState = {
+      ...state,
+      rows: state.rows.filter((row) => row.id !== Number(payload.id)),
+    };
+    return newState;
+  },
+  sumTotal() {
+    const state = this.getState();
+    return state.rows.reduce(
+      (acc, row) => {
+        acc.totalPrice += Number(row.price);
+        acc.totalQty += Number(row.qty);
+        return acc;
+      },
+      { totalPrice: 0, totalQty: 0 },
+    );
+  },
+};
+
+const render = {
+  getState() {
+    return app.getState();
+  },
+  dataField() {
+    const state = this.getState();
+    dataField.innerHTML = "";
+    state.rows.forEach((row) => {
+      const div = document.createElement("div");
+      div.dataset.id = row.id;
+      div.className = "row";
+      div.innerHTML = `
+<input type="text" name="price" value="${row.price}" />
+<input type="text" name="qty" value="${row.qty}" />
+<button type="button" class="delete-btn">DEL</button>
+		  `;
+      dataField.appendChild(div);
+    });
+  },
+  inputField() {
+    inputField.innerHTML = `
+<label>Price </label><input type="text" name="price" value=""/>
+<label>Qty </label><input type="text" name="qty" value=""/>
+`;
+  },
+  totalField() {
+    const state = this.getState();
+    const sum = crud.sumTotal(state);
+    totalField.innerHTML = `
+<p>Total Price : ${sum.totalPrice} | Total Qty ${sum.totalQty} </p>
+	  `;
+  },
+  errorField(message) {
+    errorField.textContent = message;
+    errorField.classList.add("red");
+  },
+  cleanErrorField() {
+    errorField.textContent = "";
+    errorField.classList.remove("red");
+  },
+  renderAll() {
+    this.dataField();
+    this.inputField();
+    this.totalField();
+    this.cleanErrorField();
+  },
+  renderInitialUI() {
+    this.inputField();
+    this.totalField();
+  },
+};
+
+const storage = {
+  getState() {
+    return app.getState();
+  },
+  save() {
+    localStorage.setItem("row", JSON.stringify(this.getState()));
+  },
+  load() {
+    const temp = localStorage.getItem("row");
+    return temp ? JSON.parse(temp) : { rows: [] };
+  },
+  reset() {
+    localStorage.removeItem("row");
+    return { rows: [] };
+  },
+};
+
+render.renderInitialUI();

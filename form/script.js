@@ -49,27 +49,108 @@ function createApp(InitialState) {
 let app = createApp({ rows: [] });
 
 document.addEventListener("DOMContentLoaded", () => {
-  myForm.addEventListener("submit", (e) => {});
-  dataField.addEventListener("change", (e) => {});
-  dataField.addEventListener("click", (e) => {});
-  resetBtn.addEventListener("click", () => {});
-  loadBtn.addEventListener("click", () => {});
+  myForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    try {
+      const data = new FormData(myForm);
+      const payload = {
+        id: Date.now(),
+        price: validateInput(data.get("price")),
+        qty: validateInput(data.get("qty")),
+      };
+      dispatch({ type: "addRow", payload });
+    } catch (err) {
+      console.log("validation error", err.message);
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("change", (e) => {
+    try {
+      const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
+      const payload = {
+        id: rowEl.dataset.id,
+        value: validateInput(e.target.value),
+        name: e.target.name,
+      };
+      console.log("change data", payload);
+      dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
+      const payload = { id: rowEl.dataset.id };
+      dispatch({ type: "deleteRow", payload });
+    }
+  });
+  resetBtn.addEventListener("click", () => {
+    dispatch({ type: "resetState" });
+  });
+  loadBtn.addEventListener("click", () => {
+    dispatch({ type: "loadState" });
+  });
 });
 
-function dispatch(action) {}
+function dispatch(action) {
+  console.log("dispatch", action);
+  switch (action.type) {
+    case "addRow":
+      console.log("dispatch addrow", action.payload);
+      app.setState(crud.addRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "updateRow":
+      app.setState(crud.updateRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "deleteRow":
+      app.setState(crud.deleteRow(action.payload));
+      render.renderAll();
+      storage.save();
+      break;
+    case "resetState":
+      app.setState(storage.reset());
+      render.renderAll();
+      break;
+    case "loadState":
+      app.setState(storage.load());
+      console.log("load storage", app.getState());
+      render.renderAll();
+      break;
+    default:
+      render.errorField(action.type);
+  }
+}
 
-function validateInput(input) {}
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty value is not allowed");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new "Input a valid number"();
+  } else if (num < 0) {
+    throw new Error("Negative is not allowed, input positive number");
+  }
+  return num;
+}
 
 const crud = {
   getState() {
     return app.getState();
   },
-  addRow() {
+  addRow(payload) {
     const state = this.getState();
     const newState = {
       ...state,
       rows: [
-        ...rows,
+        ...state.rows,
         { id: payload.id, price: payload.price, qty: payload.qty },
       ],
     };
@@ -77,17 +158,18 @@ const crud = {
   },
   updateRow(payload) {
     const state = this.getState();
+    console.log("paylod value", payload.value);
     const newState = {
       ...state,
       rows: state.rows.map((row) =>
         row.id === Number(payload.id)
           ? { ...row, [payload.name]: Number(payload.value) }
-          : { row },
+          : row,
       ),
     };
     return newState;
   },
-  deleteRow() {
+  deleteRow(payload) {
     const state = this.getState();
     const newState = {
       ...state,
@@ -97,7 +179,7 @@ const crud = {
   },
   sumTotal() {
     const state = this.getState();
-    return state.rows.reducer(
+    return state.rows.reduce(
       (acc, row) => {
         acc.totalPrice += Number(row.price);
         acc.totalQty += Number(row.qty);
@@ -135,12 +217,29 @@ const render = {
   },
   totalField() {
     const state = this.getState();
-    const sum = sumTotal(state);
+    const sum = crud.sumTotal(state);
     totalField.innerHTML = `
 <p>Total Price : ${sum.totalPrice} | Total Qty ${sum.totalQty} </p>
 	  `;
   },
-  errorField() {},
+  errorField(message) {
+    errorField.textContent = message;
+    errorField.classList.add("red");
+  },
+  cleanErrorField() {
+    errorField.textContent = "";
+    errorField.classList.remove("red");
+  },
+  renderAll() {
+    this.dataField();
+    this.inputField();
+    this.totalField();
+    this.cleanErrorField();
+  },
+  renderInitialUI() {
+    this.inputField();
+    this.totalField();
+  },
 };
 
 const storage = {
@@ -152,10 +251,12 @@ const storage = {
   },
   load() {
     const temp = localStorage.getItem("row");
-    return temp ? JSON.parge(temp) : { rows: [] };
+    return temp ? JSON.parse(temp) : { rows: [] };
   },
   reset() {
     localStorage.removeItem("row");
     return { rows: [] };
   },
 };
+
+render.renderInitialUI();
