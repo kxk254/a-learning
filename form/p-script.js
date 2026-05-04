@@ -5,7 +5,8 @@ const resetBtn = document.querySelector("#resetBtn");
 const loadBtn = document.querySelector("#loadBtn");
 const totalField = document.querySelector("#totalField");
 const errorField = document.querySelector("#errorField");
-const undoBtn = document.querySelector("#undo");
+const undoBtn = document.querySelector("#undoBtn");
+const redoBtn = document.querySelector("#redoBtn");
 
 // add undo button
 // inline edition without re-render  => updateOnlyThatRowinDOM
@@ -33,36 +34,36 @@ const undoBtn = document.querySelector("#undo");
  */
 // object
 //* 0. app state
-
 function createApp(initialState) {
   let state = initialState;
+
   function getState() {
     return state;
   }
+
   function setState(update) {
-    state = { ...state, ...update };
+    state = update;
     return state;
   }
+
   return { getState, setState };
 }
 
-const app = createApp({
-  past: [],
-  present: { rows: [] },
-  future: [],
-});
+const app = createApp({ past: [], present: { rows: [] }, future: [] });
 
 document.addEventListener("DOMContentLoaded", (e) => {
   myForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    const data = new FormData(myForm);
     try {
-      const data = new FormData(myForm);
-      const payload = {
-        id: crypto.randomUUID(),
-        price: validateInput(data.get("price")),
-        qty: validateInput(data.get("qty")),
-      };
-      dispatch({ type: "addRow", payload });
+      dispatch({
+        type: "addRow",
+        payload: {
+          id: crypto.randomUUID(),
+          price: validateInput(data.get("price")),
+          qty: validateInput(data.get("qty")),
+        },
+      });
     } catch (err) {
       render.errorField(err.message);
     }
@@ -71,12 +72,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const rowEl = e.target.closest(".row");
     if (!rowEl) return;
     try {
-      const payload = {
-        id: rowEl.dataset.id,
-        name: e.target.name,
-        value: validateInput(e.target.value),
-      };
-      dispatch({ type: "updateRow", payload });
+      dispatch({
+        type: "updateRow",
+        payload: {
+          id: rowEl.dataset.id,
+          name: e.target.name,
+          value: validateInput(e.target.value),
+        },
+      });
     } catch (err) {
       render.errorField(err.message);
     }
@@ -85,24 +88,25 @@ document.addEventListener("DOMContentLoaded", (e) => {
     if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
       if (!rowEl) return;
-      payload = { id: rowEl.dataset.id };
-      dispatch({ type: "deleteRow", payload });
+      console.log("row El", rowEl);
+      dispatch({ type: "deleteRow", payload: { id: rowEl.dataset.id } });
     }
   });
-  loadBtn.addEventListener("click", () => {
-    let newState = { past: [], present: saveLocal.load(), future: [] };
-    app.setState(newState);
-    render.renderAll(newState.present);
-  });
   resetBtn.addEventListener("click", () => {
-    let state = app.getState();
-    let tempPresent = saveLocal.reset(state.present);
-    let newState = applyAction(state, tempPresent);
-    app.setState(newState);
-    render.renderAll(newState);
+    let state = localData.reset();
+    app.setState(applyAction(app.getState(), state));
+    render.renderAll(state);
+  });
+  loadBtn.addEventListener("click", () => {
+    let state = localData.load();
+    app.setState(applyAction(app.getState(), state));
+    render.renderAll(state);
   });
   undoBtn.addEventListener("click", () => {
     dispatch({ type: "undo" });
+  });
+  redoBtn.addEventListener("click", () => {
+    dispatch({ type: "redo" });
   });
 });
 
@@ -113,31 +117,56 @@ function dispatch(action) {
   switch (action.type) {
     case "addRow":
       newPresent = crud.addRow(state.present, action.payload);
-      newState = app.setState(applyAction(state, newPresent));
-      render.renderAll(newState.present);
-      saveLocal.save(newState.present);
+      newState = applyAction(state, newPresent);
+      app.setState(newState);
+      render.renderAll(newPresent);
+      localData.save(newPresent);
       return;
     case "updateRow":
       newPresent = crud.updateRow(state.present, action.payload);
-      newState = app.setState(applyAction(state, newPresent));
-      render.renderAll(newState.present);
-      saveLocal.save(newState.present);
+      newState = applyAction(state, newPresent);
+      app.setState(newState);
+      render.renderAll(newPresent);
+      localData.save(newPresent);
       return;
     case "deleteRow":
       newPresent = crud.deleteRow(state.present, action.payload);
-      newState = app.setState(applyAction(state, newPresent));
-      render.renderAll(newState.present);
-      saveLocal.save(newState.present);
+      newState = applyAction(state, newPresent);
+      app.setState(newState);
+      render.renderAll(newPresent);
+      localData.save(newPresent);
       return;
     case "undo":
-      newState = app.setState(undo(state));
-      console.log("undo", state, "new", newState);
+      newState = undo(state);
       render.renderAll(newState.present);
-      saveLocal.save(newState.present);
+      localData.save(newState.present);
+      return;
+    case "redo":
+      newState = redo(state);
+      render.renderAll(newState.present);
+      localData.save(newState.present);
       return;
     default:
-      render.errorField(action.type);
   }
+}
+
+function undo(state) {
+  if (state.past.length === 0) return state;
+  const present = state.past[state.past.length - 1];
+  return {
+    past: state.past.slice(0, -1),
+    present: present,
+    future: [state.present, ...state.future],
+  };
+}
+function redo(state) {
+  if (state.future.length === 0) return state;
+  const present = state.future[0];
+  return {
+    past: [...state.past, state.present],
+    present: present,
+    future: state.future.slice(1),
+  };
 }
 function applyAction(state, newPresent) {
   return {
@@ -146,60 +175,43 @@ function applyAction(state, newPresent) {
     future: [],
   };
 }
-function undo(state) {
-  if (state.past.length === 0) return;
-  const previous = state.past[state.past.length - 1];
-  const newState = {
-    past: state.past.slice(0, -1),
-    present: previous,
-    future: [state.present, ...state.future],
-  };
-  return newState;
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty is not allowed");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new Error("Enter a valid input");
+  } else if (num < 0) {
+    throw new Error("Negtive is not allowed");
+  }
+  return num;
 }
-
 const crud = {
   addRow(state, payload) {
-    let newState = {
+    return {
       ...state,
       rows: [
         ...state.rows,
         { id: payload.id, price: payload.price, qty: payload.qty },
       ],
     };
-    return newState;
   },
   updateRow(state, payload) {
-    let newState = {
+    return {
       ...state,
-      ...state.rows,
       rows: state.rows.map((row) =>
         row.id === payload.id ? { ...row, [payload.name]: payload.value } : row,
       ),
     };
-    return newState;
   },
   deleteRow(state, payload) {
-    let newState = {
+    return {
       ...state,
-      ...state.rows,
       rows: state.rows.filter((row) => row.id !== payload.id),
     };
-    return newState;
   },
 };
-
-function validateInput(input) {
-  if (String(input).trim() === "") {
-    throw new Error("Empty value is not allowed");
-  }
-  const num = Number(input);
-  if (!Number.isFinite(num)) {
-    throw new Error("Enter a valid input");
-  } else if (num < 0) {
-    throw new Error("Enter a positive number");
-  }
-  return num;
-}
 function sumTotal(state) {
   return state.rows.reduce(
     (acc, row) => {
@@ -222,7 +234,7 @@ const render = {
 <input type="text" name="price" value="${row.price}"/>
 <input type="text" name="qty" value="${row.qty}"/>
 <button type="button" class="delete-btn">DEL</button>
-	`;
+`;
       dataField.appendChild(div);
     });
   },
@@ -235,11 +247,12 @@ const render = {
   totalField(state) {
     const sum = sumTotal(state);
     totalField.innerHTML = `
-<p>Total Price :${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>
+<p>Total Price: ${sum.totalPrice} | Total Qty ${sum.totalQty}</p>
 	  `;
   },
-  errorField(message) {
-    errorField.textContent = message;
+
+  errorField(msg) {
+    errorField.textContent = msg;
     errorField.classList.add("red");
   },
   cleanErrorField() {
@@ -258,7 +271,7 @@ const render = {
   },
 };
 
-const saveLocal = {
+const localData = {
   save(state) {
     localStorage.setItem("rows", JSON.stringify(state));
   },
