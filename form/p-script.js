@@ -8,62 +8,86 @@ const errorField = document.querySelector("#errorField");
 const undoBtn = document.querySelector("#undoBtn");
 const redoBtn = document.querySelector("#redoBtn");
 
-// add undo button
-// inline edition without re-render  => updateOnlyThatRowinDOM
-// derived state  total=computed not stored dont assing to let memory
-// prevent invalid states prevent minus
-// persist + restore cleanly
-/*
- //* 0. app state
- //* A. Events 
- //* - submit
- //* - edit 
- //* - delete 
- //* - buttons 
- //* B. Dispatch
- //* C. State Logic
- //* - validate Input 
- //* - CRUD  reducer
- //* - sum total 
- //* D. Commit Layer
- //* - history 
- //* E. Render UI 
- //* F. Side Effects
- //* - DOM update 
- //* - local Storage
+/* tasks
+ * noramlize DB
+ * server state vs client state sepration
+ * performance re-render optimization - only render state changes
+ * distributed systems
  */
-// object
-//* 0. app state
-function createApp(initialState) {
+// 0. app state
+// middleware logger persist render
+// 1. Event
+// 2. disptach / undo / redo /applyAction / validateInput / crud
+// 3. render
+// 4. storeData
+
+// 0. app state
+function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
 
   function getState() {
     return state;
   }
 
-  function setState(update) {
-    state = update;
+  function baseDispatch(action) {
+    state = reducer(state, action);
     return state;
   }
+  const dispatch = middlewares
+    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
+    .reduceRight((next, mw) => mw(next), baseDispatch);
 
-  return { getState, setState };
+  return { getState, dispatch };
 }
 
-const app = createApp({ past: [], present: { rows: [] }, future: [] });
+const emptySet = {
+  past: [],
+  present: { user: null, entities: { rows: [] } },
+  future: [],
+};
+
+const logger =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    console.log("ACTION", action);
+    const result = next(action);
+    console.log("NEW STATE", getState());
+    return result;
+  };
+
+const persist =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    localStorage.setItem("rows", JSON.stringify(getState()));
+    return result;
+  };
+
+const renderMW =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    render.renderAll(getState());
+    return result;
+  };
+
+const app = createApp(emptySet, reducer, [logger, persist, renderMW]);
+// 1. Event
 
 document.addEventListener("DOMContentLoaded", (e) => {
   myForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = new FormData(myForm);
     try {
-      dispatch({
-        type: "addRow",
-        payload: {
-          id: crypto.randomUUID(),
-          price: validateInput(data.get("price")),
-          qty: validateInput(data.get("qty")),
-        },
-      });
+      let payload = {
+        id: crypto.randomUUID(),
+        price: validateInput(data.get("price")),
+        qty: validateInput(data.get("qty")),
+      };
+      actionFn({ type: "addRow", payload });
     } catch (err) {
       render.errorField(err.message);
     }
@@ -72,14 +96,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const rowEl = e.target.closest(".row");
     if (!rowEl) return;
     try {
-      dispatch({
-        type: "updateRow",
-        payload: {
-          id: rowEl.dataset.id,
-          name: e.target.name,
-          value: validateInput(e.target.value),
-        },
-      });
+      let payload = {
+        id: rowEl.dataset.id,
+        value: validateInput(e.target.value),
+        name: e.target.name,
+      };
+      actionFn({ type: "updateRow", payload });
     } catch (err) {
       render.errorField(err.message);
     }
@@ -88,91 +110,92 @@ document.addEventListener("DOMContentLoaded", (e) => {
     if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
       if (!rowEl) return;
-      console.log("row El", rowEl);
-      dispatch({ type: "deleteRow", payload: { id: rowEl.dataset.id } });
+      let payload = { id: rowEl.dataset.id };
+      actionFn({ type: "deleteRow", payload });
     }
   });
-  resetBtn.addEventListener("click", () => {
-    let state = localData.reset();
-    app.setState(applyAction(app.getState(), state));
-    render.renderAll(state);
-  });
-  loadBtn.addEventListener("click", () => {
-    let state = localData.load();
-    app.setState(applyAction(app.getState(), state));
-    render.renderAll(state);
-  });
+  resetBtn.addEventListener("click", () => {});
+  loadBtn.addEventListener("click", () => {});
   undoBtn.addEventListener("click", () => {
-    dispatch({ type: "undo" });
+    actionFn({ type: "undo" });
   });
   redoBtn.addEventListener("click", () => {
-    dispatch({ type: "redo" });
+    actionFn({ type: "redo" });
   });
 });
+// 2. disptach / undo / redo /applyAction / validateInput / crud / sumTotal
 
-function dispatch(action) {
-  const state = app.getState();
-  let newPresent = {};
-  let newState = {};
+function actionFn(action) {
+  app.dispatch(action);
+}
+function reducer(state, action) {
+  let tempStatePresent = {};
+  let tempState = {};
   switch (action.type) {
     case "addRow":
-      newPresent = crud.addRow(state.present, action.payload);
-      newState = applyAction(state, newPresent);
-      app.setState(newState);
-      render.renderAll(newPresent);
-      localData.save(newPresent);
-      return;
+      tempStatePresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, action.payload],
+        },
+      };
+      return applyAction(state, tempStatePresent);
     case "updateRow":
-      newPresent = crud.updateRow(state.present, action.payload);
-      newState = applyAction(state, newPresent);
-      app.setState(newState);
-      render.renderAll(newPresent);
-      localData.save(newPresent);
-      return;
+      tempStatePresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.map((row) =>
+            row.id === action.payload.id
+              ? { ...row, [action.payload.name]: action.payload.value }
+              : row,
+          ),
+        },
+      };
+      return applyAction(state, tempStatePresent);
     case "deleteRow":
-      newPresent = crud.deleteRow(state.present, action.payload);
-      newState = applyAction(state, newPresent);
-      app.setState(newState);
-      render.renderAll(newPresent);
-      localData.save(newPresent);
-      return;
+      tempStatePresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.filter(
+            (row) => row.id !== action.payload.id,
+          ),
+        },
+      };
+      return applyAction(state, tempStatePresent);
     case "undo":
-      newState = undo(state);
-      render.renderAll(newState.present);
-      localData.save(newState.present);
-      return;
+      return undo(state);
     case "redo":
-      newState = redo(state);
-      render.renderAll(newState.present);
-      localData.save(newState.present);
-      return;
+      return redo(state);
     default:
+      return state;
   }
 }
-
+function applyAction(state, tempPresent) {
+  return {
+    past: [...state.past, state.present],
+    present: tempPresent,
+    future: [],
+  };
+}
 function undo(state) {
   if (state.past.length === 0) return state;
-  const present = state.past[state.past.length - 1];
+  const current = state.past[state.past.length - 1];
   return {
     past: state.past.slice(0, -1),
-    present: present,
+    present: current,
     future: [state.present, ...state.future],
   };
 }
 function redo(state) {
   if (state.future.length === 0) return state;
-  const present = state.future[0];
+  const current = state.future[0];
   return {
     past: [...state.past, state.present],
-    present: present,
+    present: current,
     future: state.future.slice(1),
-  };
-}
-function applyAction(state, newPresent) {
-  return {
-    past: [...state.past, state.present],
-    present: newPresent,
-    future: [],
   };
 }
 function validateInput(input) {
@@ -183,35 +206,10 @@ function validateInput(input) {
   if (!Number.isFinite(num)) {
     throw new Error("Enter a valid input");
   } else if (num < 0) {
-    throw new Error("Negtive is not allowed");
+    throw new Error("Negative is not allowed");
   }
   return num;
 }
-const crud = {
-  addRow(state, payload) {
-    return {
-      ...state,
-      rows: [
-        ...state.rows,
-        { id: payload.id, price: payload.price, qty: payload.qty },
-      ],
-    };
-  },
-  updateRow(state, payload) {
-    return {
-      ...state,
-      rows: state.rows.map((row) =>
-        row.id === payload.id ? { ...row, [payload.name]: payload.value } : row,
-      ),
-    };
-  },
-  deleteRow(state, payload) {
-    return {
-      ...state,
-      rows: state.rows.filter((row) => row.id !== payload.id),
-    };
-  },
-};
 function sumTotal(state) {
   return state.rows.reduce(
     (acc, row) => {
@@ -222,11 +220,19 @@ function sumTotal(state) {
     { totalPrice: 0, totalQty: 0 },
   );
 }
-
+// 3. render
 const render = {
   dataField(state) {
+    console.log("render datafile top line", state);
+    console.log(
+      "render datafield state breakdown",
+      state.present,
+      "entities",
+      state.present.entities,
+    );
     dataField.innerHTML = "";
-    state.rows.forEach((row) => {
+    console.log("render dataField", state, "rows", state.present.entities.rows);
+    state.present.entities.rows.forEach((row) => {
       const div = document.createElement("div");
       div.dataset.id = row.id;
       div.className = "row";
@@ -238,6 +244,7 @@ const render = {
       dataField.appendChild(div);
     });
   },
+
   inputField() {
     inputField.innerHTML = `
 <input type="text" name="price" value=""/>
@@ -245,14 +252,13 @@ const render = {
 `;
   },
   totalField(state) {
-    const sum = sumTotal(state);
+    let sum = sumTotal(state.present.entities);
     totalField.innerHTML = `
-<p>Total Price: ${sum.totalPrice} | Total Qty ${sum.totalQty}</p>
+<p>Total Price :${sum.totalPrice} | Total Qty ${sum.totalQty} </p>
 	  `;
   },
-
-  errorField(msg) {
-    errorField.textContent = msg;
+  errorField(message) {
+    errorField.textContent = message;
     errorField.classList.add("red");
   },
   cleanErrorField() {
@@ -270,18 +276,18 @@ const render = {
     this.totalField(state);
   },
 };
-
-const localData = {
+// 4. storeData
+const storeData = {
   save(state) {
     localStorage.setItem("rows", JSON.stringify(state));
   },
   load() {
     let temp = localStorage.getItem("rows");
-    return temp ? JSON.parse(temp) : { rows: [] };
+    return temp ? JSON.parse(temp) : emptySet;
   },
   reset() {
     localStorage.removeItem("rows");
-    return { rows: [] };
+    return emptySet;
   },
 };
-render.initialUI({ rows: [] });
+render.initialUI(emptySet);
