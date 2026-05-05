@@ -14,21 +14,19 @@ const redoBtn = document.querySelector("#redoBtn");
  * performance re-render optimization - only render state changes
  * distributed systems
  */
-// 0. app state
+// 0. app state (getState, baseDispatch, dispatch)
 // middleware logger persist render
 // 1. Event
 // 2. disptach / undo / redo /applyAction / validateInput / crud
 // 3. render
 // 4. storeData
 
-// 0. app state
+// 0. app state getState,baseDispatch, dispatch
 function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
-
   function getState() {
     return state;
   }
-
   function baseDispatch(action) {
     state = reducer(state, action);
     return state;
@@ -46,6 +44,7 @@ const emptySet = {
   future: [],
 };
 
+// logger
 const logger =
   ({ getState }) =>
   (next) =>
@@ -55,7 +54,7 @@ const logger =
     console.log("NEW STATE", getState());
     return result;
   };
-
+// persist
 const persist =
   ({ getState }) =>
   (next) =>
@@ -64,7 +63,7 @@ const persist =
     localStorage.setItem("rows", JSON.stringify(getState()));
     return result;
   };
-
+// renerMW
 const renderMW =
   ({ getState }) =>
   (next) =>
@@ -125,24 +124,25 @@ document.addEventListener("DOMContentLoaded", (e) => {
 });
 // 2. disptach / undo / redo /applyAction / validateInput / crud / sumTotal
 
+// actionFn
 function actionFn(action) {
   app.dispatch(action);
 }
+// reducer(state,action)
 function reducer(state, action) {
-  let tempStatePresent = {};
-  let tempState = {};
+  let newPresent = {};
   switch (action.type) {
     case "addRow":
-      tempStatePresent = {
+      newPresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
           rows: [...state.present.entities.rows, action.payload],
         },
       };
-      return applyAction(state, tempStatePresent);
+      return applyAction(state, newPresent);
     case "updateRow":
-      tempStatePresent = {
+      newPresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
@@ -153,9 +153,9 @@ function reducer(state, action) {
           ),
         },
       };
-      return applyAction(state, tempStatePresent);
+      return applyAction(state, newPresent);
     case "deleteRow":
-      tempStatePresent = {
+      newPresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
@@ -164,7 +164,7 @@ function reducer(state, action) {
           ),
         },
       };
-      return applyAction(state, tempStatePresent);
+      return applyAction(state, newPresent);
     case "undo":
       return undo(state);
     case "redo":
@@ -173,10 +173,12 @@ function reducer(state, action) {
       return state;
   }
 }
-function applyAction(state, tempPresent) {
+
+// applyAction
+function applyAction(state, newPresent) {
   return {
     past: [...state.past, state.present],
-    present: tempPresent,
+    present: newPresent,
     future: [],
   };
 }
