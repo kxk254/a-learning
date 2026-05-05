@@ -24,9 +24,11 @@ const redoBtn = document.querySelector("#redoBtn");
 // 0. app state getState,baseDispatch, dispatch
 function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
+
   function getState() {
     return state;
   }
+
   function baseDispatch(action) {
     state = reducer(state, action);
     return state;
@@ -34,7 +36,6 @@ function createApp(initialState, reducer, middlewares = []) {
   const dispatch = middlewares
     .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
     .reduceRight((next, mw) => mw(next), baseDispatch);
-
   return { getState, dispatch };
 }
 
@@ -63,7 +64,7 @@ const persist =
     localStorage.setItem("rows", JSON.stringify(getState()));
     return result;
   };
-// renerMW
+// renderMW
 const renderMW =
   ({ getState }) =>
   (next) =>
