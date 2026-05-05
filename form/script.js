@@ -15,31 +15,66 @@ const redoBtn = document.querySelector("#redoBtn");
  * distributed systems
  */
 // 0. app state
+// middleware logger persist render
 // 1. Event
 // 2. disptach / undo / redo /applyAction / validateInput / crud
 // 3. render
 // 4. storeData
 
 // 0. app state
-function createApp(initialState) {
+function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
 
   function getState() {
     return state;
   }
 
-  function setState(update) {
-    state = update;
+  function baseDispatch(action) {
+    state = reducer(state, action);
     return state;
   }
-  return { getState, setState };
+  const dispatch = middlewares
+    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
+    .reduceRight((next, mw) => mw(next), baseDispatch);
+
+  return { getState, dispatch };
 }
+
 const emptySet = {
   past: [],
   present: { user: null, entities: { rows: [] } },
   future: [],
 };
-const app = createApp(emptySet);
+
+const logger =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    console.log("ACTION", action);
+    const result = next(action);
+    console.log("NEW STATE", getState());
+    return result;
+  };
+
+const persist =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    localStorage.setItem("rows", JSON.stringify(getState()));
+    return result;
+  };
+
+const renderMW =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    render.renderAll(getState());
+    return result;
+  };
+
+const app = createApp(emptySet, reducer, [logger, persist, renderMW]);
 // 1. Event
 
 document.addEventListener("DOMContentLoaded", (e) => {
@@ -91,10 +126,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 // 2. disptach / undo / redo /applyAction / validateInput / crud / sumTotal
 
 function actionFn(action) {
-  const newState = reducer(app.getState(), action);
-  app.setState(newState);
-  render.renderAll(newState);
-  storeData.save(newState);
+  app.dispatch(action);
 }
 function reducer(state, action) {
   let tempStatePresent = {};
@@ -138,7 +170,7 @@ function reducer(state, action) {
     case "redo":
       return redo(state);
     default:
-      render.errorField(action.type);
+      return state;
   }
 }
 function applyAction(state, tempPresent) {
