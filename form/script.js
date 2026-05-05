@@ -34,81 +34,150 @@ function createApp(initialState) {
   }
   return { getState, setState };
 }
-
-const app = createApp({
+const emptySet = {
   past: [],
   present: { user: null, entities: { rows: [] } },
   future: [],
-});
+};
+const app = createApp(emptySet);
 // 1. Event
 
-myForm.addEventListener("DOMContentLoaded", (e) => {});
+document.addEventListener("DOMContentLoaded", (e) => {
+  myForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(myForm);
+    try {
+      let payload = {
+        id: crypto.randomUUID(),
+        price: validateInput(data.get("price")),
+        qty: validateInput(data.get("qty")),
+      };
+      actionFn({ type: "addRow", payload });
+    } catch (err) {
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("change", (e) => {
+    const rowEl = e.target.closest(".row");
+    if (!rowEl) return;
+    try {
+      let payload = {
+        id: rowEl.dataset.id,
+        value: validateInput(e.target.value),
+        name: e.target.name,
+      };
+      actionFn({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorField(err.message);
+    }
+  });
+  dataField.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
+      let payload = { id: rowEl.dataset.id };
+      actionFn({ type: "deleteRow", payload });
+    }
+  });
+  resetBtn.addEventListener("click", () => {});
+  loadBtn.addEventListener("click", () => {});
+  undoBtn.addEventListener("click", () => {
+    actionFn({ type: "undo" });
+  });
+  redoBtn.addEventListener("click", () => {
+    actionFn({ type: "redo" });
+  });
+});
 // 2. disptach / undo / redo /applyAction / validateInput / crud / sumTotal
 
-function dispatch(action) {
+function actionFn(action) {
+  const newState = reducer(app.getState(), action);
+  app.setState(newState);
+  render.renderAll(newState);
+  storeData.save(newState);
+}
+function reducer(state, action) {
+  let tempStatePresent = {};
+  let tempState = {};
   switch (action.type) {
     case "addRow":
-      return;
-    case "updateRow":
-      return;
-    case "deleteRow":
-      return;
-    case "undo":
-      return;
-    case "redo":
-      return;
-    default:
-  }
-}
-
-function undo(state) {}
-function redu(state) {}
-function applyAction(state, newPresent) {}
-function valudateInput(input) {}
-const crud = {
-  addRow(state, payload) {
-    return {
-      ...state,
-      present: {
+      tempStatePresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
-          rows: [...state.present.entities.rows, payload],
+          rows: [...state.present.entities.rows, action.payload],
         },
-      },
-    };
-  },
-  updateRow(state, payload) {
-    return {
-      ...state,
-      present: {
+      };
+      return applyAction(state, tempStatePresent);
+    case "updateRow":
+      tempStatePresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
           rows: state.present.entities.rows.map((row) =>
-            row.id === payload.id
-              ? { ...row, [payload.name]: payload.value }
+            row.id === action.payload.id
+              ? { ...row, [action.payload.name]: action.payload.value }
               : row,
           ),
         },
-      },
-    };
-  },
-  deleteRow(state, payload) {
-    return {
-      ...state,
-      present: {
+      };
+      return applyAction(state, tempStatePresent);
+    case "deleteRow":
+      tempStatePresent = {
         ...state.present,
         entities: {
           ...state.present.entities,
           rows: state.present.entities.rows.filter(
-            (row) => row.id !== payload.id,
+            (row) => row.id !== action.payload.id,
           ),
         },
-      },
-    };
-  },
-};
+      };
+      return applyAction(state, tempStatePresent);
+    case "undo":
+      return undo(state);
+    case "redo":
+      return redo(state);
+    default:
+      render.errorField(action.type);
+  }
+}
+function applyAction(state, tempPresent) {
+  return {
+    past: [...state.past, state.present],
+    present: tempPresent,
+    future: [],
+  };
+}
+function undo(state) {
+  if (state.past.length === 0) return state;
+  const current = state.past[state.past.length - 1];
+  return {
+    past: state.past.slice(0, -1),
+    present: current,
+    future: [state.present, ...state.future],
+  };
+}
+function redo(state) {
+  if (state.future.length === 0) return state;
+  const current = state.future[0];
+  return {
+    past: [...state.past, state.present],
+    present: current,
+    future: state.future.slice(1),
+  };
+}
+function validateInput(input) {
+  if (String(input).trim() === "") {
+    throw new Error("Empty is not allowed");
+  }
+  const num = Number(input);
+  if (!Number.isFinite(num)) {
+    throw new Error("Enter a valid input");
+  } else if (num < 0) {
+    throw new Error("Negative is not allowed");
+  }
+  return num;
+}
 function sumTotal(state) {
   return state.rows.reduce(
     (acc, row) => {
@@ -121,17 +190,72 @@ function sumTotal(state) {
 }
 // 3. render
 const render = {
-  dataField() {},
-  inputField() {},
-  totalField() {},
-  errorField() {},
-  cleanErrorField() {},
-  renderAll() {},
-  initialUI() {},
+  dataField(state) {
+    console.log("render datafile top line", state);
+    console.log(
+      "render datafield state breakdown",
+      state.present,
+      "entities",
+      state.present.entities,
+    );
+    dataField.innerHTML = "";
+    console.log("render dataField", state, "rows", state.present.entities.rows);
+    state.present.entities.rows.forEach((row) => {
+      const div = document.createElement("div");
+      div.dataset.id = row.id;
+      div.className = "row";
+      div.innerHTML = `
+<input type="text" name="price" value="${row.price}"/>
+<input type="text" name="qty" value="${row.qty}"/>
+<button type="button" class="delete-btn">DEL</button>
+`;
+      dataField.appendChild(div);
+    });
+  },
+
+  inputField() {
+    inputField.innerHTML = `
+<input type="text" name="price" value=""/>
+<input type="text" name="qty" value=""/>
+`;
+  },
+  totalField(state) {
+    let sum = sumTotal(state.present.entities);
+    totalField.innerHTML = `
+<p>Total Price :${sum.totalPrice} | Total Qty ${sum.totalQty} </p>
+	  `;
+  },
+  errorField(message) {
+    errorField.textContent = message;
+    errorField.classList.add("red");
+  },
+  cleanErrorField() {
+    errorField.textContent = "";
+    errorField.classList.remove("red");
+  },
+  renderAll(state) {
+    this.dataField(state);
+    this.inputField();
+    this.totalField(state);
+    this.cleanErrorField();
+  },
+  initialUI(state) {
+    this.inputField();
+    this.totalField(state);
+  },
 };
 // 4. storeData
 const storeData = {
-  save() {},
-  load() {},
-  reset() {},
+  save(state) {
+    localStorage.setItem("rows", JSON.stringify(state));
+  },
+  load() {
+    let temp = localStorage.getItem("rows");
+    return temp ? JSON.parse(temp) : emptySet;
+  },
+  reset() {
+    localStorage.removeItem("rows");
+    return emptySet;
+  },
 };
+render.initialUI(emptySet);
