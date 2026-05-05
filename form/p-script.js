@@ -14,7 +14,7 @@ const redoBtn = document.querySelector("#redoBtn");
  * performance re-render optimization - only render state changes
  * distributed systems
  */
-// 0. app state
+// 0. app state (getState, baseDispatch, dispatch)
 // middleware logger persist render
 // 1. Event
 // 2. disptach / undo / redo /applyAction / validateInput / crud
