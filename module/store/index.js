@@ -1,3 +1,3 @@
-import { createApp } from "./createApp.js";
-import { initialState } from "./initialState.js";
-import { reducer } from "./reducer.js";
+export { createApp } from "./createApp.js";
+export { initialState } from "./initialState.js";
+export { reducer } from "./reducer.js";

@@ -1,7 +1,5 @@
-export function initialState() {
-  return {
-    past: [],
-    present: { user: null, entities: { rows: [] } },
-    future: [],
-  };
-}
+export const initialState = {
+  past: [],
+  present: { user: null, entities: { rows: [] } },
+  future: [],
+};

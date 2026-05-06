@@ -1,1 +1,1 @@
-import { render } from "./render.js";
+export { render } from "./render.js";

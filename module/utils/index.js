@@ -1,2 +1,2 @@
-import { sumTotalFromRows } from "./sumTotalFromRows.js";
-import { validateInputToNumber } from "./validateInputToNumber.js";
+export { sumTotalFromRows } from "./sumTotalFromRows.js";
+export { validateInputToNumber } from "./validateInputToNumber.js";
