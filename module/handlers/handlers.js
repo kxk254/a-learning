@@ -13,6 +13,8 @@ export function setupHandlers(app) {
     const undoBtn = document.querySelector("#undoBtn");
     const redoBtn = document.querySelector("#redoBtn");
 
+    let payload;
+
     myForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const data = new FormData(myForm);

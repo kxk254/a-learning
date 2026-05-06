@@ -9,8 +9,9 @@ export const render = {
       div.dataset.id = row.id;
       div.className = "row";
       div.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>`;
+	<input type="text" name="price" value="${row.price}"/>
+	<input type="text" name="qty" value="${row.qty}"/>
+	<button type="button" class="delete-btn">DEL</button>`;
       dataField.appendChild(div);
     });
   },
