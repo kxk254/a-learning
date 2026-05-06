@@ -1,5 +1,6 @@
 import { validateInputToNumber } from "../utils/validateInputToNumber.js";
 import { render } from "../render/index.js";
+import { loadMockData, loadDataThunk } from "../store/index.js";
 
 export function setupHandlers(app) {
   document.addEventListener("DOMContentLoaded", (e) => {
@@ -36,7 +37,7 @@ export function setupHandlers(app) {
         payload = {
           id: rowEl.id,
           name: e.target.name,
-          price: validateInputToNumber(e.target.value),
+          value: validateInputToNumber(e.target.value),
         };
         app.dispatch({ type: "updateRow", payload });
       } catch (err) {
@@ -51,8 +52,13 @@ export function setupHandlers(app) {
         app.dispatch({ type: "deleteRow", payload });
       }
     });
-    resetBtn.addEventListener("click", () => {});
-    loadBtn.addEventListener("click", () => {});
+    resetBtn.addEventListener("click", () => {
+      app.dispatch({ type: "resetData" });
+    });
+    loadBtn.addEventListener("click", () => {
+      console.log("load btn was pressed");
+      app.dispatch(loadDataThunk());
+    });
     undoBtn.addEventListener("click", () => {
       app.dispatch({ type: "undo" });
     });
