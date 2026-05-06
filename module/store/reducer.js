@@ -11,6 +11,7 @@ export function reducer(state, action) {
           rows: [...present.entities.rows, ap],
         },
       };
+      console.log("reducer addRow", newPresent);
       return applyAction(state, newPresent);
     case "updateRow":
       newPresent = {

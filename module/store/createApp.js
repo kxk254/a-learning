@@ -16,6 +16,7 @@ export function createApp(initialState, reducer, middlewares = []) {
   }
 
   function baseDispatch(action) {
+    console.log("baseDispatch", action);
     state = reducer(state, action);
     listeners.forEach((l) => l());
     return state;
