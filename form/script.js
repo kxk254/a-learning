@@ -24,19 +24,33 @@ const redoBtn = document.querySelector("#redoBtn");
 // 0. app state getState,baseDispatch, dispatch
 function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
+  let listeners = [];
 
   function getState() {
     return state;
   }
 
+  function subscribe(listener) {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter((l) => l !== listener);
+    };
+  }
+
   function baseDispatch(action) {
     state = reducer(state, action);
+    listeners.forEach((l) => l());
     return state;
   }
-  const dispatch = middlewares
-    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
-    .reduceRight((next, mw) => mw(next), baseDispatch);
-  return { getState, dispatch };
+
+  let dispatch = baseDispatch;
+
+  const middlewareAPI = { getState, dispatch: (a) => dispatch(a) };
+
+  const chain = middlewares.map((mw) => mw(middlewareAPI));
+  dispatch = chain.reduceRight((next, mw) => mw(next), baseDispatch);
+
+  return { getState, dispatch, subscribe };
 }
 
 const emptySet = {
@@ -64,17 +78,32 @@ const persist =
     localStorage.setItem("rows", JSON.stringify(getState()));
     return result;
   };
-// renderMW
-const renderMW =
-  ({ getState }) =>
+// thunk
+const thunk =
+  ({ getState, dispatch }) =>
   (next) =>
   (action) => {
-    const result = next(action);
-    render.renderAll(getState());
-    return result;
+    if (typeof action === "function") {
+      return action(dispatch, getState);
+    }
+    return next(action);
   };
 
-const app = createApp(emptySet, reducer, [logger, persist, renderMW]);
+const app = createApp(emptySet, reducer, [logger, persist]);
+let prevState;
+app.subscribe(() => {
+  const state = app.getState();
+  if (prevState !== state) {
+    render.renderAll(state);
+  }
+  prevState = state;
+});
+
+app.dispatch(async (dispatch) => {
+  const rest = await fetch("/api/data");
+  const data = await res.json();
+  dispatch({ type: "addRow", payload: data });
+});
 // 1. Event
 
 document.addEventListener("DOMContentLoaded", (e) => {
@@ -293,4 +322,4 @@ const storeData = {
     return emptySet;
   },
 };
-render.initialUI(emptySet);
+render.initialUI(app.getState());
