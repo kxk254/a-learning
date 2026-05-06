@@ -1,4 +1,5 @@
 import { initialState } from "../store/initialState.js";
+import { sumTotalFromRows } from "../utils/index.js";
 
 export const render = {
   dataFieldRender(state) {
