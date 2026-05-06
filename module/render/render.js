@@ -35,14 +35,25 @@ export const render = {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
+  nameFieldRender(state) {
+    const name = state.present.user;
+    console.log("name in render", name);
+    if (name === undefined || name === null) {
+      nameField.textContent = "no user logged in";
+    } else {
+      nameField.textContent = `${name.id} | ${name.name}`;
+    }
+  },
   renderAll(state) {
+    this.nameFieldRender(state);
     this.dataFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(state);
     this.clearErrorField();
   },
-  initalUI(initialState) {
+  initalUI(state) {
+    this.nameFieldRender(state);
     this.inputFieldRender();
-    this.totalFieldRender(initialState);
+    this.totalFieldRender(state);
   },
 };
