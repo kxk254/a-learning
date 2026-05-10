@@ -7,7 +7,7 @@ export function createApp(initialState, reducer, middlewares = []) {
   }
 
   function subscribe(listener) {
-    listners = push.listener;
+    listeners.push(listener);
     return () => {
       listeners = listeners.filter((l) => l !== listener);
     };
@@ -19,8 +19,8 @@ export function createApp(initialState, reducer, middlewares = []) {
     return state;
   }
   const dispatch = middlewares
-    .map((mw) => ({ getState, dispatch: (a) => dispatch(a) }))
-    .reduceRight((next, mw) => mw(nest), baseDispatch);
+    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
+    .reduceRight((next, mw) => mw(next), baseDispatch);
 
   return { getState, dispatch, subscribe };
 }
