@@ -11,6 +11,7 @@
   </head>
   <body>
     <main>
+      <span id="nameField"></span>
       <h3>Forms</h3>
       <section id="dataField"></section>
       <section id="errorField"></section>
@@ -40,6 +41,50 @@
     <script type="module" src="./main.js" defer></script>
   </body>
 </html>
+
+
+===== ./module/PROJECT_STRUCTURE.md =====
+
+# Project Directory Structure
+
+```
+📂 /
+├── 📁 data/
+│   └── 📄 mockdata.json
+├── 📁 handlers/
+│   └── 📄 handlers.js
+├── 📁 middleware/
+│   ├── 📄 index.js
+│   ├── 📄 logger.js
+│   ├── 📄 persist.js
+│   └── 📄 thunk.js
+├── 📁 render/
+│   ├── 📄 index.js
+│   └── 📄 render.js
+├── 📁 store/
+│   ├── 📄 createApp.js
+│   ├── 📄 index.js
+│   ├── 📄 initialState.js
+│   ├── 📄 loadDataThunk.js
+│   ├── 📄 loadMockData.js
+│   ├── 📄 localData.js
+│   └── 📄 reducer.js
+├── 📁 utils/
+│   ├── 📄 index.js
+│   ├── 📄 sumTotalFromRows.js
+│   └── 📄 validateInputToNumber.js
+├── 📄 code.py
+├── 📄 index.html
+├── 📄 main.js
+├── 📄 markdown.py
+├── 📄 output.txt
+└── 📄 styles.css
+```
+
+## Folder & File Explanations
+
+- `code.py`: Python source code
+- `markdown.py`: Python source code
 
 
 ===== ./module/styles.css =====
@@ -73,12 +118,13 @@ with open(output_file, "w", encoding="utf-8") as out:
 
 ===== ./module/main.js =====
 
-import { createApp, initialState, reducer } from "./store/index.js";
+import { createApp, initialState, reducer, localData } from "./store/index.js";
 import { render } from "./render/index.js";
 import { setupHandlers } from "./handlers/handlers.js";
 import { logger, persist, thunk } from "./middleware/index.js";
 
-const app = createApp(initialState, reducer, [logger, persist]);
+const startValue = localData.loadData() || initialState;
+const app = createApp(startValue, reducer, [logger, persist, thunk]);
 
 let prevState;
 app.subscribe(() => {
@@ -91,13 +137,83 @@ app.subscribe(() => {
   prevState = state;
 });
 
-app.dispatch(async (dispatch) => {
-  const rest = await fetch("/api/data");
-  const data = await res.json();
-  dispatch({ type: "addRow", payload: data });
-});
-
 setupHandlers(app);
+
+
+===== ./module/markdown.py =====
+
+# python generate_structure.py ./module . ./module PROJECT_STRUCTURE.md
+
+import os
+from pathlib import Path
+import argparse
+
+
+def generate_directory_tree(root_dir: str, max_depth: int = None, ignore_dirs=None):
+    if ignore_dirs is None:
+        ignore_dirs = {".git", "__pycache__", "venv", "node_modules", ".pytest_cache"}
+
+    tree_lines = []
+    explanations = {}  # folder/file -> reason
+
+    def walk(path: Path, prefix: str = "", depth: int = 0):
+        if max_depth is not None and depth > max_depth:
+            return
+
+        # Sort directories first, then files
+        items = sorted(path.iterdir(), key=lambda x: (x.is_file(), x.name.lower()))
+
+        for i, item in enumerate(items):
+            if item.name in ignore_dirs or item.name.startswith("."):
+                continue
+
+            is_last = i == len(items) - 1
+            connector = "└── " if is_last else "├── "
+            rel_path = str(item.relative_to(root_dir))
+
+            if item.is_dir():
+                tree_lines.append(f"{prefix}{connector}📁 {item.name}/")
+                new_prefix = prefix + ("    " if is_last else "│   ")
+                walk(item, new_prefix, depth + 1)
+            else:
+                tree_lines.append(f"{prefix}{connector}📄 {item.name}")
+
+                # Example: Add default explanations (customize this!)
+                if "README" in item.name:
+                    explanations[rel_path] = "Project documentation and overview"
+                elif item.suffix in {".py"}:
+                    explanations[rel_path] = "Python source code"
+
+    root_path = Path(root_dir)
+    tree_lines.append(f"📂 {root_path.name}/")
+    walk(root_path)
+
+    # Build Markdown output
+    md = ["# Project Directory Structure\n", "```"]
+    md.extend(tree_lines)
+    md.append("```")
+
+    # Add Explanations section
+    md.append("\n## Folder & File Explanations\n")
+    for path, reason in sorted(explanations.items()):
+        md.append(f"- `{path}`: {reason}")
+
+    return "\n".join(md)
+
+
+# Usage
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", default=".", help="Root directory")
+    parser.add_argument("--output", default="PROJECT_STRUCTURE.md", help="Output file")
+    parser.add_argument("--depth", type=int, default=None, help="Max depth")
+    args = parser.parse_args()
+
+    content = generate_directory_tree(args.root, args.depth)
+    with open(args.output, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"✅ Structure saved to {args.output}")
 
 
 ===== ./module/output.txt =====
@@ -112,7 +228,6 @@ export const persist =
   (action) => {
     const result = next(action);
     localStorage.setItem("rows", JSON.stringify(getState()));
-    return result;
   };
 
 
@@ -188,15 +303,26 @@ export const render = {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
+  nameFieldRender(state) {
+    const name = state.present.user;
+    console.log("name in render", name);
+    if (name === undefined || name === null) {
+      nameField.textContent = "no user logged in";
+    } else {
+      nameField.textContent = `${name.id} | ${name.name}`;
+    }
+  },
   renderAll(state) {
+    this.nameFieldRender(state);
     this.dataFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(state);
     this.clearErrorField();
   },
-  initalUI(initialState) {
+  initalUI(state) {
+    this.nameFieldRender(state);
     this.inputFieldRender();
-    this.totalFieldRender(initialState);
+    this.totalFieldRender(state);
   },
 };
 
@@ -217,7 +343,7 @@ export { validateInputToNumber } from "./validateInputToNumber.js";
 export function sumTotalFromRows(rows) {
   return rows.reduce(
     (acc, row) => {
-      acc.totalPrice += row.price;
+      acc.totalPrice += row.price * row.qty;
       acc.totalQty += row.qty;
       return acc;
     },
@@ -242,10 +368,28 @@ export function validateInputToNumber(input) {
 }
 
 
+===== ./module/data/mockdata.json =====
+
+{
+  "user": { "id": 1, "name": "kenji" },
+  "entities": {
+    "rows": [
+      { "id": "aaa", "price": 100, "qty": 3 },
+      { "id": "bbb", "price": 50, "qty": 4 },
+      { "id": "bbc", "price": 80, "qty": 6 },
+      { "id": "bcc", "price": 180, "qty": 8 },
+      { "id": "bcb", "price": 120, "qty": 3 },
+      { "id": "ccc", "price": 150, "qty": 2 }
+    ]
+  }
+}
+
+
 ===== ./module/handlers/handlers.js =====
 
 import { validateInputToNumber } from "../utils/validateInputToNumber.js";
 import { render } from "../render/index.js";
+import { loadMockData, loadDataThunk } from "../store/index.js";
 
 export function setupHandlers(app) {
   document.addEventListener("DOMContentLoaded", (e) => {
@@ -282,7 +426,7 @@ export function setupHandlers(app) {
         payload = {
           id: rowEl.id,
           name: e.target.name,
-          price: validateInputToNumber(e.target.value),
+          value: validateInputToNumber(e.target.value),
         };
         app.dispatch({ type: "updateRow", payload });
       } catch (err) {
@@ -297,8 +441,13 @@ export function setupHandlers(app) {
         app.dispatch({ type: "deleteRow", payload });
       }
     });
-    resetBtn.addEventListener("click", () => {});
-    loadBtn.addEventListener("click", () => {});
+    resetBtn.addEventListener("click", () => {
+      app.dispatch({ type: "resetData" });
+    });
+    loadBtn.addEventListener("click", () => {
+      console.log("load btn was pressed");
+      app.dispatch(loadDataThunk());
+    });
     undoBtn.addEventListener("click", () => {
       app.dispatch({ type: "undo" });
     });
@@ -309,7 +458,31 @@ export function setupHandlers(app) {
 }
 
 
+===== ./module/store/loadMockData.js =====
+
+import { validateInputToNumber } from "../utils/index.js";
+
+export async function loadMockData() {
+  const res = await fetch("/module/data/mockdata.json");
+  const data = await res.json();
+  let newPresent = {
+    ...data,
+    entities: {
+      ...data.entities,
+      rows: data.entities.rows.map((row) => ({
+        id: row.id,
+        price: validateInputToNumber(row.price),
+        qty: validateInputToNumber(row.qty),
+      })),
+    },
+  };
+  return newPresent;
+}
+
+
 ===== ./module/store/reducer.js =====
+
+import { initialState } from "./initialState.js";
 
 export function reducer(state, action) {
   let newPresent = {};
@@ -324,7 +497,6 @@ export function reducer(state, action) {
           rows: [...present.entities.rows, ap],
         },
       };
-      console.log("reducer addRow", newPresent);
       return applyAction(state, newPresent);
     case "updateRow":
       newPresent = {
@@ -347,11 +519,39 @@ export function reducer(state, action) {
       };
       return applyAction(state, newPresent);
     case "undo":
-      newPresent = undo(state);
-      return applyAction(state, newPresent);
+      return undo(state);
     case "redo":
-      newPresent = redo(state);
+      return redo(state);
+    //case "loadData":
+    //newPresent = state.present;
+
+    case "loadStart":
+      console.log("load Start");
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: true, error: null },
+      };
+      console.log("load Start", newPresent);
       return applyAction(state, newPresent);
+    case "loadSuccess":
+      console.log("loadSuccess", ap);
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: false },
+        entities: { ...state.present.entities, rows: ap.entities.rows },
+        user: ap.user,
+      };
+      console.log("load success in reducer", newPresent);
+      return applyAction(state, newPresent);
+    case "loadError":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: false, error: ap },
+      };
+      return applyAction(state, newPresent);
+
+    case "resetData":
+      return localData.resetData();
     default:
       return state;
   }
@@ -368,6 +568,7 @@ function applyAction(state, newPresent) {
 function undo(state) {
   if (state.past.length === 0) return state;
   const past = state.past[state.past.length - 1];
+  console.log("undo state", past);
   return {
     past: state.past.slice(0, -1),
     present: past,
@@ -384,17 +585,30 @@ function redo(state) {
   };
 }
 
+export const localData = {
+  loadData() {
+    let temp = localStorage.getItem("rows");
+    console.log("loadData in localData", JSON.parse(temp));
+    return temp ? JSON.parse(temp) : initialState;
+  },
+  resetData() {
+    localStorage.removeItem("rows");
+    return initialState;
+  },
+};
+
 
 ===== ./module/store/index.js =====
 
 export { createApp } from "./createApp.js";
 export { initialState } from "./initialState.js";
 export { reducer } from "./reducer.js";
+export { localData } from "./localData.js";
+export { loadMockData } from "./loadMockData.js";
+export { loadDataThunk } from "./loadDataThunk.js";
 
 
 ===== ./module/store/createApp.js =====
-
-import { reducer, initialState } from "./index.js";
 
 export function createApp(initialState, reducer, middlewares = []) {
   let state = initialState;
@@ -412,7 +626,6 @@ export function createApp(initialState, reducer, middlewares = []) {
   }
 
   function baseDispatch(action) {
-    console.log("baseDispatch", action);
     state = reducer(state, action);
     listeners.forEach((l) => l());
     return state;
@@ -425,10 +638,46 @@ export function createApp(initialState, reducer, middlewares = []) {
 }
 
 
+===== ./module/store/localData.js =====
+
+export const localData = {
+  loadData() {
+    let temp = localStorage.getItem("rows");
+    console.log("loadData in localData", JSON.parse(temp));
+    return temp ? JSON.parse(temp) : initialState;
+  },
+  resetData() {
+    localStorage.removeItem("rows");
+    return initialState;
+  },
+};
+
+
 ===== ./module/store/initialState.js =====
 
 export const initialState = {
   past: [],
-  present: { user: null, entities: { rows: [] } },
+  present: {
+    user: null,
+    entities: { rows: [] },
+    ui: { loading: false, error: null },
+  },
   future: [],
 };
+
+
+===== ./module/store/loadDataThunk.js =====
+
+import { loadMockData } from "./index.js";
+
+export function loadDataThunk() {
+  return async (dispatch, getState) => {
+    dispatch({ type: "loadStart" });
+    try {
+      const newPresent = await loadMockData();
+      dispatch({ type: "loadSuccess", payload: newPresent });
+    } catch (err) {
+      dispatch({ type: "loadError", payload: err.message });
+    }
+  };
+}
