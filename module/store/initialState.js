@@ -3,7 +3,7 @@ export const initialState = {
   present: {
     user: null,
     entities: { rows: [] },
-    ui: { loading: fasle, error: null },
+    ui: { loading: false, error: null },
   },
   future: [],
 };
