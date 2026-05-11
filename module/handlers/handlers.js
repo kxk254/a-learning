@@ -51,6 +51,7 @@ export function setupHandlers(app) {
     app.dispatch({ type: "resetData" });
   });
   loadBtn.addEventListener("click", () => {
+    console.log("clicked load button");
     try {
       app.dispatch(loadDataThunk());
     } catch (err) {
