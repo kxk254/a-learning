@@ -10,7 +10,7 @@ let prevState;
 app.subscribe(() => {
   const state = app.getState();
   if (state.present.entities === null) {
-    console.log("entities === nul");
+    console.log("entities === null");
     render.initialUI(state);
   } else if (prevState !== state) {
     console.log("entities === state");
