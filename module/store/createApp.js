@@ -1,5 +1,5 @@
 export function createApp(initialState, reducer, middlewares = []) {
-  let state = initialState;
+  let state;
   let listeners = [];
 
   function getState() {
@@ -23,6 +23,8 @@ export function createApp(initialState, reducer, middlewares = []) {
   const dispatch = middlewares
     .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
     .reduceRight((next, mw) => mw(next), baseDispatch);
+
+  dispatch({ type: "@@init" });
 
   return { getState, dispatch, subscribe };
 }

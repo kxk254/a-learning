@@ -3,8 +3,7 @@ import { render } from "./render/index.js";
 import { setupHandlers } from "./handlers/handlers.js";
 import { logger, persist, thunk } from "./middleware/index.js";
 
-const startValue = initialState;
-const app = createApp(startValue, reducer, [logger, persist, thunk]);
+const app = createApp(state: initialState, reducer, [logger, persist, thunk]);
 
 let prevState;
 app.subscribe(() => {
