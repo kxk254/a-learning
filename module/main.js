@@ -3,12 +3,15 @@ import { render } from "./render/index.js";
 import { setupHandlers } from "./handlers/handlers.js";
 import { logger, persist, thunk } from "./middleware/index.js";
 
-const app = createApp(state: initialState, reducer, [logger, persist, thunk]);
+const app = createApp(initialState, reducer, [logger, persist, thunk]);
+
+render.initialUI(app.getState());
 
 let prevState;
 app.subscribe(() => {
   const state = app.getState();
-  if (state.present.entities === null) {
+  console.log("prevState -->", prevState);
+  if (prevState === undefined) {
     console.log("entities === null");
     render.initialUI(state);
   } else if (prevState !== state) {

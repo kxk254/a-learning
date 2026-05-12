@@ -13,6 +13,7 @@ export function createApp(initialState, reducer, middlewares = []) {
       listeners = listeners.filter((l) => l !== listener);
     };
   }
+  const api = { getState, dispatch: (a) => dispatch(a) };
 
   function baseDispatch(action) {
     state = reducer(state, action);
@@ -21,7 +22,7 @@ export function createApp(initialState, reducer, middlewares = []) {
     return state;
   }
   const dispatch = middlewares
-    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
+    .map((mw) => mw(api))
     .reduceRight((next, mw) => mw(next), baseDispatch);
 
   dispatch({ type: "@@init" });
