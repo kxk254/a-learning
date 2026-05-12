@@ -1,12 +1,13 @@
 export function createApp(initialState, reducer, middlewares = []) {
-  const state = initialState;
-  const listeners = [];
+  let state = initialState;
+  let listeners = [];
 
   function getState() {
     return state;
   }
 
   function subscribe(listener) {
+    console.log("subscribe ::", listener);
     listeners.push(listener);
     return () => {
       listeners = listeners.filter((l) => l !== listener);
@@ -15,6 +16,7 @@ export function createApp(initialState, reducer, middlewares = []) {
 
   function baseDispatch(action) {
     state = reducer(state, action);
+    console.log("base dispatch ::", action, state);
     listeners.forEach((l) => l());
     return state;
   }

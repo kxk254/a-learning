@@ -1,8 +1,8 @@
 import { validateInputToNumber } from "../utils/index.js";
 
 export async function loadMockData() {
-  const res = await fetch("../data/mockdata.json");
-  const data = res.json();
+  const res = await fetch("../module/data/mockdata.json");
+  const data = await res.json();
   return {
     ...data,
     entities: {

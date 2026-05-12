@@ -1,5 +1,5 @@
 export const thunk =
-  ({ getState, disptach }) =>
+  ({ getState, dispatch }) =>
   (next) =>
   (action) => {
     if (typeof action === "function") {
