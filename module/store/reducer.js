@@ -1,6 +1,6 @@
 import { initialState } from "./initialState.js";
 
-export function reducer(state, action) {
+export function reducer(state = initialState, action) {
   let present = state.present;
   let ap = action.payload;
   switch (action.type) {
@@ -57,6 +57,7 @@ export function reducer(state, action) {
     case "resetData":
       return resetData();
     default:
+      console.log("default path under reducer");
       return state;
   }
 }

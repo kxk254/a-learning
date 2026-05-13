@@ -1,17 +1,18 @@
 import { validateInputToNumber } from "../utils/index.js";
 
 export async function loadMockData() {
-  const res = await fetch("../module/data/mockdata.json");
+  const res = await fetch("/module/data/mockdata.json");
   const data = await res.json();
   return {
     ...data,
     entities: {
       ...data.entities,
-      rows: data.entries.rows.map((row) => ({
+      rows: data.entities.rows.map((row) => ({
         id: row.id,
         price: validateInputToNumber(row.price),
         qty: validateInputToNumber(row.qty),
       })),
+      user: { id: data.user.id, name: data.user.name },
     },
   };
 }

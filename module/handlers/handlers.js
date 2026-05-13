@@ -20,7 +20,7 @@ export function setupHandlers(app) {
     const data = new FormData(myForm);
     try {
       payload = {
-        id: crypto.randomUUID(),
+        id: Math.random().toString(36).slice(2),
         price: validateInputToNumber(data.get("price")),
         qty: validateInputToNumber(data.get("qty")),
       };
