@@ -16,7 +16,7 @@ export function reducer(state = initialState, action) {
       return applyAction(state, {
         ...present,
         entities: {
-          ...present.entities.rows,
+          ...present.entities,
           rows: present.entities.rows.map((row) =>
             row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
           ),
@@ -46,7 +46,7 @@ export function reducer(state = initialState, action) {
     case "loadError":
       return applyAction(state, {
         ...present,
-        ui: { loading: false, error: ap.message },
+        ui: { loading: false, error: ap },
       });
     case "undo":
       return undo(state);

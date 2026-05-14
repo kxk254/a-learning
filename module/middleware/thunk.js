@@ -3,6 +3,7 @@ export const thunk =
   (next) =>
   (action) => {
     if (typeof action === "function") {
+      console.log("thunk ", action);
       return action(dispatch, getState);
     }
     return next(action);
