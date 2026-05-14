@@ -31,11 +31,12 @@ export function reducer(state = initialState, action) {
         },
       });
     case "loadStart":
-      return applyAction(state, {
+      let a = applyAction(state, {
         ...present,
         ui: { loading: true, error: null },
       });
-      return;
+      console.log("load start inside reducer", a);
+      return a;
     case "loadSuccess":
       return applyAction(state, {
         ...present,

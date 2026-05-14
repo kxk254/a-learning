@@ -6,5 +6,6 @@ export const thunk =
       console.log("thunk ", action);
       return action(dispatch, getState);
     }
+    console.log("not passing the thunk");
     return next(action);
   };
