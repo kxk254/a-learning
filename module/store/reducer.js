@@ -32,21 +32,21 @@ export function reducer(state = initialState, action) {
       });
     case "loadStart":
       let a = applyAction(state, {
-        ...present,
+        ...ap,
+        entities: { rows: [] },
         ui: { loading: true, error: null },
+        user: {},
       });
       console.log("load start inside reducer", a);
       return a;
     case "loadSuccess":
-      return applyAction(state, {
-        ...present,
-        entities: { ...present.entities, rows: ap.entries.rows },
-        ui: { loading: false, error: null },
-        user: ap.user,
-      });
+      console.log("load success inside reducer", ap);
+      let b = applyAction(state, ap);
+      console.log("reducer load success data:", b);
+      return b;
     case "loadError":
       return applyAction(state, {
-        ...present,
+        ...ap,
         ui: { loading: false, error: ap },
       });
     case "undo":
