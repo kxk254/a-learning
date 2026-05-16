@@ -24,6 +24,7 @@ export function createApp(initialState, reducer, middlewares = []) {
   const dispatch = middlewares
     .map((mw) => mw(api))
     .reduceRight((next, mw) => mw(next), baseDispatch);
+  console.log("created dispatch at createApp ", dispatch);
 
   dispatch({ type: "@@init" });
 
