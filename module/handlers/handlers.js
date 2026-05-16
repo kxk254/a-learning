@@ -15,4 +15,55 @@ export function setupHandlers(app) {
     const redoBtn = document.querySelector("#redoBtn");
   });
   let payload = {};
+  myForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(myForm);
+    try {
+      payload = {
+        id: Math.random().toString(36).slice(2),
+        price: validateInputToNumber(data.get("price")),
+        qty: validateInputToNumber(data.get("qty")),
+      };
+      app.dispatch({ type: "addRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
+  });
+  dataField.addEventListener("change", (e) => {
+    const rowEl = e.target.closest(".row");
+    if (!rowEl) return;
+    try {
+      payload = {
+        id: rowEl.dataset.id,
+        name: e.target.name,
+        value: validateInputToNumber(e.target.value),
+      };
+      app.dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
+  });
+  dataField.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      const rowEl = e.target.closest(".row");
+      payload = { id: rowEl.dataset.id };
+      app.dispatch({ type: "deleteRow", payload });
+    }
+  });
+  resetBtn.addEventListener("click", () => {
+    app.dispatch({ type: "resetData" });
+  });
+  loadBtn.addEventListener("click", () => {
+    try {
+      app.dispatch(loadDataThunk());
+    } catch (err) {
+      render.errorField(err.message);
+    }
+  });
+  undoBtn.addEventListener("click", () => {
+    app.dispatch({ type: "undo" });
+  });
+  redoBtn.addEventListener("click", () => {
+    app.dispatch({ type: "redo" });
+  });
 }
