@@ -9,6 +9,7 @@ let prevState;
 app.subscribe(() => {
   const state = app.getState();
   if (prevState !== state) {
+    console.log("subscribe :", state);
     render.renderAll(state);
   }
   prevState = state;
