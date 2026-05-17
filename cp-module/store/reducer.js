@@ -1,21 +1,19 @@
 import { initialState } from "./initialState.js";
 
-export function reducer(state, action) {
-  let newPresent = {};
-  let ap = action.payload;
+export function reducer(state = initialState, action) {
   let present = state.present;
+  let ap = action.payload;
   switch (action.type) {
     case "addRow":
-      newPresent = {
+      return applyAction(state, {
         ...present,
         entities: {
           ...present.entities,
           rows: [...present.entities.rows, ap],
         },
-      };
-      return applyAction(state, newPresent);
+      });
     case "updateRow":
-      newPresent = {
+      return applyAction(state, {
         ...present,
         entities: {
           ...present.entities,
@@ -23,52 +21,44 @@ export function reducer(state, action) {
             row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
           ),
         },
-      };
-      return applyAction(state, newPresent);
+      });
     case "deleteRow":
-      newPresent = {
+      return applyAction(state, {
         ...present,
         entities: {
           ...present.entities,
           rows: present.entities.rows.filter((row) => row.id !== ap.id),
         },
-      };
-      return applyAction(state, newPresent);
+      });
+    case "loadStart":
+      let a = applyAction(state, {
+        ...ap,
+        entities: { rows: [] },
+        ui: { loading: true, error: null },
+        user: {},
+      });
+      console.log("load start inside reducer", a);
+      return a;
+    case "loadSuccess":
+      console.log("load success inside reducer", ap);
+      let b = applyAction(state, ap);
+      console.log("reducer load success data:", b);
+      return b;
+    case "loadError":
+      return applyAction(state, {
+        ...ap,
+        ui: { loading: false, error: ap },
+      });
     case "undo":
       return undo(state);
     case "redo":
       return redo(state);
-    //case "loadData":
-    //newPresent = state.present;
-
-    case "loadStart":
-      console.log("load Start");
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: true, error: null },
-      };
-      console.log("load Start", newPresent);
-      return applyAction(state, newPresent);
-    case "loadSuccess":
-      console.log("loadSuccess", ap);
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: false },
-        entities: { ...state.present.entities, rows: ap.entities.rows },
-        user: ap.user,
-      };
-      console.log("load success in reducer", newPresent);
-      return applyAction(state, newPresent);
-    case "loadError":
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: false, error: ap },
-      };
-      return applyAction(state, newPresent);
-
+    case "loadData":
+      return;
     case "resetData":
-      return localData.resetData();
+      return resetData();
     default:
+      console.log("default path under reducer");
       return state;
   }
 }
@@ -83,32 +73,33 @@ function applyAction(state, newPresent) {
 
 function undo(state) {
   if (state.past.length === 0) return state;
-  const past = state.past[state.past.length - 1];
-  console.log("undo state", past);
+  const present = state.past[state.past.length - 1];
   return {
     past: state.past.slice(0, -1),
-    present: past,
+    present: present,
     future: [state.present, ...state.future],
   };
 }
+
 function redo(state) {
   if (state.future.length === 0) return state;
-  const future = state.future[0];
+  const present = state.future[0];
   return {
     past: [...state.past, state.present],
-    present: future,
+    present: present,
     future: state.future.slice(1),
   };
 }
 
-export const localData = {
-  loadData() {
-    let temp = localStorage.getItem("rows");
-    console.log("loadData in localData", JSON.parse(temp));
-    return temp ? JSON.parse(temp) : initialState;
-  },
-  resetData() {
-    localStorage.removeItem("rows");
-    return initialState;
-  },
-};
+function resetData() {
+  localStorage.removeItem("rows");
+  return {
+    past: [],
+    present: {
+      user: null,
+      entities: { rows: [] },
+      ui: { loading: false, error: null },
+    },
+    future: [],
+  };
+}

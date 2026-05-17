@@ -1,59 +1,72 @@
 import { initialState } from "../store/initialState.js";
 import { sumTotalFromRows } from "../utils/index.js";
 
+const dfHTML = (row) => `
+	<input type="text" name="price" value="${row.price}"/>
+	<input type="text" name="qty" value="${row.qty}"/>
+	<button type="button" class="delete-btn">DEL</button>
+	`;
+
+const inputHTML = `
+	<input type="text" name="price" value=""/>
+	<input type="text" name="qty" value=""/>
+	`;
+
+const sumTotalHTML = (sum) =>
+  `<p>Total Price :${sum.totalPrice} | Total Qty :${sum.totalQty}</p>`;
+
+const nameFieldHTML = (user) =>
+  `<p> ID No : ${user.id} | User Name :${user.name}</p>`;
+
 export const render = {
   dataFieldRender(state) {
+    const rows = state.present.entities.rows;
     dataField.innerHTML = "";
-    state.present.entities.rows.forEach((row) => {
+    rows.forEach((row) => {
       const div = document.createElement("div");
       div.dataset.id = row.id;
       div.className = "row";
-      div.innerHTML = `
-	<input type="text" name="price" value="${row.price}"/>
-	<input type="text" name="qty" value="${row.qty}"/>
-	<button type="button" class="delete-btn">DEL</button>`;
+      div.innerHTML = dfHTML(row);
       dataField.appendChild(div);
     });
   },
   inputFieldRender() {
-    inputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-`;
+    console.log("inputField", inputHTML);
+    inputField.innerHTML = inputHTML;
   },
   totalFieldRender(state) {
     const sum = sumTotalFromRows(state.present.entities.rows);
-    totalField.innerHTML = `
-<p>Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>
-	  `;
+    totalField.innerHTML = sumTotalHTML(sum);
   },
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");
   },
-  clearErrorField() {
+  nameFieldRender(state) {
+    const user = state.present.user;
+    if (!user) {
+      nameField.textContent = "No User Data Available";
+    } else {
+      nameField.innerHTML = nameFieldHTML(user);
+    }
+  },
+  cleanErrorField() {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
-  nameFieldRender(state) {
-    const name = state.present.user;
-    console.log("name in render", name);
-    if (name === undefined || name === null) {
-      nameField.textContent = "no user logged in";
-    } else {
-      nameField.textContent = `${name.id} | ${name.name}`;
-    }
-  },
   renderAll(state) {
-    this.nameFieldRender(state);
+    console.log("render All", state);
     this.dataFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(state);
-    this.clearErrorField();
-  },
-  initalUI(state) {
+    this.cleanErrorField();
     this.nameFieldRender(state);
+  },
+  initialUI(state) {
+    console.log("initial UI", state);
     this.inputFieldRender();
     this.totalFieldRender(state);
+    this.cleanErrorField();
+    this.nameFieldRender(state);
   },
 };

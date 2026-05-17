@@ -1,7 +1,7 @@
 export function sumTotalFromRows(rows) {
   return rows.reduce(
     (acc, row) => {
-      acc.totalPrice += row.price * row.qty;
+      acc.totalPrice += row.price;
       acc.totalQty += row.qty;
       return acc;
     },

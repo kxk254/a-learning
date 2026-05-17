@@ -2,8 +2,8 @@ export const logger =
   ({ getState }) =>
   (next) =>
   (action) => {
-    console.log("ACTION", action, next);
+    console.log("ACTION", action);
     const result = next(action);
-    console.log("NEW STATE", getState());
+    console.log("LOGGER STATE", getState());
     return result;
   };

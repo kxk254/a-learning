@@ -32,17 +32,20 @@ export function setupHandlers(app) {
   dataField.addEventListener("change", (e) => {
     const rowEl = e.target.closest(".row");
     if (!rowEl) return;
-    payload = {
-      id: rowEl.dataset.id,
-      name: e.target.name,
-      value: e.target.value,
-    };
-    app.dispatch({ type: "updateRow", payload });
+    try {
+      payload = {
+        id: rowEl.dataset.id,
+        name: e.target.name,
+        value: validateInputToNumber(e.target.value),
+      };
+      app.dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
   });
   dataField.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
-      if (!rowEl) return;
       payload = { id: rowEl.dataset.id };
       app.dispatch({ type: "deleteRow", payload });
     }
@@ -51,11 +54,10 @@ export function setupHandlers(app) {
     app.dispatch({ type: "resetData" });
   });
   loadBtn.addEventListener("click", () => {
-    console.log("clicked load button");
     try {
       app.dispatch(loadDataThunk());
     } catch (err) {
-      render.errorFieldRender(err.message);
+      render.errorField(err.message);
     }
   });
   undoBtn.addEventListener("click", () => {
