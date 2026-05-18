@@ -18,15 +18,21 @@ export function reducer(state = initialState, action) {
       return applyAction(state, {
         ...present,
         ...present.entities,
-        rows: present.entities.rows.map((row) =>
-          row.id === ap.id ? { [ap.name]: ap.value } : row,
-        ),
+        entities: {
+          ...present.entities.rows,
+          rows: present.entities.rows.map((row) =>
+            row.id === ap.id ? { [row.name]: row.value } : row,
+          ),
+        },
       });
     case "deleteRow":
       return applyAction(state, {
         ...present,
         ...present.entities,
-        rows: present.entities.rows.filter((row) => row.id !== ap.id),
+        entities: {
+          ...present.entities.rows,
+          rows: present.entities.rows.filter((row) => row.id !== ap.id),
+        },
       });
     case "redo":
       return redo(state);
