@@ -16,17 +16,15 @@ const totalFieldHTML = (sum) =>
 
 export const render = {
   nameFieldRender(state) {
-    let userinfo = state.present.user;
-    console.log("name field user:", userinfo);
-    if (!userinfo) {
-      nameField.textContent = "no name";
+    let user = state.present.user;
+    if (!user || user === null || user === undefined) {
+      nameField.textContent = "No User Defined";
     } else {
-      nameField.innerHTML = nameFieldHTML(userinfo);
+      nameField.innerHTML = nameFieldHTML(user);
     }
   },
   dataFieldRender(state) {
     let rows = state.present.entities.rows;
-    console.log("data field state :", rows);
     dataField.innerHTML = "";
     rows.forEach((row) => {
       const div = document.createElement("div");
@@ -36,34 +34,29 @@ export const render = {
       dataField.appendChild(div);
     });
   },
+  inputFieldRender() {
+    inputField.innerHTML = inputFieldHTML;
+  },
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");
   },
-  inputFieldRender() {
-    inputField.innerHTML = inputFieldHTML;
+  cleanErrorField() {
+    errorField.textContent = "";
+    errorField.classList.remove("red");
   },
   totalFieldRender(state) {
-    console.log("total field render sum", state);
-    let rows = state.present.entities.rows;
-    let sum = sumTotalFromRows(rows);
+    let sum = sumTotalFromRows(state.present.entities.rows);
     totalField.innerHTML = totalFieldHTML(sum);
-  },
-  cleanErrorField() {
-    errorField.classList.remove("red");
-    errorField.textContent = "";
   },
   initialUI(state) {
     this.nameFieldRender(state);
     this.inputFieldRender();
-    this.totalFieldRender(initialState);
+    this.totalFieldRender(state);
     this.cleanErrorField();
   },
   renderAll(state) {
-    this.cleanErrorField();
-    this.nameFieldRender(state);
     this.dataFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(state);
+    this.initialUI(state);
   },
 };

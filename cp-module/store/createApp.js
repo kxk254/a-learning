@@ -7,24 +7,21 @@ export function createApp(initialState, reducer, middlewares = []) {
   }
 
   function subscribe(listener) {
-    console.log("subscribe ::", listener);
     listeners.push(listener);
     return () => {
       listeners = listeners.filter((l) => l !== listener);
     };
   }
-  const api = { getState, dispatch: (a) => dispatch(a) };
+  const api = { getState: getState, dispatch: (action) => dispatch(action) };
 
   function baseDispatch(action) {
     state = reducer(state, action);
-    console.log("base dispatch ::", action, state);
     listeners.forEach((l) => l());
     return state;
   }
   const dispatch = middlewares
     .map((mw) => mw(api))
     .reduceRight((next, mw) => mw(next), baseDispatch);
-  console.log("created dispatch at createApp ", dispatch);
 
   dispatch({ type: "@@init" });
 
