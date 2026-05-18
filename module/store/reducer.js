@@ -6,11 +6,14 @@ export function reducer(state = initialState, action) {
   switch (action.type) {
     case "addRow":
       console.log("add row reducer", action, "payload", ap);
-      return applyAction(state, {
+      let newPresent = {
         ...present,
-        ...present.entities,
-        rows: [...present.entities.rows, ap],
-      });
+        entities: { ...present.entities, rows: [...present.entities.rows, ap] },
+      };
+      console.log("add row newPresent :", newPresent);
+      let appaction = applyAction(state, newPresent);
+      console.log("add row applyAction result :", appaction);
+      return applyAction(state, newPresent);
     case "updateRow":
       return applyAction(state, {
         ...present,

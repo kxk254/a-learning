@@ -17,16 +17,22 @@ const totalFieldHTML = (sum) =>
 export const render = {
   nameFieldRender(state) {
     let userinfo = state.present.user;
-    nameField.innerHTML = nameFieldHTML(userinfo);
+    console.log("name field user:", userinfo);
+    if (!userinfo) {
+      nameField.textContent = "no name";
+    } else {
+      nameField.innerHTML = nameFieldHTML(userinfo);
+    }
   },
   dataFieldRender(state) {
     let rows = state.present.entities.rows;
+    console.log("data field state :", rows);
     dataField.innerHTML = "";
     rows.forEach((row) => {
       const div = document.createElement("div");
       div.dataset.id = row.id;
       div.className = "row";
-      div.innherHTML = dataFieldHTML(row);
+      div.innerHTML = dataFieldHTML(row);
       dataField.appendChild(div);
     });
   },
@@ -48,6 +54,7 @@ export const render = {
     errorField.textContent = "";
   },
   initialUI(state) {
+    this.nameFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(initialState);
     this.cleanErrorField();
