@@ -17,7 +17,7 @@ export function setupHandlers(app) {
   let payload = {};
   myForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const data = new FormData(myForm);
+    let data = new FormData(myForm);
     try {
       payload = {
         id: Math.random().toString(36).slice(2),
@@ -32,32 +32,29 @@ export function setupHandlers(app) {
   dataField.addEventListener("change", (e) => {
     const rowEl = e.target.closest(".row");
     if (!rowEl) return;
-    try {
-      payload = {
-        id: rowEl.dataset.id,
-        name: e.target.name,
-        value: validateInputToNumber(e.target.value),
-      };
-      app.dispatch({ type: "updateRow", payload });
-    } catch (err) {
-      render.errorFieldRender(err.message);
-    }
+    payload = {
+      id: rowEl.dataset.id,
+      name: e.target.name,
+      value: validateInputToNumber(e.target.value),
+    };
+    app.dispatch({ type: "updateRow", payload });
   });
   dataField.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
+      if (!rowEl) return;
       payload = { id: rowEl.dataset.id };
       app.dispatch({ type: "deleteRow", payload });
     }
   });
   resetBtn.addEventListener("click", () => {
-    app.dispatch({ type: "resetData" });
+    app.dispatch({ type: "reset" });
   });
   loadBtn.addEventListener("click", () => {
     try {
       app.dispatch(loadDataThunk());
     } catch (err) {
-      render.errorField(err.message);
+      render.errorFieldRender(err.message);
     }
   });
   undoBtn.addEventListener("click", () => {

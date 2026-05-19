@@ -9,9 +9,10 @@ export function createApp(initialState, reducer, middlewares = []) {
   function subscribe(listener) {
     listeners.push(listener);
     return () => {
-      listeners = listeners.filter((l) => l !== listener);
+      listeners = listeners.forEach((l) => l !== listener);
     };
   }
+
   const api = { getState: getState, dispatch: (action) => dispatch(action) };
 
   function baseDispatch(action) {
@@ -19,6 +20,7 @@ export function createApp(initialState, reducer, middlewares = []) {
     listeners.forEach((l) => l());
     return state;
   }
+
   const dispatch = middlewares
     .map((mw) => mw(api))
     .reduceRight((next, mw) => mw(next), baseDispatch);

@@ -4,6 +4,7 @@ export const logger =
   (action) => {
     console.log("ACTION", action);
     const result = next(action);
-    console.log("LOGGER STATE", getState());
+    console.log("NEW STATE", getState());
+
     return result;
   };
