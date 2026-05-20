@@ -1,40 +1,43 @@
 const board = document.querySelector("#board");
-let mws = [mwA, mwB];
-let text;
-let actionb;
-function mwA(next) {
-  return function (action) {
-    console.log("A before");
-    actionb += action + "bef A ";
-    let result = next(action);
-    actionb += action + "A ";
-    console.log("A after");
-    return actionb;
-  };
-}
-function mwB(next) {
-  return function (action) {
-    console.log("B before");
-    actionb += action + "bef B ";
-    let result = next(action);
-    actionb += action + "B ";
-    console.log("B after");
-    return actionb;
-  };
-}
 
+let middlewares = [mwA, mwB, mwC];
+let text = "";
+
+function mwA(api) {
+  return function (next) {
+    return function (action) {
+      next(action);
+      return (text += action.type + api.dispatch);
+    };
+  };
+}
+function mwB(api) {
+  return function (next) {
+    return function (action) {
+      next(action);
+      return (text += action.type + api.dispatch);
+    };
+  };
+}
+function mwC(api) {
+  return function (next) {
+    return function (action) {
+      next(action);
+      return (text += action.type + api.dispatch);
+    };
+  };
+}
 function reducer(action) {
-  console.log("Reducer");
-  actionb += "reducer " + action;
-  return actionb;
+  console.log("reducer and action", action);
+  return (text += action.type);
 }
 
-const mw = mws.reduceRight((next, mw) => mw(next), reducer);
+const api = { dispatch: () => dispatch() };
 
-const chain = mw; //mwA(mwB(reducer));
+const dispatch = middlewares
+  .map((mw) => mw(api))
+  .reduceRight((next, mw) => mw(next), reducer);
 
-// chain(mwA);
+dispatch({ type: "TEST_ACTION" });
 
-const result = chain("TEST_ACTION");
-
-board.textContent = result;
+board.textContent = text;
