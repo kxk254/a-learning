@@ -1,19 +1,40 @@
-function middleware(next) {
+const board = document.querySelector("#board");
+let mws = [mwA, mwB];
+let text;
+let actionb;
+function mwA(next) {
   return function (action) {
-    console.log("Middleware running");
-    return next(action);
+    console.log("A before");
+    actionb += action + "bef A ";
+    let result = next(action);
+    actionb += action + "A ";
+    console.log("A after");
+    return actionb;
+  };
+}
+function mwB(next) {
+  return function (action) {
+    console.log("B before");
+    actionb += action + "bef B ";
+    let result = next(action);
+    actionb += action + "B ";
+    console.log("B after");
+    return actionb;
   };
 }
 
 function reducer(action) {
-  console.log("reducer got:", action);
-  return `Handled ${action}`;
+  console.log("Reducer");
+  actionb += "reducer " + action;
+  return actionb;
 }
 
-const chain = middleware(reducer);
+const mw = mws.reduceRight((next, mw) => mw(next), reducer);
+
+const chain = mw; //mwA(mwB(reducer));
+
+// chain(mwA);
 
 const result = chain("TEST_ACTION");
-
-const board = document.querySelector("#board");
 
 board.textContent = result;
