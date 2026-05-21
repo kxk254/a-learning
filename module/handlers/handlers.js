@@ -20,7 +20,7 @@ export function setupHandlers(app) {
     let data = new FormData(myForm);
     try {
       payload = {
-        id: Math.random().toString(36).slice(2),
+        id: Math.random().toString(32).slice(2),
         price: validateInputToNumber(data.get("price")),
         qty: validateInputToNumber(data.get("qty")),
       };
@@ -32,19 +32,29 @@ export function setupHandlers(app) {
   dataField.addEventListener("change", (e) => {
     const rowEl = e.target.closest(".row");
     if (!rowEl) return;
-    payload = {
-      id: rowEl.dataset.id,
-      name: e.target.name,
-      value: validateInputToNumber(e.target.value),
-    };
-    app.dispatch({ type: "updateRow", payload });
+    try {
+      payload = {
+        id: rowEl.dataset.id,
+        name: e.target.name,
+        value: validateInputToNumber(e.target.value),
+      };
+      app.dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
   });
   dataField.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
       if (!rowEl) return;
-      payload = { id: rowEl.dataset.id };
-      app.dispatch({ type: "deleteRow", payload });
+      try {
+        payload = {
+          id: rowEl.dataset.id,
+        };
+        app.dispatch({ type: "deleteRow", payload });
+      } catch (err) {
+        render.errorFieldRender(err.message);
+      }
     }
   });
   resetBtn.addEventListener("click", () => {
@@ -53,7 +63,7 @@ export function setupHandlers(app) {
   loadBtn.addEventListener("click", () => {
     try {
       app.dispatch(loadDataThunk());
-    } catch (err) {
+    } catch (erro) {
       render.errorFieldRender(err.message);
     }
   });

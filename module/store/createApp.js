@@ -9,7 +9,7 @@ export function createApp(initialState, reducer, middlewares = []) {
   function subscribe(listener) {
     listeners.push(listener);
     return () => {
-      listeners = listeners.forEach((l) => l !== listener);
+      listeners = listeners.filter((l) => l !== listener);
     };
   }
 

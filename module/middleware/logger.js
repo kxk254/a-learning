@@ -5,6 +5,5 @@ export const logger =
     console.log("ACTION", action);
     const result = next(action);
     console.log("NEW STATE", getState());
-
     return result;
   };

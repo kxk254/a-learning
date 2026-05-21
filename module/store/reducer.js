@@ -14,6 +14,7 @@ export function reducer(state = initialState, action) {
       };
       return applyAction(state, newPresent);
     case "updateRow":
+      console.log("update Row, data :", ap);
       newPresent = {
         ...state.present,
         entities: {
@@ -34,7 +35,7 @@ export function reducer(state = initialState, action) {
       };
       return applyAction(state, newPresent);
     case "reset":
-      return resetData();
+      return resetState();
     case "undo":
       return undo(state);
     case "redo":
@@ -50,12 +51,12 @@ export function reducer(state = initialState, action) {
         ...ap,
         ui: { loading: false, error: null },
       };
-      console.log("reducer load success", newPresent);
+      console.log("reducer load success::", newPresent, "original", ap);
       return applyAction(state, newPresent);
     case "loadError":
       newPresent = {
         ...state.present,
-        ui: { loading: false, error: ap },
+        ui: { loading: false, errow: ap },
       };
       return applyAction(state, newPresent);
     default:
@@ -71,7 +72,12 @@ function applyAction(state, newPresent) {
   };
 }
 
-function undo(state, newPresent) {
+function resetState() {
+  localStorage.removeItem("rows");
+  return initialState;
+}
+
+function undo(state) {
   if (state.past.length === 0) return state;
   let current = state.past[state.past.length - 1];
   return {
@@ -81,17 +87,12 @@ function undo(state, newPresent) {
   };
 }
 
-function redo(state, newPresent) {
-  if (state.future.length === 0) return state;
+function redo(state) {
+  if (state.present.length === 0) return state;
   let current = state.future[0];
   return {
     past: [...state.past, state.present],
     present: current,
     future: state.future.slice(1),
   };
-}
-
-function resetData() {
-  localStorage.removeItem("rows");
-  return initialState;
 }

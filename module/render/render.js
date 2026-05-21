@@ -18,14 +18,14 @@ export const render = {
   nameFieldRender(state) {
     let user = state.present.user;
     if (!user || user === null || user === undefined) {
-      nameField.textContent = "No User Defined";
+      nameField.textContent = "No User Registered Yet";
     } else {
       nameField.innerHTML = nameFieldHTML(user);
     }
   },
   dataFieldRender(state) {
-    let rows = state.present.entities.rows;
     dataField.innerHTML = "";
+    let rows = state.present.entities.rows;
     rows.forEach((row) => {
       const div = document.createElement("div");
       div.dataset.id = row.id;
@@ -37,6 +37,12 @@ export const render = {
   inputFieldRender() {
     inputField.innerHTML = inputFieldHTML;
   },
+  totalFieldRender(state) {
+    let rows = state.present.entities.rows;
+    console.log("total field render :", rows, state);
+    let sum = sumTotalFromRows(state.present.entities.rows);
+    totalField.innerHTML = totalFieldHTML(sum);
+  },
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");
@@ -45,10 +51,6 @@ export const render = {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
-  totalFieldRender(state) {
-    let sum = sumTotalFromRows(state.present.entities.rows);
-    totalField.innerHTML = totalFieldHTML(sum);
-  },
   initialUI(state) {
     this.nameFieldRender(state);
     this.inputFieldRender();
@@ -56,7 +58,7 @@ export const render = {
     this.cleanErrorField();
   },
   renderAll(state) {
-    this.dataFieldRender(state);
     this.initialUI(state);
+    this.dataFieldRender(state);
   },
 };

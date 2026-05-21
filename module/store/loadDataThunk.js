@@ -4,8 +4,8 @@ export function loadDataThunk() {
   return async (dispatch, getState) => {
     dispatch({ type: "loadStart" });
     try {
-      const payload = await loadMockData();
-      dispatch({ type: "loadSuccess", payload });
+      let newPresent = await loadMockData();
+      dispatch({ type: "loadSuccess", payload: newPresent });
     } catch (err) {
       dispatch({ type: "loadError", payload: err.message });
     }
