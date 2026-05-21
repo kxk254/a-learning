@@ -20,7 +20,7 @@ const reducer = (action) => {
 
 let middlewares = [mwA, mwB, mwC];
 
-const api = "getState";
+const api = { getState: "getState", dispatch: "Dispatch API||" };
 
 const connectedMw = middlewares.map((mw) => mw(api));
 
@@ -29,3 +29,6 @@ console.log("connected middlewares ===", connectedMw);
 const dispatch = connectedMw.reduceRight((next, mw) => mw(next), reducer);
 
 dispatch("TEST_ACTION");
+
+const apistate = api.dispatch;
+console.log("api state", apistate);
