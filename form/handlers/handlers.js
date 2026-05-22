@@ -18,9 +18,9 @@ export function setupHandlers(app) {
       try {
         const data = new FormData(myForm);
         payload = {
-          id: validateInputToNumber(row.id),
-          price: validateInputToNumber(row.price),
-          qty: validateInputToNumber(row.qty),
+          id: Math.random().toString(32).slice(2),
+          price: validateInputToNumber(data.get("price")),
+          qty: validateInputToNumber(data.get("qty")),
         };
         app.dispatch({ type: "addRow", payload });
       } catch (err) {
@@ -32,7 +32,7 @@ export function setupHandlers(app) {
       if (!rowEl) return;
       try {
         payload = {
-          id: rowEl.dataset.is,
+          id: rowEl.dataset.id,
           name: e.target.name,
           value: validateInputToNumber(e.target.value),
         };
