@@ -1,0 +1,1 @@
+document.addEventHandler("DOMContentLoaded", (e) => {});

@@ -1,0 +1,19 @@
+{
+  "user": { "id": 1, "name": "kenji" },
+  "entities": {
+    "rows": [
+      { "id": "aaa", "price": 100, "qty": 3 },
+      { "id": "bbb", "price": 50, "qty": 4 },
+      { "id": "bbc", "price": 80, "qty": 6 },
+      { "id": "bcc", "price": 180, "qty": 8 },
+      { "id": "bcb", "price": 120, "qty": 3 },
+      { "id": "ccc", "price": 150, "qty": 2 }
+    ]
+  },
+  "ui": {
+    "loading": "false",
+    "error": "null",
+    "searchTerm": "",
+    "sortBy": "none"
+  }
+}
