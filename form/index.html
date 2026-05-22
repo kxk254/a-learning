@@ -7,7 +7,19 @@
   </head>
   <body>
     <main>
+      <span id="nameField"></span>
       <h3>Forms</h3>
+      <section class="controls">
+        <input type="text" id="searchInput" placeholder="Search by ID..." />
+        <select id="sortSelect">
+          <option value="none">Sort by ...</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-dsc">Price ↓</option>
+          <option value="qty-asc">Qty ↑</option>
+          <option value="qty-dsc">Qty ↓</option>
+        </select>
+        <button id="clearFilters">Clear Filters</button>
+      </section>
       <section id="dataField"></section>
       <section id="errorField"></section>
 

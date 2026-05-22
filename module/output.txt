@@ -1,48 +1,5 @@
 
 
-===== ./module/index.html =====
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>My Page</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="stylesheet" href="../styles.css" />
-  </head>
-  <body>
-    <main>
-      <span id="nameField"></span>
-      <h3>Forms</h3>
-      <section id="dataField"></section>
-      <section id="errorField"></section>
-
-      <section>
-        <form id="myForm">
-          <div id="inputField"></div>
-          <input type="submit" value="submit" />
-        </form>
-      </section>
-
-      <section id="totalField"></section>
-
-      <section class="actions">
-        <button type="button" id="resetBtn">reset</button>
-        <button type="button" id="loadBtn">load</button>
-      </section>
-      <section class="redoaction">
-        <button type="button" id="undoBtn">undo</button>
-        <button type="button" id="redoBtn">redo</button>
-      </section>
-    </main>
-
-    <footer>
-      <a href="../index.html">back</a>
-    </footer>
-    <script type="module" src="./main.js" defer></script>
-  </body>
-</html>
-
-
 ===== ./module/PROJECT_STRUCTURE.md =====
 
 # Project Directory Structure
@@ -87,7 +44,50 @@
 - `markdown.py`: Python source code
 
 
-===== ./module/styles.css =====
+===== ./module/index.html =====
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>My Page</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <main>
+      <span id="nameField"></span>
+      <h3>Forms</h3>
+      <section id="dataField"></section>
+      <section id="errorField"></section>
+
+      <section>
+        <form id="myForm">
+          <div id="inputField"></div>
+          <input type="submit" value="submit" />
+        </form>
+      </section>
+
+      <section id="totalField"></section>
+
+      <section class="actions">
+        <button type="button" id="resetBtn">reset</button>
+        <button type="button" id="loadBtn">load</button>
+      </section>
+      <section class="redoaction">
+        <button type="button" id="undoBtn">undo</button>
+        <button type="button" id="redoBtn">redo</button>
+      </section>
+    </main>
+
+    <footer>
+      <a href="../index.html">back</a>
+    </footer>
+    <script type="module" src="./main.js" defer></script>
+  </body>
+</html>
+
+
+===== ./module/output.txt =====
 
 
 
@@ -116,28 +116,8 @@ with open(output_file, "w", encoding="utf-8") as out:
                 out.write(f"\n\n===== {file_path} (SKIPPED: {e}) =====\n")
 
 
-===== ./module/main.js =====
+===== ./module/styles.css =====
 
-import { createApp, initialState, reducer, localData } from "./store/index.js";
-import { render } from "./render/index.js";
-import { setupHandlers } from "./handlers/handlers.js";
-import { logger, persist, thunk } from "./middleware/index.js";
-
-const startValue = localData.loadData() || initialState;
-const app = createApp(startValue, reducer, [logger, persist, thunk]);
-
-let prevState;
-app.subscribe(() => {
-  const state = app.getState();
-  if (state.present.entities === null) {
-    render.initialUI(state);
-  } else if (prevState !== state) {
-    render.renderAll(state);
-  }
-  prevState = state;
-});
-
-setupHandlers(app);
 
 
 ===== ./module/markdown.py =====
@@ -216,126 +196,99 @@ if __name__ == "__main__":
     print(f"✅ Structure saved to {args.output}")
 
 
-===== ./module/output.txt =====
+===== ./module/test.js =====
 
+function test(name, fn) {
+  try {
+    fn();
+    console.log("PASSED", name);
+  } catch (err) {
+    console.log("ERROR :", err.message);
+  }
+}
 
+function expect(received) {
+  return {
+    toBe(expected) {
+      if (received !== expected) {
+        throw new Error(`Expected ${expected}, got ${received}`);
+      }
+    },
 
-===== ./module/middleware/persist.js =====
+    toEqual(expected) {
+      const r = JSON.stringify(received);
+      const e = JSON.stringify(expected);
 
-export const persist =
-  ({ getState }) =>
-  (next) =>
-  (action) => {
-    const result = next(action);
-    localStorage.setItem("rows", JSON.stringify(getState()));
+      if (r !== e) {
+        throw new Error(`expected ${e}, got ${r}`);
+      }
+    },
+  };
+}
+
+test("increments counter", () => {
+  const result = counterReducer(0, { type: "inc" });
+
+  expect(result).toBe(1);
+});
+
+test("dispatch updates state", () => {
+  app.dispatch({ type: "addRow" });
+
+  expect(getState()).toBe(1);
+});
+
+test("listener gets called", () => {
+  let called = false;
+  const unsub = app.subscribe(() => {
+    called = true;
+  });
+
+  app.dispatch({ type: "addRow" });
+
+  expect(called).toBe(true);
+
+  unsub();
+});
+
+test("thunk dispatches actions", async () => {
+  const actions = [];
+  const dispatch = (action) => {
+    actions.push(action);
   };
 
-
-===== ./module/middleware/logger.js =====
-
-export const logger =
-  ({ getState }) =>
-  (next) =>
-  (action) => {
-    console.log("ACTION", action);
-    const result = next(action);
-    console.log("NEW STATE", getState());
-    return result;
+  const getState = () => ({});
+  const thunk = async (dispatch) => {
+    dispatch({ type: "start" });
+    dispatch({ type: "success" });
   };
+  await thunk(dispatch, getState);
+  expect(actions).toEqual([{ type: "start" }, { type: "success" }]);
+});
 
 
-===== ./module/middleware/index.js =====
+===== ./module/main.js =====
 
-export { logger } from "./logger.js";
-export { persist } from "./persist.js";
-export { thunk } from "./thunk.js";
+import { createApp, initialState, reducer } from "./store/index.js";
+import { render } from "./render/index.js";
+import { setupHandlers } from "./handlers/handlers.js";
+import { logger, persist, thunk } from "./middleware/index.js";
 
+const app = createApp(initialState, reducer, [logger, persist, thunk]);
 
-===== ./module/middleware/thunk.js =====
+let prevState;
+app.subscribe(() => {
+  const state = app.getState();
+  if (prevState !== state) {
+    console.log("subscribe :", state);
+    render.renderAll(state);
+  }
+  prevState = state;
+});
 
-export const thunk =
-  ({ getState, dispatch }) =>
-  (next) =>
-  (action) => {
-    if (typeof action === "function") {
-      return action(dispatch, getState);
-    }
-    return next(action);
-  };
+render.initialUI(app.getState());
 
-
-===== ./module/render/render.js =====
-
-import { initialState } from "../store/initialState.js";
-import { sumTotalFromRows } from "../utils/index.js";
-
-export const render = {
-  dataFieldRender(state) {
-    dataField.innerHTML = "";
-    state.present.entities.rows.forEach((row) => {
-      const div = document.createElement("div");
-      div.dataset.id = row.id;
-      div.className = "row";
-      div.innerHTML = `
-	<input type="text" name="price" value="${row.price}"/>
-	<input type="text" name="qty" value="${row.qty}"/>
-	<button type="button" class="delete-btn">DEL</button>`;
-      dataField.appendChild(div);
-    });
-  },
-  inputFieldRender() {
-    inputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-`;
-  },
-  totalFieldRender(state) {
-    const sum = sumTotalFromRows(state.present.entities.rows);
-    totalField.innerHTML = `
-<p>Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>
-	  `;
-  },
-  errorFieldRender(message) {
-    errorField.textContent = message;
-    errorField.classList.add("red");
-  },
-  clearErrorField() {
-    errorField.textContent = "";
-    errorField.classList.remove("red");
-  },
-  nameFieldRender(state) {
-    const name = state.present.user;
-    console.log("name in render", name);
-    if (name === undefined || name === null) {
-      nameField.textContent = "no user logged in";
-    } else {
-      nameField.textContent = `${name.id} | ${name.name}`;
-    }
-  },
-  renderAll(state) {
-    this.nameFieldRender(state);
-    this.dataFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(state);
-    this.clearErrorField();
-  },
-  initalUI(state) {
-    this.nameFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(state);
-  },
-};
-
-
-===== ./module/render/index.js =====
-
-export { render } from "./render.js";
-
-
-===== ./module/utils/index.js =====
-
-export { sumTotalFromRows } from "./sumTotalFromRows.js";
-export { validateInputToNumber } from "./validateInputToNumber.js";
+setupHandlers(app);
 
 
 ===== ./module/utils/sumTotalFromRows.js =====
@@ -356,16 +309,97 @@ export function sumTotalFromRows(rows) {
 
 export function validateInputToNumber(input) {
   if (String(input).trim() === "") {
-    throw new Error("Empty is now allowed");
+    throw new Error("Empty value is not allowed");
   }
+
   const num = Number(input);
+
   if (!Number.isFinite(num)) {
-    throw new Error("Enter a valid input");
+    throw new Error("Input a valid Number");
   } else if (num < 0) {
     throw new Error("Negative is not allowed");
   }
   return num;
 }
+
+
+===== ./module/utils/index.js =====
+
+export { sumTotalFromRows } from "./sumTotalFromRows.js";
+export { validateInputToNumber } from "./validateInputToNumber.js";
+
+
+===== ./module/render/render.js =====
+
+import { initialState } from "../store/initialState.js";
+import { sumTotalFromRows } from "../utils/index.js";
+
+const nameFieldHTML = (user) => `<p>ID : ${user.id} | Name : ${user.name}`;
+const dataFieldHTML = (data) => `
+<input type="text" name="price" value="${data.price}"/>
+<input type="text" name="qty" value="${data.qty}"/>
+<button type="button" class="delete-btn">DEL</button>
+`;
+const inputFieldHTML = `
+<input type="text" name="price" value=""/>
+<input type="text" name="qty" value=""/>
+`;
+const totalFieldHTML = (sum) =>
+  `<p>Total Price :${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>`;
+
+export const render = {
+  nameFieldRender(state) {
+    let user = state.present.user;
+    if (!user || user === null || user === undefined) {
+      nameField.textContent = "No User Registered Yet";
+    } else {
+      nameField.innerHTML = nameFieldHTML(user);
+    }
+  },
+  dataFieldRender(state) {
+    dataField.innerHTML = "";
+    let rows = state.present.entities.rows;
+    rows.forEach((row) => {
+      const div = document.createElement("div");
+      div.dataset.id = row.id;
+      div.className = "row";
+      div.innerHTML = dataFieldHTML(row);
+      dataField.appendChild(div);
+    });
+  },
+  inputFieldRender() {
+    inputField.innerHTML = inputFieldHTML;
+  },
+  totalFieldRender(state) {
+    let rows = state.present.entities.rows;
+    console.log("total field render :", rows, state);
+    let sum = sumTotalFromRows(state.present.entities.rows);
+    totalField.innerHTML = totalFieldHTML(sum);
+  },
+  errorFieldRender(message) {
+    errorField.textContent = message;
+    errorField.classList.add("red");
+  },
+  cleanErrorField() {
+    errorField.textContent = "";
+    errorField.classList.remove("red");
+  },
+  initialUI(state) {
+    this.nameFieldRender(state);
+    this.inputFieldRender();
+    this.totalFieldRender(state);
+    this.cleanErrorField();
+  },
+  renderAll(state) {
+    this.initialUI(state);
+    this.dataFieldRender(state);
+  },
+};
+
+
+===== ./module/render/index.js =====
+
+export { render } from "./render.js";
 
 
 ===== ./module/data/mockdata.json =====
@@ -402,255 +436,112 @@ export function setupHandlers(app) {
     const errorField = document.querySelector("#errorField");
     const undoBtn = document.querySelector("#undoBtn");
     const redoBtn = document.querySelector("#redoBtn");
-
-    let payload;
-
-    myForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = new FormData(myForm);
-      try {
-        payload = {
-          id: crypto.randomUUID(),
-          price: validateInputToNumber(data.get("price")),
-          qty: validateInputToNumber(data.get("qty")),
-        };
-        app.dispatch({ type: "addRow", payload });
-      } catch (err) {
-        render.errorFieldRender(err.message);
-      }
-    });
-    dataField.addEventListener("change", (e) => {
+  });
+  let payload = {};
+  myForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let data = new FormData(myForm);
+    try {
+      payload = {
+        id: Math.random().toString(32).slice(2),
+        price: validateInputToNumber(data.get("price")),
+        qty: validateInputToNumber(data.get("qty")),
+      };
+      app.dispatch({ type: "addRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
+  });
+  dataField.addEventListener("change", (e) => {
+    const rowEl = e.target.closest(".row");
+    if (!rowEl) return;
+    try {
+      payload = {
+        id: rowEl.dataset.id,
+        name: e.target.name,
+        value: validateInputToNumber(e.target.value),
+      };
+      app.dispatch({ type: "updateRow", payload });
+    } catch (err) {
+      render.errorFieldRender(err.message);
+    }
+  });
+  dataField.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
       const rowEl = e.target.closest(".row");
       if (!rowEl) return;
       try {
         payload = {
-          id: rowEl.id,
-          name: e.target.name,
-          value: validateInputToNumber(e.target.value),
+          id: rowEl.dataset.id,
         };
-        app.dispatch({ type: "updateRow", payload });
+        app.dispatch({ type: "deleteRow", payload });
       } catch (err) {
         render.errorFieldRender(err.message);
       }
-    });
-    dataField.addEventListener("click", (e) => {
-      if (e.target.classList.contains("delete-btn")) {
-        const rowEl = e.target.closest(".row");
-        if (!rowEl) return;
-        payload = { id: rowEl.dataset.id };
-        app.dispatch({ type: "deleteRow", payload });
-      }
-    });
-    resetBtn.addEventListener("click", () => {
-      app.dispatch({ type: "resetData" });
-    });
-    loadBtn.addEventListener("click", () => {
-      console.log("load btn was pressed");
+    }
+  });
+  resetBtn.addEventListener("click", () => {
+    app.dispatch({ type: "reset" });
+  });
+  loadBtn.addEventListener("click", () => {
+    try {
       app.dispatch(loadDataThunk());
-    });
-    undoBtn.addEventListener("click", () => {
-      app.dispatch({ type: "undo" });
-    });
-    redoBtn.addEventListener("click", () => {
-      app.dispatch({ type: "redo" });
-    });
+    } catch (erro) {
+      render.errorFieldRender(err.message);
+    }
+  });
+  undoBtn.addEventListener("click", () => {
+    app.dispatch({ type: "undo" });
+  });
+  redoBtn.addEventListener("click", () => {
+    app.dispatch({ type: "redo" });
   });
 }
 
 
-===== ./module/store/loadMockData.js =====
+===== ./module/middleware/logger.js =====
 
-import { validateInputToNumber } from "../utils/index.js";
-
-export async function loadMockData() {
-  const res = await fetch("/module/data/mockdata.json");
-  const data = await res.json();
-  let newPresent = {
-    ...data,
-    entities: {
-      ...data.entities,
-      rows: data.entities.rows.map((row) => ({
-        id: row.id,
-        price: validateInputToNumber(row.price),
-        qty: validateInputToNumber(row.qty),
-      })),
-    },
+export const logger =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    console.log("ACTION", action);
+    const result = next(action);
+    console.log("NEW STATE", getState());
+    return result;
   };
-  return newPresent;
-}
 
 
-===== ./module/store/reducer.js =====
+===== ./module/middleware/thunk.js =====
 
-import { initialState } from "./initialState.js";
-
-export function reducer(state, action) {
-  let newPresent = {};
-  let ap = action.payload;
-  let present = state.present;
-  switch (action.type) {
-    case "addRow":
-      newPresent = {
-        ...present,
-        entities: {
-          ...present.entities,
-          rows: [...present.entities.rows, ap],
-        },
-      };
-      return applyAction(state, newPresent);
-    case "updateRow":
-      newPresent = {
-        ...present,
-        entities: {
-          ...present.entities,
-          rows: present.entities.rows.map((row) =>
-            row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
-          ),
-        },
-      };
-      return applyAction(state, newPresent);
-    case "deleteRow":
-      newPresent = {
-        ...present,
-        entities: {
-          ...present.entities,
-          rows: present.entities.rows.filter((row) => row.id !== ap.id),
-        },
-      };
-      return applyAction(state, newPresent);
-    case "undo":
-      return undo(state);
-    case "redo":
-      return redo(state);
-    //case "loadData":
-    //newPresent = state.present;
-
-    case "loadStart":
-      console.log("load Start");
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: true, error: null },
-      };
-      console.log("load Start", newPresent);
-      return applyAction(state, newPresent);
-    case "loadSuccess":
-      console.log("loadSuccess", ap);
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: false },
-        entities: { ...state.present.entities, rows: ap.entities.rows },
-        user: ap.user,
-      };
-      console.log("load success in reducer", newPresent);
-      return applyAction(state, newPresent);
-    case "loadError":
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: false, error: ap },
-      };
-      return applyAction(state, newPresent);
-
-    case "resetData":
-      return localData.resetData();
-    default:
-      return state;
-  }
-}
-
-function applyAction(state, newPresent) {
-  return {
-    past: [...state.past, state.present],
-    present: newPresent,
-    future: [],
+export const thunk =
+  ({ getState, dispatch }) =>
+  (next) =>
+  (action) => {
+    if (typeof action === "function") {
+      return action(dispatch, getState);
+    }
+    return next(action);
   };
-}
 
-function undo(state) {
-  if (state.past.length === 0) return state;
-  const past = state.past[state.past.length - 1];
-  console.log("undo state", past);
-  return {
-    past: state.past.slice(0, -1),
-    present: past,
-    future: [state.present, ...state.future],
+
+===== ./module/middleware/index.js =====
+
+export { logger } from "./logger.js";
+export { persist } from "./persist.js";
+export { thunk } from "./thunk.js";
+
+
+===== ./module/middleware/persist.js =====
+
+export const persist =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    localStorage.setItem("rows", JSON.stringify(getState()));
+    return result;
   };
-}
-function redo(state) {
-  if (state.future.length === 0) return state;
-  const future = state.future[0];
-  return {
-    past: [...state.past, state.present],
-    present: future,
-    future: state.future.slice(1),
-  };
-}
-
-export const localData = {
-  loadData() {
-    let temp = localStorage.getItem("rows");
-    console.log("loadData in localData", JSON.parse(temp));
-    return temp ? JSON.parse(temp) : initialState;
-  },
-  resetData() {
-    localStorage.removeItem("rows");
-    return initialState;
-  },
-};
-
-
-===== ./module/store/index.js =====
-
-export { createApp } from "./createApp.js";
-export { initialState } from "./initialState.js";
-export { reducer } from "./reducer.js";
-export { localData } from "./localData.js";
-export { loadMockData } from "./loadMockData.js";
-export { loadDataThunk } from "./loadDataThunk.js";
-
-
-===== ./module/store/createApp.js =====
-
-export function createApp(initialState, reducer, middlewares = []) {
-  let state = initialState;
-  let listeners = [];
-
-  function getState() {
-    return state;
-  }
-
-  function subscribe(listener) {
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  }
-
-  function baseDispatch(action) {
-    state = reducer(state, action);
-    listeners.forEach((l) => l());
-    return state;
-  }
-  const dispatch = middlewares
-    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
-    .reduceRight((next, mw) => mw(next), baseDispatch);
-
-  return { getState, dispatch, subscribe };
-}
-
-
-===== ./module/store/localData.js =====
-
-export const localData = {
-  loadData() {
-    let temp = localStorage.getItem("rows");
-    console.log("loadData in localData", JSON.parse(temp));
-    return temp ? JSON.parse(temp) : initialState;
-  },
-  resetData() {
-    localStorage.removeItem("rows");
-    return initialState;
-  },
-};
 
 
 ===== ./module/store/initialState.js =====
@@ -666,18 +557,191 @@ export const initialState = {
 };
 
 
+===== ./module/store/loadMockData.js =====
+
+import { validateInputToNumber } from "../utils/validateInputToNumber.js";
+
+export async function loadMockData() {
+  let res = await fetch("/module/data/mockdata.json");
+  let data = await res.json();
+  let newPresent = {
+    ...data,
+    entities: {
+      ...data.entities,
+      rows: data.entities.rows.map((row) => ({
+        id: row.id,
+        price: validateInputToNumber(row.price),
+        qty: validateInputToNumber(row.qty),
+      })),
+    },
+  };
+  return newPresent;
+}
+
+
 ===== ./module/store/loadDataThunk.js =====
 
-import { loadMockData } from "./index.js";
+import { loadMockData } from "./loadMockData.js";
 
 export function loadDataThunk() {
   return async (dispatch, getState) => {
     dispatch({ type: "loadStart" });
     try {
-      const newPresent = await loadMockData();
+      let newPresent = await loadMockData();
       dispatch({ type: "loadSuccess", payload: newPresent });
     } catch (err) {
       dispatch({ type: "loadError", payload: err.message });
     }
   };
 }
+
+
+===== ./module/store/createApp.js =====
+
+export function createApp(initialState, reducer, middlewares = []) {
+  let state;
+  let listeners = [];
+
+  function getState() {
+    return state;
+  }
+
+  function subscribe(listener) {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter((l) => l !== listener);
+    };
+  }
+
+  const api = { getState: getState, dispatch: (action) => dispatch(action) };
+
+  function baseDispatch(action) {
+    state = reducer(state, action);
+    listeners.forEach((l) => l());
+    return state;
+  }
+
+  const dispatch = middlewares
+    .map((mw) => mw(api))
+    .reduceRight((next, mw) => mw(next), baseDispatch);
+
+  dispatch({ type: "@@init" });
+
+  return { getState, dispatch, subscribe };
+}
+
+
+===== ./module/store/reducer.js =====
+
+import { initialState } from "./initialState.js";
+
+export function reducer(state = initialState, action) {
+  let ap = action.payload;
+  let newPresent;
+  switch (action.type) {
+    case "addRow":
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, ap],
+        },
+      };
+      return applyAction(state, newPresent);
+    case "updateRow":
+      console.log("update Row, data :", ap);
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.map((row) =>
+            row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
+          ),
+        },
+      };
+      return applyAction(state, newPresent);
+    case "deleteRow":
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.filter((row) => row.id !== ap.id),
+        },
+      };
+      return applyAction(state, newPresent);
+    case "reset":
+      return resetState();
+    case "undo":
+      return undo(state);
+    case "redo":
+      return redo(state);
+    case "loadStart":
+      newPresent = {
+        ...state.present,
+        ui: { loading: true, error: null },
+      };
+      return applyAction(state, newPresent);
+    case "loadSuccess":
+      newPresent = {
+        ...ap,
+        ui: { loading: false, error: null },
+      };
+      console.log("reducer load success::", newPresent, "original", ap);
+      return applyAction(state, newPresent);
+    case "loadError":
+      newPresent = {
+        ...state.present,
+        ui: { loading: false, errow: ap },
+      };
+      return applyAction(state, newPresent);
+    default:
+      return state;
+  }
+}
+
+function applyAction(state, newPresent) {
+  return {
+    past: [...state.past, state.present],
+    present: newPresent,
+    future: [],
+  };
+}
+
+function resetState() {
+  localStorage.removeItem("rows");
+  return initialState;
+}
+
+function undo(state) {
+  if (state.past.length === 0) return state;
+  let current = state.past[state.past.length - 1];
+  return {
+    past: state.past.slice(0, -1),
+    present: current,
+    future: [state.present, ...state.future],
+  };
+}
+
+function redo(state) {
+  if (state.present.length === 0) return state;
+  let current = state.future[0];
+  return {
+    past: [...state.past, state.present],
+    present: current,
+    future: state.future.slice(1),
+  };
+}
+
+
+===== ./module/store/index.js =====
+
+export { createApp } from "./createApp.js";
+export { initialState } from "./initialState.js";
+export { reducer } from "./reducer.js";
+// export { localData } from "./localData.js";
+export { loadMockData } from "./loadMockData.js";
+export { loadDataThunk } from "./loadDataThunk.js";
+
+
+===== ./module/store/localData.js =====
+
