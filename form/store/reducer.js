@@ -1,9 +1,19 @@
 import { initialState } from "./initialState.js";
 
 export function reducer(state = initialState, action) {
+  console.log("reducer state", state);
+  let newPresent;
+  let ap = action.payload;
   switch (action.type) {
     case "addRow":
-      return;
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, ap],
+        },
+      };
+      return applyAction(state, newPresent);
     case "updateRow":
       return;
     case "deleteRow":
@@ -21,6 +31,14 @@ export function reducer(state = initialState, action) {
     case "loadError":
       return;
     default:
-      return;
+      return state;
   }
+}
+
+function applyAction(state, newPresent) {
+  return {
+    past: [...state.past, state.present],
+    present: newPresent,
+    future: [],
+  };
 }

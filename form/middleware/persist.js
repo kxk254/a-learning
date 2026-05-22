@@ -1,4 +1,4 @@
-export const logger =
+export const persist =
   ({ getState }) =>
   (next) =>
   (action) => {
