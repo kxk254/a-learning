@@ -38,6 +38,7 @@ export function reducer(state = initialState, action) {
     case "reset":
       return initialState;
     case "undo":
+      console.log("reducer undo");
       return undo(state);
     case "redo":
       return redo(state);
@@ -56,6 +57,10 @@ export function reducer(state = initialState, action) {
         ui: { ...state.present.ui, loadking: false, error: ap },
       };
       return applyAction(state, newPresent);
+    case "setSearchTerm":
+      return;
+    case "setSortBy":
+      return;
     default:
       return state;
   }
@@ -79,11 +84,11 @@ function redo(state) {
   };
 }
 function undo(state) {
-  if (state.future.length === 0) return state;
+  if (state.past.length === 0) return state;
   let current = state.past[state.past.length - 1];
   return {
     past: state.past.slice(0, -1),
     present: current,
-    future: [present, ...state.future],
+    future: [state.present, ...state.future],
   };
 }
