@@ -1,26 +1,89 @@
 import { initialState } from "./initialState.js";
 
 export function reducer(state = initialState, action) {
+  console.log("reducer state", state);
+  let newPresent;
+  let ap = action.payload;
+  console.log("reducer ap", ap);
   switch (action.type) {
     case "addRow":
-      return;
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, ap],
+        },
+      };
+      return applyAction(state, newPresent);
     case "updateRow":
-      return;
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.map((r) =>
+            r.id === ap.id ? { ...r, [ap.name]: [ap.value] } : r,
+          ),
+        },
+      };
+      return applyAction(state, newPresent);
     case "deleteRow":
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: state.present.entities.rows.filter((r) => r.id !== ap.id),
+        },
+      };
       return;
     case "reset":
-      return;
+      return initialState;
     case "undo":
-      return;
+      return undo(state);
     case "redo":
-      return;
+      return redo(state);
     case "loadStart":
-      return;
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: true, error: null },
+      };
+      return applyAction(state, newPresent);
     case "loadSuccess":
-      return;
+      newPresent = ap;
+      return applyAction(state, newPresent);
     case "loadError":
-      return;
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loadking: false, error: ap },
+      };
+      return applyAction(state, newPresent);
     default:
-      return;
+      return state;
   }
+}
+
+function applyAction(state, newPresent) {
+  return {
+    past: [...state.past, state.present],
+    present: newPresent,
+    future: [],
+  };
+}
+
+function redo(state) {
+  if (state.future.length === 0) return state;
+  let current = state.future[0];
+  return {
+    past: [...state.past, state.present],
+    present: current,
+    future: state.future.slice(1),
+  };
+}
+function undo(state) {
+  if (state.future.length === 0) return state;
+  let current = state.past[state.past.length - 1];
+  return {
+    past: state.past.slice(0, -1),
+    present: current,
+    future: [present, ...state.future],
+  };
 }

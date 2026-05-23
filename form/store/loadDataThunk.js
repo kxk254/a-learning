@@ -1,3 +1,5 @@
+import { loadMockData } from "./loadMockData.js";
+
 export function loadDataThunk() {
   return async (dispatch, getState) => {
     dispatch({ type: "loadStart" });

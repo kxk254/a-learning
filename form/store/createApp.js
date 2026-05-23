@@ -13,7 +13,8 @@ export function createApp(initialState, reducer, middlewares = []) {
     };
   }
 
-  const api = {};
+  let dispatch;
+  const api = { getState, dispatch: (action) => dispatch(action) };
 
   function baseDispatch(action) {
     state = reducer(state, action);
@@ -21,10 +22,7 @@ export function createApp(initialState, reducer, middlewares = []) {
     return state;
   }
   const connectedMW = middlewares.map((mw) => mw(api));
-  const dispatch = connectedMW.reduceRight(
-    (next, mw) => mw(next),
-    baseDispatch,
-  );
+  dispatch = connectedMW.reduceRight((next, mw) => mw(next), baseDispatch);
 
   dispatch({ type: "@@init" });
 

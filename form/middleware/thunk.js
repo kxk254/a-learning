@@ -1,4 +1,4 @@
-export const logger =
+export const thunk =
   ({ getState, dispatch }) =>
   (next) =>
   (action) => {
