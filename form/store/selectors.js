@@ -6,7 +6,7 @@ export function getVisibleRows(state) {
     const term = searchTerm.toLowerCase();
     rows = rows.filter(
       (row) =>
-        row.id.toLowerCase().include(term) ||
+        row.id.toLowerCase().includes(term) ||
         String(row.price).includes(term) ||
         String(row.qty).includes(term),
     );

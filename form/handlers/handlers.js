@@ -12,6 +12,10 @@ export function setupHandlers(app) {
     const loadBtn = document.querySelector("#loadBtn");
     const undoBtn = document.querySelector("#undoBtn");
     const redoBtn = document.querySelector("#redoBtn");
+    const searchInput = document.querySelector("#searchInput");
+    const sortSelect = document.querySelector("#sortSelect");
+    const clearFiltersBtn = document.querySelector("#clearFilters");
+
     let payload;
     myForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -60,6 +64,61 @@ export function setupHandlers(app) {
     });
     redoBtn.addEventListener("click", () => {
       app.dispatch({ type: "redo" });
+    });
+    searchInput.addEventListener("change", (e) => {
+      const value = e.target.value;
+      console.log("search Input Value=>", value);
+      app.dispatch({ type: "setSearchTerm", payload: value });
+    });
+    sortSelect.addEventListener("change", (e) => {
+      const value = e.target.value;
+      console.log("sort select value==>", value);
+      app.dispatch({ type: "setSortBy", payload: value });
+    });
+    clearFiltersBtn.addEventListener("click", () => {
+      payload = { sortSelect: "none", searchInput: "" };
+      console.log("clicked clear Filters button :", payload);
+      app.dispatch({ type: "clearFilters", payload });
+    });
+
+    // ===Drag and Drop Reordering ===
+    dataField.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("row")) {
+        e.dataTransfer.setData("text/plain", e.target.dataset.id);
+        e.target.classList.add("dragging");
+      }
+    });
+    dataField.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const row = e.target.closest(".row");
+      if (row) row.classList.add("drag-over");
+    });
+
+    dataField.addEventListener("dragleave", (e) => {
+      const row = e.target.closest(".row");
+      if (row) row.classList.remove("drag-over");
+    });
+
+    dataField.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const draggedId = e.dataTransfer.getData("text/plain");
+      const targetRow = e.target.closest(".row");
+
+      if (!targetRow || targetRow.dataset.id === draggedId) return;
+
+      app.dispatch({
+        type: "reorderRows",
+        payload: { draggedId, targetId: targetRow.dataset.id },
+      });
+
+      document.querySelectorAll(".row").forEach((r) => {
+        r.classList.remove("dragging", "drag-over");
+      });
+    });
+    dataField.addEventListener("dragend", () => {
+      document.querySelectorAll(".row").forEach((r) => {
+        r.classList.remove("dragging", "drag-over");
+      });
     });
   });
 }

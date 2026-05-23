@@ -1,11 +1,15 @@
 import { sumTotalFromRows } from "../utils/sumTotalFromRows.js";
+import { getVisibleRows } from "../store/index.js";
 
 const nameFieldHTML = (user) => `ID: ${user.id} | NAME: ${user.name}`;
-const dataFieldHTML = (data) => `
-<input type="text" name="price" value="${data.id}"\>
-<input type="text" name="price" value="${data.price}"\>
-<input type="text" name="qty" value="${data.qty}"\>
+const dataFieldHTML = (row) => `
+<div class="row" draggable="true" data-id="${row.id}">
+<span class-"drag-handle">≡</span>
+<span class="row-id">${row.id}</span>
+<input type="text" name="price" value="${row.price}" class="price-input"\>
+<input type="text" name="qty" value="${row.qty}" class="qty-input"\>
 <button type="button" class="delete-btn">DEL</button>
+</div>
 `;
 const totalFieldHTML = (sum) =>
   `Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty}`;
@@ -24,7 +28,7 @@ export const render = {
     }
   },
   dataFieldRender(state) {
-    const rows = state.present.entities.rows;
+    const rows = getVisibleRows(state);
     if (!rows) return;
     dataField.innerHTML = "";
     rows.forEach((row) => {
@@ -51,11 +55,17 @@ export const render = {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
+  controlsField(state) {
+    const uiState = state.present.ui;
+    searchInput.value = uiState.searchTerm;
+    sortSelect.value = uiState.sortBy;
+  },
   initialUI(state) {
     this.clearErrorField();
     this.nameFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(state);
+    this.controlsField(state);
   },
   renderAll(state) {
     this.initialUI(state);
