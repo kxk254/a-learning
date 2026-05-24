@@ -46,7 +46,7 @@ export const render = {
       let rowEl = existingRows.get(row.id);
       if (rowEl) {
         const priceSpan = rowEl.querySelector('[data-name="price"]');
-        const qtySpan = rowEl.querySelector('[data-qty="qty"]');
+        const qtySpan = rowEl.querySelector('[data-name="qty"]');
         if (priceSpan) priceSpan.textContent = row.price;
         if (qtySpan) qtySpan.textContent = row.qty;
       } else {
