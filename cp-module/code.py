@@ -1,7 +1,8 @@
+
 import os
 
-root_dir = "./module"  # change this
-output_file = "./module/output.txt"
+root_dir = "./form"  # change this
+output_file = "./form/output.txt"
 
 with open(output_file, "w", encoding="utf-8") as out:
 

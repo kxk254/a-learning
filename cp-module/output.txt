@@ -1,10 +1,11 @@
 
 
-===== ./module/index.html =====
+===== ./form/index.html =====
 
 <!doctype html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <title>My Page</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="../styles.css" />
@@ -13,6 +14,17 @@
     <main>
       <span id="nameField"></span>
       <h3>Forms</h3>
+      <section class="controls">
+        <input type="text" id="searchInput" placeholder="Search by ID..." />
+        <select id="sortSelect">
+          <option value="none">Sort by ...</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-dsc">Price ↓</option>
+          <option value="qty-asc">Qty ↑</option>
+          <option value="qty-dsc">Qty ↓</option>
+        </select>
+        <button type="button" id="clearFilters">Clear Filters</button>
+      </section>
       <section id="dataField"></section>
       <section id="errorField"></section>
 
@@ -38,65 +50,67 @@
     <footer>
       <a href="../index.html">back</a>
     </footer>
-    <script type="module" src="./main.js" defer></script>
+    <script type="module" src="./script.js" defer></script>
   </body>
 </html>
 
 
-===== ./module/PROJECT_STRUCTURE.md =====
+===== ./form/styles.css =====
 
-# Project Directory Structure
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 1px;
+  border-bottom: 1px solid #ddd;
+}
 
-```
-📂 /
-├── 📁 data/
-│   └── 📄 mockdata.json
-├── 📁 handlers/
-│   └── 📄 handlers.js
-├── 📁 middleware/
-│   ├── 📄 index.js
-│   ├── 📄 logger.js
-│   ├── 📄 persist.js
-│   └── 📄 thunk.js
-├── 📁 render/
-│   ├── 📄 index.js
-│   └── 📄 render.js
-├── 📁 store/
-│   ├── 📄 createApp.js
-│   ├── 📄 index.js
-│   ├── 📄 initialState.js
-│   ├── 📄 loadDataThunk.js
-│   ├── 📄 loadMockData.js
-│   ├── 📄 localData.js
-│   └── 📄 reducer.js
-├── 📁 utils/
-│   ├── 📄 index.js
-│   ├── 📄 sumTotalFromRows.js
-│   └── 📄 validateInputToNumber.js
-├── 📄 code.py
-├── 📄 index.html
-├── 📄 main.js
-├── 📄 markdown.py
-├── 📄 output.txt
-└── 📄 styles.css
-```
+.drag-handle {
+  cursor: grab;
+  font-size: 1.2em;
+  user-select: none;
+}
 
-## Folder & File Explanations
+.editable {
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  min-width: 60px;
+  cursor: pointer;
+}
 
-- `code.py`: Python source code
-- `markdown.py`: Python source code
+.editable:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+}
 
+.editable.editing {
+  border-color: #007bff;
+  background: white;
+  padding: 2px 6px;
+}
 
-===== ./module/styles.css =====
+.dragging {
+  opacity: 0.5;
+}
+
+.drag-over {
+  background: #e3f2fd;
+  border: 2px dashed #2196f3;
+}
+
+#dataField {
+  width: 40%;
+  margin: auto;
+}
 
 
+===== ./form/code.py =====
 
-===== ./module/code.py =====
 
 import os
 
-root_dir = "./module"  # change this
-output_file = "./module/output.txt"
+root_dir = "./form"  # change this
+output_file = "./form/output.txt"
 
 with open(output_file, "w", encoding="utf-8") as out:
 
@@ -116,111 +130,51 @@ with open(output_file, "w", encoding="utf-8") as out:
                 out.write(f"\n\n===== {file_path} (SKIPPED: {e}) =====\n")
 
 
-===== ./module/main.js =====
+===== ./form/script.js =====
 
-import { createApp, initialState, reducer, localData } from "./store/index.js";
-import { render } from "./render/index.js";
+import { createApp, reducer, initialState } from "./store/index.js";
 import { setupHandlers } from "./handlers/handlers.js";
-import { logger, persist, thunk } from "./middleware/index.js";
+import { render } from "./render/index.js";
+import { logger, persist, thunk, reset } from "./middleware/index.js";
 
-const startValue = localData.loadData() || initialState;
-const app = createApp(startValue, reducer, [logger, persist, thunk]);
+let middlewares = [logger, persist, reset, thunk];
+const app = createApp(initialState, reducer, middlewares);
 
 let prevState;
 app.subscribe(() => {
   const state = app.getState();
-  if (state.present.entities === null) {
-    render.initialUI(state);
-  } else if (prevState !== state) {
+  if (state !== prevState) {
     render.renderAll(state);
   }
   prevState = state;
 });
 
+render.initialUI(app.getState());
+
 setupHandlers(app);
 
 
-===== ./module/markdown.py =====
-
-# python generate_structure.py ./module . ./module PROJECT_STRUCTURE.md
-
-import os
-from pathlib import Path
-import argparse
-
-
-def generate_directory_tree(root_dir: str, max_depth: int = None, ignore_dirs=None):
-    if ignore_dirs is None:
-        ignore_dirs = {".git", "__pycache__", "venv", "node_modules", ".pytest_cache"}
-
-    tree_lines = []
-    explanations = {}  # folder/file -> reason
-
-    def walk(path: Path, prefix: str = "", depth: int = 0):
-        if max_depth is not None and depth > max_depth:
-            return
-
-        # Sort directories first, then files
-        items = sorted(path.iterdir(), key=lambda x: (x.is_file(), x.name.lower()))
-
-        for i, item in enumerate(items):
-            if item.name in ignore_dirs or item.name.startswith("."):
-                continue
-
-            is_last = i == len(items) - 1
-            connector = "└── " if is_last else "├── "
-            rel_path = str(item.relative_to(root_dir))
-
-            if item.is_dir():
-                tree_lines.append(f"{prefix}{connector}📁 {item.name}/")
-                new_prefix = prefix + ("    " if is_last else "│   ")
-                walk(item, new_prefix, depth + 1)
-            else:
-                tree_lines.append(f"{prefix}{connector}📄 {item.name}")
-
-                # Example: Add default explanations (customize this!)
-                if "README" in item.name:
-                    explanations[rel_path] = "Project documentation and overview"
-                elif item.suffix in {".py"}:
-                    explanations[rel_path] = "Python source code"
-
-    root_path = Path(root_dir)
-    tree_lines.append(f"📂 {root_path.name}/")
-    walk(root_path)
-
-    # Build Markdown output
-    md = ["# Project Directory Structure\n", "```"]
-    md.extend(tree_lines)
-    md.append("```")
-
-    # Add Explanations section
-    md.append("\n## Folder & File Explanations\n")
-    for path, reason in sorted(explanations.items()):
-        md.append(f"- `{path}`: {reason}")
-
-    return "\n".join(md)
-
-
-# Usage
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root", default=".", help="Root directory")
-    parser.add_argument("--output", default="PROJECT_STRUCTURE.md", help="Output file")
-    parser.add_argument("--depth", type=int, default=None, help="Max depth")
-    args = parser.parse_args()
-
-    content = generate_directory_tree(args.root, args.depth)
-    with open(args.output, "w", encoding="utf-8") as f:
-        f.write(content)
-
-    print(f"✅ Structure saved to {args.output}")
-
-
-===== ./module/output.txt =====
+===== ./form/output.txt =====
 
 
 
-===== ./module/middleware/persist.js =====
+===== ./form/middleware/reset.js =====
+
+export const reset =
+  ({ getState }) =>
+  (next) =>
+  (action) => {
+    const result = next(action);
+    console.log("inside reset, action ==>", action.type);
+    if (action.type === "reset") {
+      console.log("now inside reset middleware to delete local storage");
+      localStorage.removeItem("rows");
+    }
+    return result;
+  };
+
+
+===== ./form/middleware/persist.js =====
 
 export const persist =
   ({ getState }) =>
@@ -228,123 +182,165 @@ export const persist =
   (action) => {
     const result = next(action);
     localStorage.setItem("rows", JSON.stringify(getState()));
+    return result;
   };
 
 
-===== ./module/middleware/logger.js =====
+===== ./form/middleware/logger.js =====
 
 export const logger =
   ({ getState }) =>
   (next) =>
   (action) => {
-    console.log("ACTION", action);
+    console.log("ACTION :", action);
     const result = next(action);
     console.log("NEW STATE", getState());
     return result;
   };
 
 
-===== ./module/middleware/index.js =====
+===== ./form/middleware/index.js =====
 
 export { logger } from "./logger.js";
 export { persist } from "./persist.js";
 export { thunk } from "./thunk.js";
+export { reset } from "./reset.js";
 
 
-===== ./module/middleware/thunk.js =====
+===== ./form/middleware/thunk.js =====
 
 export const thunk =
   ({ getState, dispatch }) =>
   (next) =>
   (action) => {
     if (typeof action === "function") {
-      return action(dispatch, getState);
+      action(dispatch, getState);
     }
     return next(action);
   };
 
 
-===== ./module/render/render.js =====
+===== ./form/render/render.js =====
 
-import { initialState } from "../store/initialState.js";
-import { sumTotalFromRows } from "../utils/index.js";
+import { sumTotalFromRows } from "../utils/sumTotalFromRows.js";
+import { getVisibleRows } from "../store/index.js";
+
+const nameFieldHTML = (user) => `ID: ${user.id} | NAME: ${user.name}`;
+const dataFieldHTML = (row) => `
+<span class="drag-handle">≡</span>
+<span class="row-id">${row.id}</span>
+<span class="editable price" data-name="price">${row.price}</span>
+<span class="editable qty" data-name="qty">${row.qty}</span>
+<button type="button" class="delete-btn">DEL</button>
+</div>
+`;
+const totalFieldHTML = (sum) =>
+  `Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty}`;
+const inputFieldHTML = `
+<input type="text" name="price" value=""\>
+<input type="text" name="qty" value=""\>
+`;
 
 export const render = {
+  nameFieldRender(state) {
+    if (!state || !state.present.user || state.present.user == undefined) {
+      nameField.textContent = "No User Defined";
+    } else {
+      const user = state.present.user;
+      nameField.textContent = nameFieldHTML(user);
+    }
+  },
   dataFieldRender(state) {
-    dataField.innerHTML = "";
-    state.present.entities.rows.forEach((row) => {
-      const div = document.createElement("div");
-      div.dataset.id = row.id;
-      div.className = "row";
-      div.innerHTML = `
-	<input type="text" name="price" value="${row.price}"/>
-	<input type="text" name="qty" value="${row.qty}"/>
-	<button type="button" class="delete-btn">DEL</button>`;
-      dataField.appendChild(div);
+    const rows = getVisibleRows(state);
+    const existingRows = new Map();
+
+    if (document.querySelector(".editable.editing")) {
+      return;
+    }
+
+    // Step 1: Collect current DOM rows
+    document.querySelectorAll(".row").forEach((el) => {
+      existingRows.set(el.dataset.id, el);
     });
+
+    // Step 2: Clear container only once
+    const fragment = document.createDocumentFragment();
+
+    rows.forEach((row) => {
+      let rowEl = existingRows.get(row.id);
+      if (rowEl) {
+        const priceSpan = rowEl.querySelector('[data-name="price"]');
+        const qtySpan = rowEl.querySelector('[data-name="qty"]');
+        if (priceSpan) priceSpan.textContent = row.price;
+        if (qtySpan) qtySpan.textContent = row.qty;
+      } else {
+        rowEl = document.createElement("div");
+        rowEl.dataset.id = row.id;
+        rowEl.className = "row";
+        rowEl.draggable = true;
+        rowEl.innerHTML = dataFieldHTML(row);
+      }
+      fragment.appendChild(rowEl);
+    });
+    dataField.innerHTML = "";
+    dataField.appendChild(fragment);
   },
-  inputFieldRender() {
-    inputField.innerHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
-`;
-  },
-  totalFieldRender(state) {
-    const sum = sumTotalFromRows(state.present.entities.rows);
-    totalField.innerHTML = `
-<p>Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>
-	  `;
-  },
+
+  // Error Field
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");
+  },
+  inputFieldRender() {
+    inputField.innerHTML = inputFieldHTML;
+  },
+  totalFieldRender(state) {
+    console.log("total field render state", state);
+    const sum = sumTotalFromRows(state.present.entities.rows);
+    if (!sum) return;
+    totalField.innerHTML = totalFieldHTML(sum);
   },
   clearErrorField() {
     errorField.textContent = "";
     errorField.classList.remove("red");
   },
-  nameFieldRender(state) {
-    const name = state.present.user;
-    console.log("name in render", name);
-    if (name === undefined || name === null) {
-      nameField.textContent = "no user logged in";
-    } else {
-      nameField.textContent = `${name.id} | ${name.name}`;
-    }
+  controlsField(state) {
+    const uiState = state.present.ui;
+    searchInput.value = uiState.searchTerm;
+    sortSelect.value = uiState.sortBy;
+  },
+  initialUI(state) {
+    this.clearErrorField();
+    this.nameFieldRender(state);
+    this.inputFieldRender();
+    this.totalFieldRender(state);
+    this.controlsField(state);
   },
   renderAll(state) {
-    this.nameFieldRender(state);
+    this.initialUI(state);
     this.dataFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(state);
-    this.clearErrorField();
-  },
-  initalUI(state) {
-    this.nameFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(state);
   },
 };
 
 
-===== ./module/render/index.js =====
+===== ./form/render/index.js =====
 
 export { render } from "./render.js";
 
 
-===== ./module/utils/index.js =====
+===== ./form/utils/index.js =====
 
 export { sumTotalFromRows } from "./sumTotalFromRows.js";
 export { validateInputToNumber } from "./validateInputToNumber.js";
 
 
-===== ./module/utils/sumTotalFromRows.js =====
+===== ./form/utils/sumTotalFromRows.js =====
 
 export function sumTotalFromRows(rows) {
   return rows.reduce(
     (acc, row) => {
       acc.totalPrice += row.price * row.qty;
-      acc.totalQty += row.qty;
+      acc.totalQty += Number(row.qty);
       return acc;
     },
     { totalPrice: 0, totalQty: 0 },
@@ -352,15 +348,15 @@ export function sumTotalFromRows(rows) {
 }
 
 
-===== ./module/utils/validateInputToNumber.js =====
+===== ./form/utils/validateInputToNumber.js =====
 
 export function validateInputToNumber(input) {
   if (String(input).trim() === "") {
-    throw new Error("Empty is now allowed");
+    throw new Error("Empty is not allowed");
   }
-  const num = Number(input);
+  let num = Number(input);
   if (!Number.isFinite(num)) {
-    throw new Error("Enter a valid input");
+    throw new Error("Enter valid number");
   } else if (num < 0) {
     throw new Error("Negative is not allowed");
   }
@@ -368,7 +364,7 @@ export function validateInputToNumber(input) {
 }
 
 
-===== ./module/data/mockdata.json =====
+===== ./form/data/mockdata.json =====
 
 {
   "user": { "id": 1, "name": "kenji" },
@@ -381,36 +377,44 @@ export function validateInputToNumber(input) {
       { "id": "bcb", "price": 120, "qty": 3 },
       { "id": "ccc", "price": 150, "qty": 2 }
     ]
+  },
+  "ui": {
+    "loading": "false",
+    "error": "null",
+    "searchTerm": "",
+    "sortBy": "none"
   }
 }
 
 
-===== ./module/handlers/handlers.js =====
+===== ./form/handlers/handlers.js =====
 
 import { validateInputToNumber } from "../utils/validateInputToNumber.js";
-import { render } from "../render/index.js";
-import { loadMockData, loadDataThunk } from "../store/index.js";
+import { render } from "../render/render.js";
+import { loadDataThunk } from "../store/index.js";
 
 export function setupHandlers(app) {
   document.addEventListener("DOMContentLoaded", (e) => {
-    const dataField = document.querySelector("#dataField");
-    const inputField = document.querySelector("#inputField");
     const myForm = document.querySelector("#myForm");
+    const dataField = document.querySelector("#dataField");
+    const errorField = document.querySelector("#errorField");
+    const totalField = document.querySelector("#totalField");
     const resetBtn = document.querySelector("#resetBtn");
     const loadBtn = document.querySelector("#loadBtn");
-    const totalField = document.querySelector("#totalField");
-    const errorField = document.querySelector("#errorField");
     const undoBtn = document.querySelector("#undoBtn");
     const redoBtn = document.querySelector("#redoBtn");
+    const searchInput = document.querySelector("#searchInput");
+    const sortSelect = document.querySelector("#sortSelect");
+    const clearFiltersBtn = document.querySelector("#clearFilters");
 
     let payload;
-
+    // === Form Submit ( Add Row ) ===
     myForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const data = new FormData(myForm);
       try {
         payload = {
-          id: crypto.randomUUID(),
+          id: Math.random().toString(32).slice(2),
           price: validateInputToNumber(data.get("price")),
           qty: validateInputToNumber(data.get("qty")),
         };
@@ -419,20 +423,87 @@ export function setupHandlers(app) {
         render.errorFieldRender(err.message);
       }
     });
-    dataField.addEventListener("change", (e) => {
-      const rowEl = e.target.closest(".row");
-      if (!rowEl) return;
-      try {
-        payload = {
-          id: rowEl.id,
-          name: e.target.name,
-          value: validateInputToNumber(e.target.value),
-        };
-        app.dispatch({ type: "updateRow", payload });
-      } catch (err) {
-        render.errorFieldRender(err.message);
-      }
+
+    // === inline editing ===
+    let currentlyEditing = null;
+    dataField.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("editable")) return;
+      const span = e.target;
+      console.log("datafield click event ", span);
+
+      const rowId = span.closest(".row").dataset.id;
+      const fieldName = span.dataset.name;
+      const originalValue = span.textContent.trim();
+      if (span.classList.contains("editing")) return;
+
+      // store original value
+      span.dataset.original = originalValue;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = originalValue;
+      input.className = "inline-edit-input";
+
+      span.classList.add("editing");
+      span.innerHTML = "";
+      span.appendChild(input);
+
+      currentlyEditing = span;
+
+      input.focus();
+      input.select();
+
+      const finishEditing = (success = true) => {
+        if (success) {
+          try {
+            const newValue = validateInputToNumber(input.value);
+            console.log("datafield finish editing span ", span);
+            app.dispatch({
+              type: "updateRow",
+              payload: { id: rowId, name: fieldName, value: newValue },
+            });
+            // span.textContent = newValue;
+          } catch (err) {
+            render.errorFieldRender(err.message);
+            span.textContent = originalValue;
+          }
+        } else {
+          span.textContent = originalValue;
+        }
+
+        span.classList.remove("editing");
+        currentlyEditing = null;
+        delete span.dataset.original;
+      };
+      input.addEventListener("blur", () => finishEditing(true));
+
+      input.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          finishEditing(true);
+        }
+        if (ev.key === "Escape") {
+          ev.preventDefault();
+          finishEditing(false);
+        }
+      });
     });
+    // === data update in input field ===
+    // dataField.addEventListener("change", (e) => {
+    //   const rowEl = e.target;
+    //   if (!rowEl.classList.contains("row-input")) return;
+    //   try {
+    //     payload = {
+    //       id: rowEl.dataset.id,
+    //       name: e.target.dataset.name,
+    //       value: validateInputToNumber(e.target.value),
+    //     };
+    //     app.dispatch({ type: "updateRow", payload });
+    //   } catch (err) {
+    //     render.errorFieldRender(err.message);
+    //   }
+    // });
+    // === data update delete row ===
     dataField.addEventListener("click", (e) => {
       if (e.target.classList.contains("delete-btn")) {
         const rowEl = e.target.closest(".row");
@@ -442,10 +513,9 @@ export function setupHandlers(app) {
       }
     });
     resetBtn.addEventListener("click", () => {
-      app.dispatch({ type: "resetData" });
+      app.dispatch({ type: "reset" });
     });
     loadBtn.addEventListener("click", () => {
-      console.log("load btn was pressed");
       app.dispatch(loadDataThunk());
     });
     undoBtn.addEventListener("click", () => {
@@ -454,94 +524,161 @@ export function setupHandlers(app) {
     redoBtn.addEventListener("click", () => {
       app.dispatch({ type: "redo" });
     });
+    searchInput.addEventListener("change", (e) => {
+      const value = e.target.value;
+      console.log("search Input Value=>", value);
+      app.dispatch({ type: "setSearchTerm", payload: value });
+    });
+    sortSelect.addEventListener("change", (e) => {
+      const value = e.target.value;
+      console.log("sort select value==>", value);
+      app.dispatch({ type: "setSortBy", payload: value });
+    });
+    clearFiltersBtn.addEventListener("click", () => {
+      payload = { sortSelect: "none", searchInput: "" };
+      console.log("clicked clear Filters button :", payload);
+      app.dispatch({ type: "clearFilters", payload });
+    });
+
+    // ===Drag and Drop Reordering ===
+    dataField.addEventListener("dragstart", (e) => {
+      if (e.target.classList.contains("row")) {
+        e.dataTransfer.setData("text/plain", e.target.dataset.id);
+        e.target.classList.add("dragging");
+      }
+    });
+    dataField.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const row = e.target.closest(".row");
+      if (row) row.classList.add("drag-over");
+    });
+
+    dataField.addEventListener("dragleave", (e) => {
+      const row = e.target.closest(".row");
+      if (row) row.classList.remove("drag-over");
+    });
+
+    dataField.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const draggedId = e.dataTransfer.getData("text/plain");
+      const targetRow = e.target.closest(".row");
+
+      if (!targetRow || targetRow.dataset.id === draggedId) return;
+
+      app.dispatch({
+        type: "reorderRows",
+        payload: { draggedId, targetId: targetRow.dataset.id },
+      });
+
+      document.querySelectorAll(".row").forEach((r) => {
+        r.classList.remove("dragging", "drag-over");
+      });
+    });
+    dataField.addEventListener("dragend", () => {
+      document.querySelectorAll(".row").forEach((r) => {
+        r.classList.remove("dragging", "drag-over");
+      });
+    });
   });
 }
 
 
-===== ./module/store/loadMockData.js =====
+===== ./form/store/loadMockData.js =====
 
 import { validateInputToNumber } from "../utils/index.js";
 
 export async function loadMockData() {
-  const res = await fetch("/module/data/mockdata.json");
+  const res = await fetch("/form/data/mockdata.json");
   const data = await res.json();
-  let newPresent = {
-    ...data,
-    entities: {
-      ...data.entities,
-      rows: data.entities.rows.map((row) => ({
-        id: row.id,
-        price: validateInputToNumber(row.price),
-        qty: validateInputToNumber(row.qty),
-      })),
-    },
-  };
+  console.log("load mock data", data);
+  const newPresent = data;
   return newPresent;
 }
 
 
-===== ./module/store/reducer.js =====
+===== ./form/store/selectors.js =====
+
+export function getVisibleRows(state) {
+  let rows = [...state.present.entities.rows];
+  const { searchTerm, sortBy } = state.present.ui;
+
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase();
+    rows = rows.filter(
+      (row) =>
+        row.id.toLowerCase().includes(term) ||
+        String(row.price).includes(term) ||
+        String(row.qty).includes(term),
+    );
+  }
+
+  if (sortBy !== "none") {
+    const [field, direction] = sortBy.split("-");
+    rows.sort((a, b) => {
+      const valA = a[field];
+      const valB = b[field];
+      return direction === "asc" ? valA - valB : valB - valA;
+    });
+  }
+  return rows;
+}
+
+
+===== ./form/store/reducer.js =====
 
 import { initialState } from "./initialState.js";
+import { getVisibleRows } from "./selectors.js";
 
-export function reducer(state, action) {
-  let newPresent = {};
+export function reducer(state = initialState, action) {
+  console.log("reducer state", state);
+  let newPresent;
   let ap = action.payload;
-  let present = state.present;
+  console.log("reducer ap", ap);
   switch (action.type) {
     case "addRow":
       newPresent = {
-        ...present,
+        ...state.present,
         entities: {
-          ...present.entities,
-          rows: [...present.entities.rows, ap],
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, ap],
         },
       };
       return applyAction(state, newPresent);
     case "updateRow":
       newPresent = {
-        ...present,
+        ...state.present,
         entities: {
-          ...present.entities,
-          rows: present.entities.rows.map((row) =>
-            row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
+          ...state.present.entities,
+          rows: state.present.entities.rows.map((r) =>
+            r.id === ap.id ? { ...r, [ap.name]: ap.value } : r,
           ),
         },
       };
       return applyAction(state, newPresent);
     case "deleteRow":
       newPresent = {
-        ...present,
+        ...state.present,
         entities: {
-          ...present.entities,
-          rows: present.entities.rows.filter((row) => row.id !== ap.id),
+          ...state.present.entities,
+          rows: state.present.entities.rows.filter((r) => r.id !== ap.id),
         },
       };
       return applyAction(state, newPresent);
+    case "reset":
+      return initialState;
     case "undo":
+      console.log("reducer undo");
       return undo(state);
     case "redo":
       return redo(state);
-    //case "loadData":
-    //newPresent = state.present;
-
     case "loadStart":
-      console.log("load Start");
       newPresent = {
         ...state.present,
         ui: { ...state.present.ui, loading: true, error: null },
       };
-      console.log("load Start", newPresent);
       return applyAction(state, newPresent);
     case "loadSuccess":
-      console.log("loadSuccess", ap);
-      newPresent = {
-        ...state.present,
-        ui: { ...state.present.ui, loading: false },
-        entities: { ...state.present.entities, rows: ap.entities.rows },
-        user: ap.user,
-      };
-      console.log("load success in reducer", newPresent);
+      newPresent = ap;
       return applyAction(state, newPresent);
     case "loadError":
       newPresent = {
@@ -549,9 +686,40 @@ export function reducer(state, action) {
         ui: { ...state.present.ui, loading: false, error: ap },
       };
       return applyAction(state, newPresent);
+    case "setSearchTerm":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: ap },
+      };
+      return applyAction(state, newPresent);
+    case "setSortBy":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, sortBy: ap },
+      };
+      return applyAction(state, newPresent);
+    case "clearFilters":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: "", sortBy: "none" },
+      };
+      console.log("reducer clear filters: ", newPresent);
+      return applyAction(state, newPresent);
+    case "reorderRows":
+      const { draggedId, targetId } = action.payload;
+      const rows = [...state.present.entities.rows];
 
-    case "resetData":
-      return localData.resetData();
+      const draggedIndex = rows.findIndex((r) => r.id === draggedId);
+      const targetIndex = rows.findIndex((r) => r.id === targetId);
+
+      const [draggedRow] = rows.splice(draggedIndex, 1);
+      rows.splice(targetIndex, 0, draggedRow);
+
+      newPresent = {
+        ...state.present,
+        entities: { ...state.present.entities, rows },
+      };
+      return applyAction(state, newPresent);
     default:
       return state;
   }
@@ -565,53 +733,40 @@ function applyAction(state, newPresent) {
   };
 }
 
-function undo(state) {
-  if (state.past.length === 0) return state;
-  const past = state.past[state.past.length - 1];
-  console.log("undo state", past);
-  return {
-    past: state.past.slice(0, -1),
-    present: past,
-    future: [state.present, ...state.future],
-  };
-}
 function redo(state) {
   if (state.future.length === 0) return state;
-  const future = state.future[0];
+  let current = state.future[0];
   return {
     past: [...state.past, state.present],
-    present: future,
+    present: current,
     future: state.future.slice(1),
   };
 }
-
-export const localData = {
-  loadData() {
-    let temp = localStorage.getItem("rows");
-    console.log("loadData in localData", JSON.parse(temp));
-    return temp ? JSON.parse(temp) : initialState;
-  },
-  resetData() {
-    localStorage.removeItem("rows");
-    return initialState;
-  },
-};
+function undo(state) {
+  if (state.past.length === 0) return state;
+  let current = state.past[state.past.length - 1];
+  return {
+    past: state.past.slice(0, -1),
+    present: current,
+    future: [state.present, ...state.future],
+  };
+}
 
 
-===== ./module/store/index.js =====
+===== ./form/store/index.js =====
 
 export { createApp } from "./createApp.js";
 export { initialState } from "./initialState.js";
-export { reducer } from "./reducer.js";
-export { localData } from "./localData.js";
-export { loadMockData } from "./loadMockData.js";
 export { loadDataThunk } from "./loadDataThunk.js";
+export { loadMockData } from "./loadMockData.js";
+export { reducer } from "./reducer.js";
+export { getVisibleRows } from "./selectors.js";
 
 
-===== ./module/store/createApp.js =====
+===== ./form/store/createApp.js =====
 
 export function createApp(initialState, reducer, middlewares = []) {
-  let state = initialState;
+  let state;
   let listeners = [];
 
   function getState() {
@@ -625,59 +780,48 @@ export function createApp(initialState, reducer, middlewares = []) {
     };
   }
 
+  let dispatch;
+  const api = { getState, dispatch: (action) => dispatch(action) };
+
   function baseDispatch(action) {
     state = reducer(state, action);
     listeners.forEach((l) => l());
     return state;
   }
-  const dispatch = middlewares
-    .map((mw) => mw({ getState, dispatch: (a) => dispatch(a) }))
-    .reduceRight((next, mw) => mw(next), baseDispatch);
+  const connectedMW = middlewares.map((mw) => mw(api));
+  dispatch = connectedMW.reduceRight((next, mw) => mw(next), baseDispatch);
 
-  return { getState, dispatch, subscribe };
+  dispatch({ type: "@@init" });
+
+  return { getState, subscribe, dispatch };
 }
 
 
-===== ./module/store/localData.js =====
-
-export const localData = {
-  loadData() {
-    let temp = localStorage.getItem("rows");
-    console.log("loadData in localData", JSON.parse(temp));
-    return temp ? JSON.parse(temp) : initialState;
-  },
-  resetData() {
-    localStorage.removeItem("rows");
-    return initialState;
-  },
-};
-
-
-===== ./module/store/initialState.js =====
+===== ./form/store/initialState.js =====
 
 export const initialState = {
   past: [],
   present: {
-    user: null,
     entities: { rows: [] },
-    ui: { loading: false, error: null },
+    user: null,
+    ui: { loading: false, error: null, searchTerm: "", sortBy: "none" },
   },
   future: [],
 };
 
 
-===== ./module/store/loadDataThunk.js =====
+===== ./form/store/loadDataThunk.js =====
 
-import { loadMockData } from "./index.js";
+import { loadMockData } from "./loadMockData.js";
 
 export function loadDataThunk() {
   return async (dispatch, getState) => {
     dispatch({ type: "loadStart" });
     try {
-      const newPresent = await loadMockData();
-      dispatch({ type: "loadSuccess", payload: newPresent });
+      const payload = await loadMockData();
+      dispatch({ type: "loadSuccess", payload });
     } catch (err) {
-      dispatch({ type: "loadError", payload: err.message });
+      dispatch({ type: "loadError", payload: err });
     }
   };
 }
