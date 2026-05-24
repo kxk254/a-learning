@@ -33,21 +33,85 @@ export function setupHandlers(app) {
       }
     });
 
-    // === data update in input field ===
-    dataField.addEventListener("change", (e) => {
-      const rowEl = e.target;
-      if (!rowEl.classList.contains("row-input")) return;
-      try {
-        payload = {
-          id: rowEl.dataset.id,
-          name: e.target.dataset.name,
-          value: validateInputToNumber(e.target.value),
-        };
-        app.dispatch({ type: "updateRow", payload });
-      } catch (err) {
-        render.errorFieldRender(err.message);
-      }
+    // === inline editing ===
+    let currentlyEditing = null;
+    dataField.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("editable")) return;
+      const span = e.target;
+      console.log("datafield click event ", span);
+
+      const rowId = span.closest(".row").dataset.id;
+      const fieldName = span.dataset.name;
+      const originalValue = span.textContent.trim();
+      if (span.classList.contains("editing")) return;
+
+      // store original value
+      span.dataset.original = originalValue;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = originalValue;
+      input.className = "inline-edit-input";
+
+      span.classList.add("editing");
+      span.innerHTML = "";
+      span.appendChild(input);
+
+      currentlyEditing = span;
+
+      input.focus();
+      input.select();
+
+      const finishEditing = (success = true) => {
+        if (success) {
+          try {
+            const newValue = validateInputToNumber(input.value);
+            console.log("datafield finish editing span ", span);
+            app.dispatch({
+              type: "updateRow",
+              payload: { id: rowId, name: fieldName, value: newValue },
+            });
+            span.textContent = newValue;
+          } catch (err) {
+            render.errorFieldRender(err.message);
+            span.textContent = originalValue;
+          }
+        } else {
+          span.textContent = originalValue;
+        }
+
+        span.classList.remove("editing");
+        currentlyEditing = null;
+        delete span.dataset.original;
+      };
+      input.addEventListener("blur", () => finishEditing(true));
+
+      input.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          finishEditing(true);
+        }
+        if (ev.key === "Escape") {
+          ev.preventDefault();
+          finishEditing(false);
+        }
+      });
     });
+    // === data update in input field ===
+    // dataField.addEventListener("change", (e) => {
+    //   const rowEl = e.target;
+    //   if (!rowEl.classList.contains("row-input")) return;
+    //   try {
+    //     payload = {
+    //       id: rowEl.dataset.id,
+    //       name: e.target.dataset.name,
+    //       value: validateInputToNumber(e.target.value),
+    //     };
+    //     app.dispatch({ type: "updateRow", payload });
+    //   } catch (err) {
+    //     render.errorFieldRender(err.message);
+    //   }
+    // });
     // === data update delete row ===
     dataField.addEventListener("click", (e) => {
       if (e.target.classList.contains("delete-btn")) {

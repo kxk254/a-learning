@@ -3,11 +3,10 @@ import { getVisibleRows } from "../store/index.js";
 
 const nameFieldHTML = (user) => `ID: ${user.id} | NAME: ${user.name}`;
 const dataFieldHTML = (row) => `
-<div class="row" draggable="true" data-id="${row.id}">
 <span class="drag-handle">≡</span>
 <span class="row-id">${row.id}</span>
-<input type="text" class="row-input price-input" data-id="${row.id}" data-name="price" value="${row.price}"/>
-<input type="text" class="row-input qty-input" data-id="${row.id}" data-name="qty" value="${row.qty}"/>
+<span class="editable price" data-name="price">${row.price}</span>
+<span class="editable qty" data-name="qty">${row.qty}</span>
 <button type="button" class="delete-btn">DEL</button>
 </div>
 `;
@@ -29,16 +28,41 @@ export const render = {
   },
   dataFieldRender(state) {
     const rows = getVisibleRows(state);
-    if (!rows) return;
-    dataField.innerHTML = "";
-    rows.forEach((row) => {
-      const div = document.createElement("div");
-      div.dataset.id = row.id;
-      div.className = "row";
-      div.innerHTML = dataFieldHTML(row);
-      dataField.appendChild(div);
+    const existingRows = new Map();
+
+    if (document.querySelector(".editable.editing")) {
+      return;
+    }
+
+    // Step 1: Collect current DOM rows
+    document.querySelectorAll(".row").forEach((el) => {
+      existingRows.set(el.dataset.id, el);
     });
+
+    // Step 2: Clear container only once
+    const fragment = document.createDocumentFragment();
+
+    rows.forEach((row) => {
+      let rowEl = existingRows.get(row.id);
+      if (rowEl) {
+        const priceSpan = rowEl.querySelector('[data-name="price"]');
+        const qtySpan = rowEl.querySelector('[data-qty="qty"]');
+        if (priceSpan) priceSpan.textContent = row.price;
+        if (qtySpan) qtySpan.textContent = row.qty;
+      } else {
+        rowEl = document.createElement("div");
+        rowEl.dataset.id = row.id;
+        rowEl.className = "row";
+        rowEl.draggable = true;
+        rowEl.innerHTML = dataFieldHTML(row);
+      }
+      fragment.appendChild(rowEl);
+    });
+    dataField.innerHTML = "";
+    dataField.appendChild(fragment);
   },
+
+  // Error Field
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");

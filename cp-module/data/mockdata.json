@@ -9,5 +9,11 @@
       { "id": "bcb", "price": 120, "qty": 3 },
       { "id": "ccc", "price": 150, "qty": 2 }
     ]
+  },
+  "ui": {
+    "loading": "false",
+    "error": "null",
+    "searchTerm": "",
+    "sortBy": "none"
   }
 }

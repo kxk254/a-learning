@@ -38,3 +38,8 @@
   background: #e3f2fd;
   border: 2px dashed #2196f3;
 }
+
+#dataField {
+  width: 40%;
+  margin: auto;
+}
