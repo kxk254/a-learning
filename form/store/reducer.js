@@ -35,7 +35,7 @@ export function reducer(state = initialState, action) {
           rows: state.present.entities.rows.filter((r) => r.id !== ap.id),
         },
       };
-      return;
+      return applyAction(state, newPresent);
     case "reset":
       return initialState;
     case "undo":

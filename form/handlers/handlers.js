@@ -17,10 +17,11 @@ export function setupHandlers(app) {
     const clearFiltersBtn = document.querySelector("#clearFilters");
 
     let payload;
+    // === Form Submit ( Add Row ) ===
     myForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      const data = new FormData(myForm);
       try {
-        const data = new FormData(myForm);
         payload = {
           id: Math.random().toString(32).slice(2),
           price: validateInputToNumber(data.get("price")),
@@ -31,13 +32,15 @@ export function setupHandlers(app) {
         render.errorFieldRender(err.message);
       }
     });
+
+    // === data update in input field ===
     dataField.addEventListener("change", (e) => {
-      const rowEl = e.target.closest(".row");
-      if (!rowEl) return;
+      const rowEl = e.target;
+      if (!rowEl.classList.contains("row-input")) return;
       try {
         payload = {
           id: rowEl.dataset.id,
-          name: e.target.name,
+          name: e.target.dataset.name,
           value: validateInputToNumber(e.target.value),
         };
         app.dispatch({ type: "updateRow", payload });
@@ -45,6 +48,7 @@ export function setupHandlers(app) {
         render.errorFieldRender(err.message);
       }
     });
+    // === data update delete row ===
     dataField.addEventListener("click", (e) => {
       if (e.target.classList.contains("delete-btn")) {
         const rowEl = e.target.closest(".row");

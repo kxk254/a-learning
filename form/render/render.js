@@ -4,10 +4,10 @@ import { getVisibleRows } from "../store/index.js";
 const nameFieldHTML = (user) => `ID: ${user.id} | NAME: ${user.name}`;
 const dataFieldHTML = (row) => `
 <div class="row" draggable="true" data-id="${row.id}">
-<span class-"drag-handle">≡</span>
+<span class="drag-handle">≡</span>
 <span class="row-id">${row.id}</span>
-<input type="text" name="price" value="${row.price}" class="price-input"\>
-<input type="text" name="qty" value="${row.qty}" class="qty-input"\>
+<input type="text" class="row-input price-input" data-id="${row.id}" data-name="price" value="${row.price}"/>
+<input type="text" class="row-input qty-input" data-id="${row.id}" data-name="qty" value="${row.qty}"/>
 <button type="button" class="delete-btn">DEL</button>
 </div>
 `;
@@ -47,6 +47,7 @@ export const render = {
     inputField.innerHTML = inputFieldHTML;
   },
   totalFieldRender(state) {
+    console.log("total field render state", state);
     const sum = sumTotalFromRows(state.present.entities.rows);
     if (!sum) return;
     totalField.innerHTML = totalFieldHTML(sum);
