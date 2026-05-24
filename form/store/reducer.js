@@ -1,4 +1,5 @@
 import { initialState } from "./initialState.js";
+import { getVisibleRows } from "./selectors.js";
 
 export function reducer(state = initialState, action) {
   console.log("reducer state", state);
@@ -38,6 +39,7 @@ export function reducer(state = initialState, action) {
     case "reset":
       return initialState;
     case "undo":
+      console.log("reducer undo");
       return undo(state);
     case "redo":
       return redo(state);
@@ -53,7 +55,41 @@ export function reducer(state = initialState, action) {
     case "loadError":
       newPresent = {
         ...state.present,
-        ui: { ...state.present.ui, loadking: false, error: ap },
+        ui: { ...state.present.ui, loading: false, error: ap },
+      };
+      return applyAction(state, newPresent);
+    case "setSearchTerm":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: ap },
+      };
+      return applyAction(state, newPresent);
+    case "setSortBy":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, sortBy: ap },
+      };
+      return applyAction(state, newPresent);
+    case "clearFilters":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: "", sortBy: "none" },
+      };
+      console.log("reducer clear filters: ", newPresent);
+      return applyAction(state, newPresent);
+    case "reorderRows":
+      const { draggedId, targetId } = action.payload;
+      const rows = [...state.present.entities.rows];
+
+      const draggedIndex = rows.findIndex((r) => r.id === draggedId);
+      const targetIndex = rows.findIndex((r) => r.id === targetId);
+
+      const [draggedRow] = rows.splice(draggedIndex, 1);
+      rows.splice(targetIndex, 0, draggedRow);
+
+      newPresent = {
+        ...state.present,
+        entities: { ...state.present.entities, rows },
       };
       return applyAction(state, newPresent);
     default:
@@ -79,11 +115,11 @@ function redo(state) {
   };
 }
 function undo(state) {
-  if (state.future.length === 0) return state;
+  if (state.past.length === 0) return state;
   let current = state.past[state.past.length - 1];
   return {
     past: state.past.slice(0, -1),
     present: current,
-    future: [present, ...state.future],
+    future: [state.present, ...state.future],
   };
 }
