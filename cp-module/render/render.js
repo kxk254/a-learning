@@ -1,41 +1,68 @@
-import { initialState } from "../store/initialState.js";
-import { sumTotalFromRows } from "../utils/index.js";
+import { sumTotalFromRows } from "../utils/sumTotalFromRows.js";
+import { getVisibleRows } from "../store/index.js";
 
-const nameFieldHTML = (user) => `<p>ID : ${user.id} | Name : ${user.name}`;
-const dataFieldHTML = (data) => `
-<input type="text" name="price" value="${data.price}"/>
-<input type="text" name="qty" value="${data.qty}"/>
+const nameFieldHTML = (user) => `ID: ${user.id} | NAME: ${user.name}`;
+const dataFieldHTML = (row) => `
+<span class="drag-handle">≡</span>
+<span class="row-id">${row.id}</span>
+<span class="editable price" data-name="price">${row.price}</span>
+<span class="editable qty" data-name="qty">${row.qty}</span>
 <button type="button" class="delete-btn">DEL</button>
-`;
-const inputFieldHTML = `
-<input type="text" name="price" value=""/>
-<input type="text" name="qty" value=""/>
+</div>
 `;
 const totalFieldHTML = (sum) =>
-  `<p>Total Price :${sum.totalPrice} | Total Qty : ${sum.totalQty} </p>`;
+  `Total Price : ${sum.totalPrice} | Total Qty : ${sum.totalQty}`;
+const inputFieldHTML = `
+<input type="text" name="price" value=""\>
+<input type="text" name="qty" value=""\>
+`;
 
 export const render = {
   nameFieldRender(state) {
-    let userinfo = state.present.user;
-    console.log("name field user:", userinfo);
-    if (!userinfo) {
-      nameField.textContent = "no name";
+    if (!state || !state.present.user || state.present.user == undefined) {
+      nameField.textContent = "No User Defined";
     } else {
-      nameField.innerHTML = nameFieldHTML(userinfo);
+      const user = state.present.user;
+      nameField.textContent = nameFieldHTML(user);
     }
   },
   dataFieldRender(state) {
-    let rows = state.present.entities.rows;
-    console.log("data field state :", rows);
-    dataField.innerHTML = "";
-    rows.forEach((row) => {
-      const div = document.createElement("div");
-      div.dataset.id = row.id;
-      div.className = "row";
-      div.innerHTML = dataFieldHTML(row);
-      dataField.appendChild(div);
+    const rows = getVisibleRows(state);
+    const existingRows = new Map();
+
+    if (document.querySelector(".editable.editing")) {
+      return;
+    }
+
+    // Step 1: Collect current DOM rows
+    document.querySelectorAll(".row").forEach((el) => {
+      existingRows.set(el.dataset.id, el);
     });
+
+    // Step 2: Clear container only once
+    const fragment = document.createDocumentFragment();
+
+    rows.forEach((row) => {
+      let rowEl = existingRows.get(row.id);
+      if (rowEl) {
+        const priceSpan = rowEl.querySelector('[data-name="price"]');
+        const qtySpan = rowEl.querySelector('[data-name="qty"]');
+        if (priceSpan) priceSpan.textContent = row.price;
+        if (qtySpan) qtySpan.textContent = row.qty;
+      } else {
+        rowEl = document.createElement("div");
+        rowEl.dataset.id = row.id;
+        rowEl.className = "row";
+        rowEl.draggable = true;
+        rowEl.innerHTML = dataFieldHTML(row);
+      }
+      fragment.appendChild(rowEl);
+    });
+    dataField.innerHTML = "";
+    dataField.appendChild(fragment);
   },
+
+  // Error Field
   errorFieldRender(message) {
     errorField.textContent = message;
     errorField.classList.add("red");
@@ -44,26 +71,29 @@ export const render = {
     inputField.innerHTML = inputFieldHTML;
   },
   totalFieldRender(state) {
-    console.log("total field render sum", state);
-    let rows = state.present.entities.rows;
-    let sum = sumTotalFromRows(rows);
+    console.log("total field render state", state);
+    const sum = sumTotalFromRows(state.present.entities.rows);
+    if (!sum) return;
     totalField.innerHTML = totalFieldHTML(sum);
   },
-  cleanErrorField() {
-    errorField.classList.remove("red");
+  clearErrorField() {
     errorField.textContent = "";
+    errorField.classList.remove("red");
+  },
+  controlsField(state) {
+    const uiState = state.present.ui;
+    searchInput.value = uiState.searchTerm;
+    sortSelect.value = uiState.sortBy;
   },
   initialUI(state) {
+    this.clearErrorField();
     this.nameFieldRender(state);
-    this.inputFieldRender();
-    this.totalFieldRender(initialState);
-    this.cleanErrorField();
-  },
-  renderAll(state) {
-    this.cleanErrorField();
-    this.nameFieldRender(state);
-    this.dataFieldRender(state);
     this.inputFieldRender();
     this.totalFieldRender(state);
+    this.controlsField(state);
+  },
+  renderAll(state) {
+    this.initialUI(state);
+    this.dataFieldRender(state);
   },
 };

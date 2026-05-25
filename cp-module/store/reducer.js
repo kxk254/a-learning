@@ -1,57 +1,97 @@
 import { initialState } from "./initialState.js";
+import { getVisibleRows } from "./selectors.js";
 
 export function reducer(state = initialState, action) {
-  const present = state.present;
+  console.log("reducer state", state);
+  let newPresent;
   let ap = action.payload;
+  console.log("reducer ap", ap);
   switch (action.type) {
     case "addRow":
-      console.log("add row reducer", action, "payload", ap);
-      let newPresent = {
-        ...present,
-        entities: { ...present.entities, rows: [...present.entities.rows, ap] },
+      newPresent = {
+        ...state.present,
+        entities: {
+          ...state.present.entities,
+          rows: [...state.present.entities.rows, ap],
+        },
       };
-      console.log("add row newPresent :", newPresent);
-      let appaction = applyAction(state, newPresent);
-      console.log("add row applyAction result :", appaction);
       return applyAction(state, newPresent);
     case "updateRow":
-      return applyAction(state, {
-        ...present,
+      newPresent = {
+        ...state.present,
         entities: {
-          ...present.entities.rows,
-          rows: present.entities.rows.map((row) =>
-            row.id === ap.id ? { ...row, [ap.name]: ap.value } : row,
+          ...state.present.entities,
+          rows: state.present.entities.rows.map((r) =>
+            r.id === ap.id ? { ...r, [ap.name]: ap.value } : r,
           ),
         },
-      });
+      };
+      return applyAction(state, newPresent);
     case "deleteRow":
-      return applyAction(state, {
-        ...present,
+      newPresent = {
+        ...state.present,
         entities: {
-          ...present.entities.rows,
-          rows: present.entities.rows.filter((row) => row.id !== ap.id),
+          ...state.present.entities,
+          rows: state.present.entities.rows.filter((r) => r.id !== ap.id),
         },
-      });
+      };
+      return applyAction(state, newPresent);
+    case "reset":
+      return initialState;
+    case "undo":
+      console.log("reducer undo");
+      return undo(state);
     case "redo":
       return redo(state);
-    case "undo":
-      return undo(state);
     case "loadStart":
-      return applyAction(state, {
-        ...present,
-        ui: { loading: true, error: null },
-      });
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: true, error: null },
+      };
+      return applyAction(state, newPresent);
     case "loadSuccess":
-      console.log("load success :", ap);
-      return applyAction(state, ap);
-    case "loadFail":
-      return applyAction(state, {
-        ...present,
-        ui: { loading: false, error: ap },
-      });
-    case "resetData":
-      localStorage.removeItem("rows");
-      return initialState;
+      newPresent = ap;
+      return applyAction(state, newPresent);
+    case "loadError":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, loading: false, error: ap },
+      };
+      return applyAction(state, newPresent);
+    case "setSearchTerm":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: ap },
+      };
+      return applyAction(state, newPresent);
+    case "setSortBy":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, sortBy: ap },
+      };
+      return applyAction(state, newPresent);
+    case "clearFilters":
+      newPresent = {
+        ...state.present,
+        ui: { ...state.present.ui, searchTerm: "", sortBy: "none" },
+      };
+      console.log("reducer clear filters: ", newPresent);
+      return applyAction(state, newPresent);
+    case "reorderRows":
+      const { draggedId, targetId } = action.payload;
+      const rows = [...state.present.entities.rows];
+
+      const draggedIndex = rows.findIndex((r) => r.id === draggedId);
+      const targetIndex = rows.findIndex((r) => r.id === targetId);
+
+      const [draggedRow] = rows.splice(draggedIndex, 1);
+      rows.splice(targetIndex, 0, draggedRow);
+
+      newPresent = {
+        ...state.present,
+        entities: { ...state.present.entities, rows },
+      };
+      return applyAction(state, newPresent);
     default:
       return state;
   }
@@ -67,20 +107,19 @@ function applyAction(state, newPresent) {
 
 function redo(state) {
   if (state.future.length === 0) return state;
-  let present = state.future[0];
+  let current = state.future[0];
   return {
     past: [...state.past, state.present],
-    present: present,
+    present: current,
     future: state.future.slice(1),
   };
 }
-
 function undo(state) {
   if (state.past.length === 0) return state;
-  let present = state.past[state.past.length - 1];
+  let current = state.past[state.past.length - 1];
   return {
     past: state.past.slice(0, -1),
-    present: present,
+    present: current,
     future: [state.present, ...state.future],
   };
 }

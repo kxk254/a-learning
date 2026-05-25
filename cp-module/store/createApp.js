@@ -12,18 +12,19 @@ export function createApp(initialState, reducer, middlewares = []) {
       listeners = listeners.filter((l) => l !== listener);
     };
   }
-  const api = { getState: getState, dispatch: (action) => dispatch(action) };
+
+  let dispatch;
+  const api = { getState, dispatch: (action) => dispatch(action) };
 
   function baseDispatch(action) {
     state = reducer(state, action);
     listeners.forEach((l) => l());
     return state;
   }
-  const dispatch = middlewares
-    .map((mw) => mw(api))
-    .reduceRight((next, mw) => mw(next), baseDispatch);
+  const connectedMW = middlewares.map((mw) => mw(api));
+  dispatch = connectedMW.reduceRight((next, mw) => mw(next), baseDispatch);
 
   dispatch({ type: "@@init" });
 
-  return { getState, dispatch, subscribe };
+  return { getState, subscribe, dispatch };
 }
