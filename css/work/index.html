@@ -2,24 +2,78 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Loging</title>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../root.css" />
     <link rel="stylesheet" href="./style.css" />
   </head>
+
   <body>
-    <main>
-      <form class="loginCard">
-        <h1>Login</h1>
-        <div class="formGroup">
-          <label>Email</label
-          ><input type="text" placeholder="Enter your email address" />
+    <main class="dashboard">
+      <!-- sidebar -->
+      <div class="sidebar">
+        <h2 class="logo">My Logo</h2>
+        <nav>
+          <a href="#">Dashboard</a>
+          <a href="#">Analysis</a>
+          <a href="#">Users</a>
+          <a href="#">Products</a>
+          <a href="#">Settings</a>
+        </nav>
+      </div>
+
+      <!-- main content -->
+      <section class="mainContents">
+        <!-- title bar -->
+        <div class="titleBar">
+          <div>
+            <h2>Dashboard</h2>
+            <p>Welcome Back</p>
+          </div>
+
+          <button class="profileBtn">Admin</button>
         </div>
-        <div class="formGroup">
-          <label>Password</label
-          ><input type="password" placeholder="Enter your password" />
+        <!-- header cards -->
+        <div class="headerCards">
+          <div class="card">
+            <h3>Total Users</h3>
+            <p>12,450</p>
+          </div>
+          <div class="card">
+            <h3>Revenues</h3>
+            <p>$5,600</p>
+          </div>
+          <div class="card">
+            <h3>Orders</h3>
+            <p>4,578</p>
+          </div>
+          <div class="card">
+            <h3>Growth</h3>
+            <p>18%</p>
+          </div>
         </div>
-        <button type="submit">Log In</button>
-      </form>
+        <!-- top charts  -->
+
+        <div class="salesOverview">
+          <h3>Saels Overview</h3>
+          <div>Chart Area</div>
+        </div>
+        <!-- activities -->
+        <div class="activities">
+          <h3>Recent Activities</h3>
+          <div class="activity">
+            <h3>New Order</h3>
+            <p>2 mins ago</p>
+          </div>
+          <div class="activity">
+            <h3>User Registered</h3>
+            <p>10 mins ago</p>
+          </div>
+          <div class="activity">
+            <h3>Payment Received</h3>
+            <p>25 mins ago</p>
+          </div>
+        </div>
+      </section>
     </main>
-    <footer><a href="/">Back</a></footer>
   </body>
 </html>
