@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../root.css" />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="../root.css" />
   </head>
-
   <body>
-    <main class="dashboard">
-      <!-- sidebar -->
+    <main class="container">
+      <!-- Side Bar  -->
       <div class="sidebar">
-        <h2 class="logo">My Logo</h2>
+        <h2>My Dash</h2>
         <nav>
           <a href="#">Dashboard</a>
           <a href="#">Analysis</a>
@@ -20,20 +19,18 @@
           <a href="#">Settings</a>
         </nav>
       </div>
-
-      <!-- main content -->
-      <section class="mainContents">
-        <!-- title bar -->
-        <div class="titleBar">
-          <div>
-            <h2>Dashboard</h2>
+      <!-- Main Contents -->
+      <section class="main-contents">
+        <!-- - header  -->
+        <div class="main-header">
+          <div class="main-title">
+            <h3>Dashboard</h3>
             <p>Welcome Back</p>
           </div>
-
-          <button class="profileBtn">Admin</button>
+          <button type="submit">Admin</button>
         </div>
-        <!-- header cards -->
-        <div class="headerCards">
+        <!-- - cards -->
+        <div class="cards">
           <div class="card">
             <h3>Total Users</h3>
             <p>12,450</p>
@@ -51,29 +48,29 @@
             <p>18%</p>
           </div>
         </div>
-        <!-- top charts  -->
-        <div class="salesContainer">
-          <div class="salesOverview">
+        <!-- Sales  -->
+        <section class="sales-section">
+          <!-- - sales overview -->
+          <div class="sales-overview">
             <h3>Sales Overview</h3>
-            <div class="chart">Chart Area</div>
+            <p>Chart Area</p>
           </div>
-          <!-- activities -->
+          <!-- - recent activities -->
           <div class="activities">
-            <h3>Recent Activities</h3>
             <div class="activity">
-              <h3>New Order</h3>
+              <h4>New Order</h4>
               <p>2 mins ago</p>
             </div>
             <div class="activity">
-              <h3>User Registered</h3>
+              <h4>User Registered</h4>
               <p>10 mins ago</p>
             </div>
             <div class="activity">
-              <h3>Payment Received</h3>
+              <h4>Payment Received</h4>
               <p>25 mins ago</p>
             </div>
           </div>
-        </div>
+        </section>
       </section>
     </main>
   </body>
