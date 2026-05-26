@@ -1,0 +1,63 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
+footer {
+  text-align: center;
+}
+
+.loginCard {
+  width: 320px;
+  border-radius: 10px;
+  box-shadow: 5px 20px 30px rgba(0, 0, 0, 0.08);
+  padding: 25px 35px 40px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #666;
+  padding: 8px;
+}
+
+button {
+  width: 100%;
+  color: blue;
+  transition: background 0.5s;
+  font-size: 1.1rem;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  background: blue;
+  padding: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  color: black;
+}
