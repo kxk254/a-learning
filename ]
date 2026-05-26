@@ -1,0 +1,14 @@
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>サンプルページ</title>
+    <base href="https://example.com/" target="_blank" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a href="about.html">会社概要</a>
+    <img src="images/logo.png" alt="ロゴ" />
+    <a href="https://www.awwwards.com/">Awwards</a>
+  </body>
+</html>
