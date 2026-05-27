@@ -22,8 +22,14 @@
 }
 .menu a {
   padding: var(--space-md);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
 }
 
+.menu a:hover {
+  background: rgb(255, 255, 255, 0.1);
+  color: var(--white);
+}
 /* main content  */
 
 .main-contents {
@@ -46,6 +52,11 @@
   color: var(--white);
   padding: var(--space-sm);
   margin: var(--space-sm);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.header-btn:hover {
+  background: var(--primary-hover);
 }
 
 .cards {
@@ -81,12 +92,18 @@
   justify-content: center;
   align-items: center;
 }
+.panel-large h3 {
+  margin-bottom: var(--space-sm);
+}
 .panel {
   display: flex;
   flex-direction: column;
   background: var(--white);
   padding: var(--space-sm);
   border-radius: var(--radius-md);
+}
+.panel h3 {
+  margin-bottom: var(--space-sm);
 }
 .activity {
   display: flex;
