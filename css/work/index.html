@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="../root.css" />
   </head>
+
   <body>
-    <main class="container">
-      <!-- Side Bar  -->
+    <main class="dashboard">
+      <!-- SIDEBAR  -->
       <div class="sidebar">
-        <h2>My Dash</h2>
-        <nav>
+        <h2 class="logo">My Dash</h2>
+        <nav class="menu">
           <a href="#">Dashboard</a>
           <a href="#">Analysis</a>
           <a href="#">Users</a>
@@ -19,59 +20,59 @@
           <a href="#">Settings</a>
         </nav>
       </div>
-      <!-- Main Contents -->
-      <section class="main-contents">
-        <!-- - header  -->
-        <div class="main-header">
-          <div class="main-title">
+      <div class="main-contents">
+        <!-- HEADER  -->
+        <header class="header">
+          <div>
             <h3>Dashboard</h3>
             <p>Welcome Back</p>
           </div>
-          <button type="submit">Admin</button>
-        </div>
-        <!-- - cards -->
-        <div class="cards">
+          <button class="header-btn">Admin</button>
+        </header>
+        <!-- CARD  -->
+        <section class="cards">
           <div class="card">
             <h3>Total Users</h3>
-            <p>12,450</p>
+            <span>12.450</span>
           </div>
           <div class="card">
             <h3>Revenues</h3>
-            <p>$5,600</p>
+            <span>$5,600</span>
           </div>
           <div class="card">
             <h3>Orders</h3>
-            <p>4,578</p>
+            <span>4,578</span>
           </div>
           <div class="card">
             <h3>Growth</h3>
-            <p>18%</p>
+            <span>18%</span>
           </div>
-        </div>
-        <!-- Sales  -->
-        <section class="sales-section">
-          <!-- - sales overview -->
-          <div class="sales-overview">
+        </section>
+        <!-- CONTENT-GRID -->
+        <section class="content-grid">
+          <!-- panel-large  -->
+          <div class="panel-large">
             <h3>Sales Overview</h3>
             <p>Chart Area</p>
           </div>
-          <!-- - recent activities -->
-          <div class="activities">
+          <!-- panel -->
+          <div class="panel">
+            <h3>Activities</h3>
             <div class="activity">
-              <h4>New Order</h4>
-              <p>2 mins ago</p>
+              <span>New Order</span>
+              <small>2 mins ago</small>
             </div>
             <div class="activity">
-              <h4>User Registered</h4>
-              <p>10 mins ago</p>
+              <span>User Registered</span>
+              <small>10 mins agohjh</small>
             </div>
             <div class="activity">
-              <h4>Payment Received</h4>
-              <p>25 mins ago</p>
+              <span>Payment Received</span>
+              <small>25 mins ago</small>
             </div>
           </div>
         </section>
-      </section>
+      </div>
     </main>
   </body>
 </html>
