@@ -1,15 +1,174 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Backgrounds */
+  --background: #f5f7fb;
+  --surface: #ffffff;
+  --surface-secondary: #eef2f7;
+  --surface-tertiary: #e4e9f2;
+
+  /* Typography */
+  --foreground: #0f172a;
+  --foreground-muted: #475569;
+  --foreground-subtle: #64748b;
+  --foreground-inverse: #ffffff;
+
+  /* Brand */
+  --primary: #0f3d66;
+  --primary-hover: #154f84;
+  --primary-active: #0b2f4f;
+  --primary-foreground: #ffffff;
+
+  /* Accent / Profitability */
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-soft: #ccfbf1;
+  --accent-foreground: #ffffff;
+
+  /* Success */
+  --success: #15803d;
+  --success-soft: #dcfce7;
+
+  /* Warning */
+  --warning: #d97706;
+  --warning-soft: #fef3c7;
+
+  /* Danger */
+  --danger: #dc2626;
+  --danger-soft: #fee2e2;
+
+  /* Borders */
+  --border: #d6dce8;
+  --border-strong: #c0cad8;
+
+  /* Inputs */
+  --input: #ffffff;
+  --input-border: #cbd5e1;
+  --input-focus: #0f3d66;
+
+  /* Sidebar */
+  --sidebar-bg: #0f172a;
+  --sidebar-surface: #162033;
+  --sidebar-hover: #1e293b;
+  --sidebar-active: #0f3d66;
+  --sidebar-text: #e2e8f0;
+  --sidebar-text-muted: #94a3b8;
+
+  /* Cards */
+  --card: #ffffff;
+  --card-hover: #f8fafc;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Layout */
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --content-max-width: 1440px;
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px rgba(15, 61, 102, 0.2);
+
+  /* Charts */
+  --chart-1: #0f3d66;
+  --chart-2: #0f766e;
+  --chart-3: #2563eb;
+  --chart-4: #14b8a6;
+  --chart-5: #64748b;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  --space-4xl: 40px;
+  --space-5xl: 48px;
+  --space-6xl: 64px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+.dark {
+  /* Core Backgrounds */
+  --background: #09111d;
+  --surface: #0f172a;
+  --surface-secondary: #162033;
+  --surface-tertiary: #1e293b;
 
+  /* Typography */
+  --foreground: #f8fafc;
+  --foreground-muted: #cbd5e1;
+  --foreground-subtle: #94a3b8;
+  --foreground-inverse: #0f172a;
+
+  /* Brand */
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-active: #2563eb;
+  --primary-foreground: #ffffff;
+
+  /* Accent */
+  --accent: #14b8a6;
+  --accent-hover: #2dd4bf;
+  --accent-soft: rgba(20, 184, 166, 0.15);
+  --accent-foreground: #ffffff;
+
+  /* Success */
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.12);
+
+  /* Warning */
+  --warning: #f59e0b;
+  --warning-soft: rgba(245, 158, 11, 0.12);
+
+  /* Danger */
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.12);
+
+  /* Borders */
+  --border: #243244;
+  --border-strong: #334155;
+
+  /* Inputs */
+  --input: #0f172a;
+  --input-border: #334155;
+  --input-focus: #3b82f6;
+
+  /* Sidebar */
+  --sidebar-bg: #020817;
+  --sidebar-surface: #0f172a;
+  --sidebar-hover: #162033;
+  --sidebar-active: #1d4ed8;
+  --sidebar-text: #f1f5f9;
+  --sidebar-text-muted: #94a3b8;
+
+  /* Cards */
+  --card: #0f172a;
+  --card-hover: #162033;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.25);
+
+  /* Charts */
+  --chart-1: #60a5fa;
+  --chart-2: #2dd4bf;
+  --chart-3: #38bdf8;
+  --chart-4: #22c55e;
+  --chart-5: #94a3b8;
+}
 html {
   height: 100%;
 }
