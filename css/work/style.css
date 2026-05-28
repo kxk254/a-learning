@@ -1,0 +1,115 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md);
+  background: var(--bg-sidebar);
+  height: 100vh;
+}
+
+.logo {
+  margin-bottom: var(--space-2xl);
+  color: var(--white);
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-light);
+}
+.menu a {
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.menu a:hover {
+  background: rgb(255, 255, 255, 0.1);
+  color: var(--white);
+}
+/* main content  */
+
+.main-contents {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md);
+  gap: var(--space-md);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background: var(--white);
+}
+.header-btn {
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--white);
+  padding: var(--space-sm);
+  margin: var(--space-sm);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.header-btn:hover {
+  background: var(--primary-hover);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-sm);
+}
+.card {
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 3px 5px rgb(0, 0, 0, 0.1);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-md);
+}
+.panel-large {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+}
+.panel-large p {
+  height: 300px;
+  background: var(--bg-main);
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.panel-large h3 {
+  margin-bottom: var(--space-sm);
+}
+.panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+}
+.panel h3 {
+  margin-bottom: var(--space-sm);
+}
+.activity {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-main);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-md);
+}
