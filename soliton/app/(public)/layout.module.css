@@ -8,6 +8,9 @@
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
 }
+.logo {
+  color: var(--primary);
+}
 
 .main {
   flex: 1;

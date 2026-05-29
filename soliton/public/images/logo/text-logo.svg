@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 512">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #0f3d66;
+      }
+
+      .cls-2 {
+        fill: #00e5ff;
+      }
+
+      .cls-3 {
+        fill: #0f172a;
+        font-family: Helvetica-Bold, Helvetica;
+        font-size: 447.49px;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <g>
+    <rect class="cls-1" y="0" width="512" height="512" rx="25" ry="25"/>
+    <path class="cls-2" d="M189,417h-72v-132c0-4.42,3.58-8,8-8h56c4.42,0,8,3.58,8,8v132Z"/>
+    <path class="cls-2" d="M292,417h-72v-210c0-5.52,4.48-10,10-10h52c5.52,0,10,4.48,10,10v210Z"/>
+    <path class="cls-2" d="M395,415h-72V108c0-7.18,5.82-13,13-13h46c7.18,0,13,5.82,13,13v307Z"/>
+  </g>
+  <text class="cls-3" transform="translate(565.93 415) scale(.71 1)"><tspan x="0" y="0">Soliton Core</tspan></text>
+</svg>

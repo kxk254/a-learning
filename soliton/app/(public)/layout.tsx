@@ -7,7 +7,10 @@ export default function AdminLayout({
 }) {
   return (
     <div className={styles.shell}>
-      <aside className={styles.sidebar}>sidebar</aside>
+      <aside className={styles.sidebar}>
+        sidebar
+        <h1 className={styles.logo}>Soliton Core</h1>
+      </aside>
 
       <div className={styles.main}>
         <header>Topbar</header>
