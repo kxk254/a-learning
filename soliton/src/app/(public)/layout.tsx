@@ -1,4 +1,5 @@
 import styles from "./layout.module.css";
+import { AppHeader } from "@/src/layout/AppHeader";
 
 export default function AdminLayout({
   children,
@@ -13,8 +14,7 @@ export default function AdminLayout({
       </aside>
 
       <div className={styles.main}>
-        <header>Topbar</header>
-
+        <AppHeader />
         <main className={styles.content}>{children}</main>
       </div>
     </div>

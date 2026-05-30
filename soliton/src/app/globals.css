@@ -117,10 +117,11 @@
   --primary-foreground: #ffffff;
 
   /* Accent */
-  --accent: #14b8a6;
-  --accent-hover: #2dd4bf;
-  --accent-soft: rgba(20, 184, 166, 0.15);
-  --accent-foreground: #ffffff;
+  --accent: #00e5ff;
+  --accent-hover: #33ebff;
+  --accent-active: #00b4cc;
+  --accent-soft: rgba(0, 229, 255, 0.16);
+  --accent-foreground: #001018;
 
   /* Success */
   --success: #22c55e;
