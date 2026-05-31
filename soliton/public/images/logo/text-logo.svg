@@ -1,28 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="_レイヤー_1" data-name="レイヤー 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 512">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #0f3d66;
-      }
-
-      .cls-2 {
-        fill: #00e5ff;
-      }
-
-      .cls-3 {
-        fill: #0f172a;
-        font-family: Helvetica-Bold, Helvetica;
-        font-size: 447.49px;
-        font-weight: 700;
-      }
-    </style>
-  </defs>
-  <g>
-    <rect class="cls-1" y="0" width="512" height="512" rx="25" ry="25"/>
-    <path class="cls-2" d="M189,417h-72v-132c0-4.42,3.58-8,8-8h56c4.42,0,8,3.58,8,8v132Z"/>
-    <path class="cls-2" d="M292,417h-72v-210c0-5.52,4.48-10,10-10h52c5.52,0,10,4.48,10,10v210Z"/>
-    <path class="cls-2" d="M395,415h-72V108c0-7.18,5.82-13,13-13h46c7.18,0,13,5.82,13,13v307Z"/>
-  </g>
-  <text class="cls-3" transform="translate(565.93 415) scale(.71 1)"><tspan x="0" y="0">Soliton Core</tspan></text>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 10667 2134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="ページ1" transform="matrix(4.166667,0,0,4.166667,0,0)">
+        <rect x="0" y="0" width="2560" height="512" style="fill:none;"/>
+        <clipPath id="_clip1">
+            <rect x="0" y="0" width="2560" height="512"/>
+        </clipPath>
+        <g clip-path="url(#_clip1)">
+            <g id="レイヤー-1" serif:id="レイヤー 1">
+                <g transform="matrix(0.711111,0,0,2.014051,-2269.155556,-267.868804)">
+                    <path d="M3791.469,133C3823.17,133 3853.574,137.446 3875.99,145.361C3898.407,153.276 3911,164.01 3911,175.203L3911,345.011C3911,356.204 3898.407,366.938 3875.99,374.853C3853.574,382.768 3823.17,387.214 3791.469,387.214L3310.531,387.214C3278.83,387.214 3248.426,382.768 3226.01,374.853C3203.593,366.938 3191,356.204 3191,345.011L3191,175.203C3191,164.01 3203.593,153.276 3226.01,145.361C3248.426,137.446 3278.83,133 3310.531,133L3791.469,133Z" style="fill:rgb(15,61,102);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,189,277)">
+                    <path d="M0,140L-72,140L-72,8C-72,3.582 -68.418,0 -64,0L-8,0C-3.582,0 0,3.582 0,8L0,140Z" style="fill:rgb(0,229,255);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,292,197)">
+                    <path d="M0,220L-72,220L-72,10C-72,4.477 -67.523,0 -62,0L-10,0C-4.477,0 0,4.477 0,10L0,220Z" style="fill:rgb(0,229,255);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,395,95)">
+                    <path d="M0,320L-72,320L-72,13C-72,5.82 -66.18,0 -59,0L-13,0C-5.82,0 0,5.82 0,13L0,320Z" style="fill:rgb(0,229,255);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(0.24,0,0,0.24,430.103608,70.627833)">
+                    <g transform="matrix(0.71428,0,0,1,161.69641,0)">
+                        <g transform="matrix(1864.53125,0,0,1864.53125,11651.048261,1434.884027)">
+                        </g>
+                        <text x="565.926px" y="1434.884px" style="font-family:'Helvetica-Bold', 'Helvetica';font-weight:700;font-size:1864.531px;fill:rgb(15,23,42);">S<tspan x="1809.665px 2948.706px 3466.843px 3984.981px 4605.995px 5745.036px 6884.077px 7402.716px 8749.332px 9888.373px 10614.085px " y="1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px 1434.884px ">oliton Core</tspan></text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
 </svg>
