@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BoxCubeIcon, CalendarIcon, UserCircleIcon } from "@/src/icons/index";
-import styles from "./sidebar.module.css";
+import styles from "./Sidebar.module.css";
 
 type NavItem = {
   name: string;

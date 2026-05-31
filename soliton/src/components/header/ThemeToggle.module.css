@@ -1,0 +1,12 @@
+.themeToggleBtn {
+}
+.bright {
+  background: var(--surface);
+  color: var(--foreground);
+}
+.moon {
+  background: var(--surface);
+  color: var(--foreground);
+  width: 20px;
+  height: 20px;
+}

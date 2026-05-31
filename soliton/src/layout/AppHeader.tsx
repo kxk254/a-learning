@@ -2,20 +2,19 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { BarsStaggered } from "@/src/icons/index";
+import styles from "./Header.module.css";
+import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 
 export const AppHeader = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <>
-      <button
-        onClick={() => {
-          console.log("clicked");
-          toggleTheme();
-        }}
-      >
-        Theme-{theme}
-      </button>
-    </>
+    <header className={styles.header}>
+      <BarsStaggered />
+      <div className={styles.headerRight}>
+        <ThemeToggleBtn />
+      </div>
+    </header>
   );
 };

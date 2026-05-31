@@ -1,0 +1,18 @@
+import React from "react";
+import { useTheme } from "@/src/context/ThemeContext";
+import { BrightnessIcon, MoonIcon } from "@/src/icons/index";
+import styles from "./ThemeToggle.module.css";
+
+export const ThemeToggleBtn = () => {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button onClick={toggleTheme} className={styles.themeToggleBtn}>
+      {theme === "light" ? (
+        <BrightnessIcon className={styles.bright} />
+      ) : (
+        <MoonIcon className={styles.moon} />
+      )}
+    </button>
+  );
+};

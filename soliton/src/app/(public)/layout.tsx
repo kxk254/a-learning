@@ -1,4 +1,4 @@
-import styles from "./layout.module.css";
+import styles from "./Layout.module.css";
 import { AppHeader } from "@/src/layout/AppHeader";
 import { AppSidebar } from "@/src/layout/AppSidebar";
 
