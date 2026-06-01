@@ -7,13 +7,26 @@ import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 import Image from "next/image";
 import Link from "next/link";
+import { useSidebar } from "@/src/context/SidebarContext";
 
 export const AppHeader = () => {
   const { theme, toggleTheme } = useTheme();
+  const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+
+  const handleToggle = () => {
+    console.log("handleToggle");
+    if (window.innerWidth >= 1024) {
+      toggleSidebar();
+    } else {
+      toggleMobileSidebar();
+    }
+  };
 
   return (
     <header className={styles.header}>
-      <BarsStaggered />
+      <button onClick={handleToggle} className={styles.handleBtn}>
+        <BarsStaggered className={styles.barsStaggered} />
+      </button>
       <Link href="/" className={styles.logo}>
         {theme === "light" ? (
           <Image

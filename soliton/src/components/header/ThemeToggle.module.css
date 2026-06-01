@@ -5,6 +5,7 @@
   background: var(--surface);
   width: var(--space-3xl);
   height: var(--space-3xl);
+  cursor: pointer;
 }
 .bright {
   background: var(--surface);

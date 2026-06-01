@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/src/context/ThemeContext";
+import { SidebarProvider } from "@/src/context/SidebarContext";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${notoSansJP.variable} ${geistMono.variable}`}>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <SidebarProvider>{children}</SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
