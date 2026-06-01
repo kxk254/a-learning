@@ -1,0 +1,8 @@
+.sidebar {
+  width: 250px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+}
+.logo {
+  color: var(--sidebar-text);
+}

@@ -3,19 +3,11 @@
   height: 100vh;
 }
 
-.sidebar {
-  width: 250px;
-  background: var(--sidebar-bg);
-  color: var(--sidebar-text);
-}
-.logo {
-  color: var(--primary);
-}
-
 .main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  background: var(--background);
 }
 
 .content {

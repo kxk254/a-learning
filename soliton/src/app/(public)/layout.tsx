@@ -1,5 +1,6 @@
-import styles from "./layout.module.css";
+import styles from "./Layout.module.css";
 import { AppHeader } from "@/src/layout/AppHeader";
+import { AppSidebar } from "@/src/layout/AppSidebar";
 
 export default function AdminLayout({
   children,
@@ -8,11 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className={styles.shell}>
-      <aside className={styles.sidebar}>
-        sidebar
-        <h1 className={styles.logo}>Soliton Core</h1>
-      </aside>
-
+      <AppSidebar />
       <div className={styles.main}>
         <AppHeader />
         <main className={styles.content}>{children}</main>

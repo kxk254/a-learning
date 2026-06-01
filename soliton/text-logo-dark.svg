@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 10667 2134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="ページ1" transform="matrix(4.166667,0,0,4.166667,0,0)">
+        <rect x="0" y="0" width="2560" height="512" style="fill:none;"/>
+        <clipPath id="_clip1">
+            <rect x="0" y="0" width="2560" height="512"/>
+        </clipPath>
+        <g clip-path="url(#_clip1)">
+            <g id="レイヤー-1" serif:id="レイヤー 1">
+                <g transform="matrix(1.066667,0,0,0.579841,-2193.066667,225.558324)">
+                    <path d="M2456.312,-389C2477.447,-389 2497.716,-373.556 2512.66,-346.064C2527.604,-318.573 2536,-281.287 2536,-242.408L2536,347.408C2536,386.287 2527.604,423.573 2512.66,451.064C2497.716,478.556 2477.447,494 2456.312,494L2135.688,494C2114.553,494 2094.284,478.556 2079.34,451.064C2064.396,423.573 2056,386.287 2056,347.408L2056,-242.408C2056,-281.287 2064.396,-318.573 2079.34,-346.064C2094.284,-373.556 2114.553,-389 2135.688,-389L2456.312,-389Z" style="fill:rgb(0,229,255);"/>
+                </g>
+                <g transform="matrix(1,0,0,1,185.4121,275.5775)">
+                    <path d="M0,140L-72,140L-72,8C-72,3.582 -68.418,0 -64,0L-8,0C-3.582,0 0,3.582 0,8L0,140Z" style="fill:rgb(15,61,102);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,288.4121,195.5775)">
+                    <path d="M0,220L-72,220L-72,10C-72,4.477 -67.523,0 -62,0L-10,0C-4.477,0 0,4.477 0,10L0,220Z" style="fill:rgb(15,61,102);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,391.4121,93.5775)">
+                    <path d="M0,320L-72,320L-72,13C-72,5.82 -66.18,0 -59,0L-13,0C-5.82,0 0,5.82 0,13L0,320Z" style="fill:rgb(15,61,102);fill-rule:nonzero;"/>
+                </g>
+                <g transform="matrix(0.24,0,0,0.24,439.156804,72.147943)">
+                    <g transform="matrix(0.71428,0,0,1,165.099882,0)">
+                        <g transform="matrix(1864.530417,0,0,1864.530417,11662.955407,1436.883571)">
+                        </g>
+                        <text x="577.838px" y="1436.884px" style="font-family:'Helvetica-Bold', 'Helvetica';font-weight:700;font-size:1864.53px;fill:rgb(248,250,252);">S<tspan x="1821.576px 2960.617px 3478.754px 3996.891px 4617.905px 5756.946px 6895.986px 7414.625px 8761.24px 9900.28px 10625.992px " y="1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px 1436.884px ">oliton Core</tspan></text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
