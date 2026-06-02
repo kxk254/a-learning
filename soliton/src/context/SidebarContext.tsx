@@ -43,9 +43,8 @@ export const SidebarProvider = ({ children }) => {
     }
   };
 
-  handleResize();
-
   useEffect(() => {
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -53,11 +52,12 @@ export const SidebarProvider = ({ children }) => {
   }, []);
 
   const toggleSidebar = () => {
+    console.log("sidebar context is expanded ", isExpanded);
     setIsExpanded((prev) => !prev);
   };
 
   const toggleMobileSidebar = () => {
-    setOpensubmenu((prev) => (prev === item ? null : item));
+    setIsMobileOpen((prev) => !prev);
   };
 
   const toggleSubmenu = (item: string) => {
@@ -76,7 +76,7 @@ export const SidebarProvider = ({ children }) => {
         toggleMobileSidebar,
         setIsHovered,
         setActiveItem,
-        togglesubmenu,
+        toggleSubmenu,
       }}
     >
       {children}

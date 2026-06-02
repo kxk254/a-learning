@@ -5,3 +5,17 @@
   align-items: center;
   padding: var(--space-xl);
 }
+
+.handleBtn {
+  border: none;
+  padding: var(--space-xs);
+  background: var(--background);
+  cursor: pointer;
+}
+
+.barsStaggered {
+  background: var(--surface);
+  color: var(--foreground);
+  width: var(--space-xl);
+  height: var(--space-xl);
+}
