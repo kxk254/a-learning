@@ -37,7 +37,10 @@ export const SidebarProvider = ({ children }) => {
 
   const handleResize = () => {
     const mobile = window.innerWidth < 768;
+    let inner = window.innerWidth;
+    console.log("handleResize", isMobileOpen, "width", inner, "mobile", mobile);
     setIsMobile(mobile);
+    console.log("isMobile after set", isMobile);
     if (!mobile) {
       setIsMobileOpen(false);
     }
@@ -50,6 +53,10 @@ export const SidebarProvider = ({ children }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("isMobile changed:", isMobile);
+  }, [isMobile]);
 
   const toggleSidebar = () => {
     console.log("sidebar context is expanded ", isExpanded);

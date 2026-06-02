@@ -34,7 +34,8 @@ const navItems: NavItem[] = [
 ];
 
 export const AppSidebar = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isExpanded, isMobileOpen, isHovered, setIsHovered, isMobile } =
+    useSidebar();
   const showSidebar = isMobileOpen || isExpanded;
   const renderMenuItems = (
     navItems: NavItem[],
@@ -52,7 +53,15 @@ export const AppSidebar = () => {
   return (
     <>
       <aside
-        className={`${styles.sidebar} ${showSidebar ? styles.open : styles.closed}`}
+        className={`${styles.sidebar} ${
+          isMobile
+            ? isMobileOpen
+              ? styles.mobileVisible
+              : styles.mobileHidden
+            : showSidebar || isHovered
+              ? styles.wide
+              : styles.narrow
+        }`}
       >
         <BoxCubeIcon />
         {renderMenuItems(navItems, "main")}
