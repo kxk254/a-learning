@@ -11,13 +11,10 @@
   width: 90px;
 }
 .mobileVisible {
-  width: 290px;
   transform: translateX(0);
 }
 .mobileHidden {
   transform: translateX(-100%);
-  overflow: hidden;
-  width: 0px;
 }
 
 .logo {

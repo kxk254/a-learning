@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { BarsStaggered } from "@/src/icons/index";
+import { BarsStaggered, CrossIcon } from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 import Image from "next/image";
@@ -14,7 +14,6 @@ export const AppHeader = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const handleToggle = () => {
-    console.log("handleToggle");
     if (window.innerWidth >= 1024) {
       toggleSidebar();
     } else {
@@ -24,30 +23,38 @@ export const AppHeader = () => {
 
   return (
     <header className={styles.header}>
-      <button onClick={handleToggle} className={styles.handleBtn}>
-        <BarsStaggered className={styles.barsStaggered} />
-      </button>
-      <Link href="/" className={styles.logo}>
-        {theme === "light" ? (
-          <Image
-            className={styles.logoLight}
-            src="./images/logo/text-logo.svg"
-            alt="Logo"
-            width={154}
-            height={32}
-          />
-        ) : (
-          <Image
-            className={styles.logoDark}
-            src="./images/logo/text-logo-dark.svg"
-            alt="logo"
-            width={154}
-            height={32}
-          />
-        )}
-      </Link>
-      <div className={styles.headerRight}>
-        <ThemeToggleBtn />
+      <div className={styles.headerInner}>
+        <div className={styles.toolbar}>
+          <button onClick={handleToggle} className={styles.handleBtn}>
+            {isMobileOpen ? (
+              <BarsStaggered className={styles.barsStaggered} />
+            ) : (
+              <CrossIcon className={styles.barsStaggered} />
+            )}
+          </button>
+          <Link href="/" className={styles.logo}>
+            {theme === "light" ? (
+              <Image
+                className={styles.logoLight}
+                src="./images/logo/text-logo.svg"
+                alt="Logo"
+                width={154}
+                height={32}
+              />
+            ) : (
+              <Image
+                className={styles.logoDark}
+                src="./images/logo/text-logo-dark.svg"
+                alt="logo"
+                width={154}
+                height={32}
+              />
+            )}
+          </Link>
+        </div>
+        <div className={styles.headerRight}>
+          <ThemeToggleBtn />
+        </div>
       </div>
     </header>
   );

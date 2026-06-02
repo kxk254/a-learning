@@ -1,9 +1,19 @@
 .header {
+  position: sticky;
+  top: 0;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  width: 100px;
   align-items: center;
   padding: var(--space-xl);
+  border: var(--border);
+}
+
+.headerInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 .handleBtn {
@@ -12,10 +22,45 @@
   background: var(--background);
   cursor: pointer;
 }
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
 
 .barsStaggered {
   background: var(--surface);
   color: var(--foreground);
   width: var(--space-xl);
   height: var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .header {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+  .container {
+    flex-direction: row;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .toolbar {
+    justify-content: normal;
+    border-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .toolbar {
+    gap: 1rem;
+  }
 }

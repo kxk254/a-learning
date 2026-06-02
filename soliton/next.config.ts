@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
 
-  allowedDevOrigins: ["192.168.11.71", "localhost", "127.0.0.1"],
+  allowedDevOrigins: [
+    "192.168.11.71",
+    "localhost",
+    "127.0.0.1",
+    "192.168.0.40",
+  ],
 
   webpack(config) {
     config.module.rules.push({
