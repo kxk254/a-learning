@@ -35,24 +35,22 @@ export const SidebarProvider = ({ children }) => {
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
-  const handleResize = () => {
-    const mobile = window.innerWidth < 768;
-    let inner = window.innerWidth;
-    setIsMobile(mobile);
-    if (!mobile) {
-      setIsMobileOpen(false);
-    }
-  };
-
   useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      let inner = window.innerWidth;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsMobileOpen(false);
+      }
+    };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {}, [isMobile]);
 
   const toggleSidebar = () => {
     setIsExpanded((prev) => !prev);
@@ -65,6 +63,18 @@ export const SidebarProvider = ({ children }) => {
   const toggleSubmenu = (item: string) => {
     setOpenSubmenu((prev) => (prev === item ? null : item));
   };
+  useEffect(() => {
+    console.log(
+      "--sidebarcontext--change if isMobileOpen current status",
+      isMobileOpen,
+    );
+  }, [isMobile]);
+  useEffect(() => {
+    console.log(
+      "--sidebar context--change if isMobile current status",
+      isMobile,
+    );
+  }, [isMobile]);
 
   return (
     <SidebarContext.Provider

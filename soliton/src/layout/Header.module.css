@@ -40,14 +40,10 @@
 }
 
 @media (min-width: 1024px) {
-  .header {
+  .headerInner {
+    flex-direction: row;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-  }
-  .container {
-    flex-direction: row;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
   }
   .toolbar {
     justify-content: normal;

@@ -20,12 +20,13 @@ export default function AdminLayout({
   console.log(
     "mainContentMargin-->",
     mainContentMargin,
-    "is Mobile Open",
+    "isMobileOpen==>:",
     isMobileOpen,
+    "isExpanded",
+    isExpanded,
   );
   return (
     <div className={styles.shell}>
-      <AppSidebar />
       <div className={`${styles.main} ${mainContentMargin}`}>
         <AppHeader />
         <main className={styles.content}>{children}</main>

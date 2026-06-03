@@ -1,9 +1,9 @@
 .shell {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .main {
-  flex: 1;
+  width: 100%;
   background: var(--background);
   transition: all 0.3s ease;
 }
@@ -23,8 +23,8 @@
   margin-left: 90px;
 }
 
-@media (min-width: 1280) {
-  .container {
+@media (min-width: 1280px) {
+  .shell {
     display: flex;
   }
 }
