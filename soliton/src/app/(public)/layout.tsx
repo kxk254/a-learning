@@ -12,10 +12,10 @@ export default function AdminLayout({
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
   const mainContentMargin = isMobileOpen
-    ? styles.ml0
-    : isExpanded || isHovered
+    ? isExpanded || isHovered
       ? styles.ml290
-      : styles.ml90;
+      : styles.ml90
+    : styles.ml0;
 
   console.log(
     "mainContentMargin-->",
