@@ -1,0 +1,15 @@
+アイコン色：#6A67F5
+
+ダーク背景：#121212〜#1A1A1A
+
+アクセント（線・ハイライト）：#A5A3FF
+
+indigo-500 in Tailwind
+
+Tailwind indigo-500: #6366f1
+
+They are extremely close:
+
+#6a67f5
+
+#6366f1

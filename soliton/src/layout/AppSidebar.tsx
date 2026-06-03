@@ -35,7 +35,6 @@ const navItems: NavItem[] = [
 
 export const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
-  const showSidebar = isMobileOpen || isExpanded;
   const renderMenuItems = (
     navItems: NavItem[],
     menuType: "main" | "others",
@@ -49,11 +48,10 @@ export const AppSidebar = () => {
       ))}
     </ul>
   );
+
   return (
     <>
-      <aside
-        className={`${styles.sidebar} ${showSidebar ? styles.open : styles.closed}`}
-      >
+      <aside className={`${styles.sidebar} 	`}>
         <BoxCubeIcon />
         {renderMenuItems(navItems, "main")}
         <h2 className={styles.logo}>Soliton Core</h2>

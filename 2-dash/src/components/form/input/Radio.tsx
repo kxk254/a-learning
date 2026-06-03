@@ -1,0 +1,57 @@
+import React from "react";
+
+interface RadioProps {
+  id: string;
+  name: string;
+  value: string;
+  checked: boolean;
+  label: string;
+  onChange: (value: string) => void;
+  clannName?: string;
+  disabled?: boolean;
+}
+const Radio: React.FC<RadioProps> = ({
+  id,
+  name,
+  value,
+  checked,
+  label,
+  onChange,
+  className = "",
+  disabled = false,
+}) => {
+  return (
+    <label>
+      <input
+        id={id}
+        name={name}
+        type="radio"
+        value={value}
+        checked={checked}
+        onChange={() => !disabled && onChange(value)}
+        className="sr-only"
+        disabled={disabled}
+      />
+      <span
+        className={`flex h-5 w-5 items-center justify-center rounded-full border-[1.25px] ${
+          checked
+            ? "border-brand-500 bg-brand-500"
+            : "bg-transparent border-gray-300 dark:border-gray-700"
+        } ${
+          disabled
+            ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-700"
+            : ""
+        }`}
+      >
+        <span
+          className={`h-2 w-2 rounded-full bg-white ${
+            checked ? "block" : "hidden"
+          }`}
+        ></span>
+      </span>
+      {label}
+    </label>
+  );
+};
+
+export default Radio;
