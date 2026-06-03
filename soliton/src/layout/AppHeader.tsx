@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { BarsStaggered, CrossIcon } from "@/src/icons/index";
+import { BarsStaggered, CrossIcon, ThreeDotsIcon } from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 import Image from "next/image";
@@ -11,6 +11,7 @@ import { useSidebar } from "@/src/context/SidebarContext";
 
 export const AppHeader = () => {
   const { theme, toggleTheme } = useTheme();
+  const [isApplicationMenuOpen, setIsApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar, isExpanded } =
     useSidebar();
 
@@ -20,8 +21,10 @@ export const AppHeader = () => {
     console.log("screen size :", screenSize, isLargeScreen);
     if (isLargeScreen) {
       toggleSidebar();
+      console.log("handle toggle togglesidebar activated");
     } else {
       toggleMobileSidebar();
+      console.log("handle toggle toggleMOBILEsidebar activated");
     }
   };
 
@@ -31,6 +34,10 @@ export const AppHeader = () => {
   useEffect(() => {
     console.log("isMobileOpen changed =>", isMobileOpen);
   }, [isMobileOpen]);
+
+  const toggleApplicationMenu = () => {
+    setIsApplicationMenuOpen(!isApplicationMenuOpen);
+  };
 
   return (
     <header className={styles.header}>
@@ -42,9 +49,9 @@ export const AppHeader = () => {
             aria-label="Toggle Sidebar"
           >
             {isMobileOpen ? (
-              <BarsStaggered className={styles.barsStaggered} />
-            ) : (
               <CrossIcon className={styles.barsStaggered} />
+            ) : (
+              <BarsStaggered className={styles.barsStaggered} />
             )}
           </button>
           <Link href="/" className={styles.logo}>
@@ -67,13 +74,21 @@ export const AppHeader = () => {
             )}
           </Link>
           {/* Three Dots for small screen hidden large */}
-          {/*only large search input field
-          <div>
+          <button
+            onClick={toggleApplicationMenu}
+            className={styles.threeDotsBtn}
+          >
+            <ThreeDotsIcon className={styles.threeDotsIcon} />
+          </button>
+          {/*only large search input field */}
+          <div
+            className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose}`}
+          >
+            this
             <form>
-              <div></div>
+              <div>THIS</div>
             </form>
           </div>
-	  only large search input field */}
         </div>
         {/* Application meny open  userDropDown*/}
         <div className={styles.headerRight}>

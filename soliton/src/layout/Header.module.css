@@ -2,10 +2,8 @@
   position: sticky;
   top: 0;
   display: flex;
-  width: 100px;
+  width: 100%;
   align-items: center;
-  padding: var(--space-xl);
-  border: var(--border);
 }
 
 .headerInner {
@@ -14,6 +12,8 @@
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
+  border-bottom: solid 1px;
+  border-color: var(--border);
 }
 
 .handleBtn {
@@ -21,15 +21,20 @@
   padding: var(--space-xs);
   background: var(--background);
   cursor: pointer;
+  width: var(--space-4xl);
+  height: var(--space-4xl);
 }
+
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   gap: 0.5rem;
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--border);
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: solid 1px;
+  border-color: var(--border);
 }
 
 .barsStaggered {
@@ -39,19 +44,61 @@
   height: var(--space-xl);
 }
 
+.threeDotsBtn {
+  border: none;
+  padding: var(--space-xs);
+  background: var(--background);
+  cursor: pointer;
+  width: var(--space-4xl);
+  height: var(--space-4xl);
+}
+
+.threeDotsIcon {
+  background: var(--surface);
+  color: var(--foreground);
+  width: var(--space-xl);
+  height: var(--space-xl);
+}
+.searchInput {
+  display: none;
+}
+
+.appOpen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.appClose {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   .headerInner {
     flex-direction: row;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
   }
   .toolbar {
     justify-content: normal;
-    border-bottom: 0;
     padding-left: 0;
     padding-right: 0;
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+  .logo {
+    display: none;
+  }
+  .threeDotsBtn {
+    display: none;
+  }
+  .searchInput {
+    display: block;
+  }
+  .appOpen {
+    display: flex;
   }
 }
 

@@ -68,13 +68,16 @@ export const SidebarProvider = ({ children }) => {
       "--sidebarcontext--change if isMobileOpen current status",
       isMobileOpen,
     );
-  }, [isMobile]);
+  }, [isMobileOpen]);
   useEffect(() => {
     console.log(
       "--sidebar context--change if isMobile current status",
       isMobile,
     );
   }, [isMobile]);
+  useEffect(() => {
+    console.log("--sidebarcontext isHover", isHovered);
+  }, [isHovered]);
 
   return (
     <SidebarContext.Provider

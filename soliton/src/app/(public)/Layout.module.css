@@ -14,17 +14,17 @@
 }
 
 .ml0 {
-  margin-left: 0;
-}
-.ml290 {
-  margin-left: 290px;
-}
-.ml90 {
-  margin-left: 90px;
+  margin-left: var(--aside-zero);
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .shell {
     display: flex;
+  }
+  .ml290 {
+    margin-left: var(--aside-wide);
+  }
+  .ml90 {
+    margin-left: var(--aside-narrow);
   }
 }

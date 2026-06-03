@@ -51,7 +51,20 @@ export const AppSidebar = () => {
 
   return (
     <>
-      <aside className={`${styles.sidebar} 	`}>
+      <aside
+        className={`${styles.sidebar} 
+	${
+    isExpanded || isMobileOpen
+      ? styles.wide
+      : isHovered
+        ? styles.wide
+        : styles.narrow
+  }
+	${isMobileOpen ? styles.mobileVisible : styles.mobileHidden}
+	      `}
+        onMouseEnter={() => !isExpanded && setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <BoxCubeIcon />
         {renderMenuItems(navItems, "main")}
         <h2 className={styles.logo}>Soliton Core</h2>

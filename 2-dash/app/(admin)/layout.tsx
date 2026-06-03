@@ -20,6 +20,8 @@ export default function AdminLayout({
       ? "lg:ml-[290]"
       : "lg:ml-[90px]";
 
+  console.log("mainContentMargin", mainContentMargin);
+
   return (
     <div className="min-h-screen xl:flex">
       {/* Sidebar and Backdrop */}
