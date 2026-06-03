@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { BarsStaggered, CrossIcon, ThreeDotsIcon } from "@/src/icons/index";
+import {
+  BarsStaggered,
+  CrossIcon,
+  ThreeDotsIcon,
+  SearchIcon,
+} from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 import Image from "next/image";
@@ -14,6 +19,7 @@ export const AppHeader = () => {
   const [isApplicationMenuOpen, setIsApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar, isExpanded } =
     useSidebar();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleToggle = () => {
     let screenSize = window.innerWidth;
@@ -81,17 +87,30 @@ export const AppHeader = () => {
             <ThreeDotsIcon className={styles.threeDotsIcon} />
           </button>
           {/*only large search input field */}
-          <div
-            className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose}`}
-          >
-            this
+          <div className={styles.searchSection}>
             <form>
-              <div>THIS</div>
+              <div className={styles.searchInnerDiv}>
+                <span className={styles.searchIconField}>
+                  <SearchIcon className={styles.searchIcon} />
+                </span>
+                <input
+                  className={styles.searchInput}
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search or type command..."
+                />
+                <button className={styles.searchBtn}>
+                  <span>⌘</span>
+                  <span>K</span>
+                </button>
+              </div>
             </form>
           </div>
         </div>
         {/* Application meny open  userDropDown*/}
-        <div className={styles.headerRight}>
+        <div
+          className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose}`}
+        >
           <ThemeToggleBtn />
         </div>
         {/* Application meny open */}

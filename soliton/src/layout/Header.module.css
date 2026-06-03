@@ -59,9 +59,8 @@
   width: var(--space-xl);
   height: var(--space-xl);
 }
-.searchInput {
-  display: none;
-}
+
+/* Toggle App Open Section */
 
 .appOpen {
   display: flex;
@@ -71,10 +70,36 @@
   padding-top: var(--space-xl);
   padding-bottom: var(--space-lg);
   box-shadow: var(--shadow-md);
+  background: var(--background);
 }
 
 .appClose {
   display: none;
+}
+
+/* Search Input Section */
+.searchSection {
+  display: none;
+}
+.searchInnerDiv {
+  position: relative;
+}
+.searchIconField {
+  position: absolute;
+  top: 50%;
+  left: var(--space-lg);
+  transform: translateY(-50%);
+}
+.searchIcon {
+  background: var(--surface);
+  color: var(--foreground);
+  width: var(--space-xl);
+  height: var(--space-xl);
+}
+.searchInput {
+  width: 100%;
+}
+.searchBtn {
 }
 
 @media (min-width: 1024px) {
@@ -94,7 +119,7 @@
   .threeDotsBtn {
     display: none;
   }
-  .searchInput {
+  .searchSection {
     display: block;
   }
   .appOpen {
