@@ -95,6 +95,11 @@
   --space-4xl: 40px;
   --space-5xl: 48px;
   --space-6xl: 64px;
+
+  /* Sidebar Spacing */
+  --aside-wide: 290px;
+  --aside-narrow: 90px;
+  --aside-zero: 0px;
 }
 
 .dark {

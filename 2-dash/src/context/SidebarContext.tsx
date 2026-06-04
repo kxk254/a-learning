@@ -63,6 +63,15 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   const toggleSubmenu = (item: string) => {
     setOpenSubmenu((prev) => (prev === item ? null : item));
   };
+  useEffect(() => {
+    console.log("isMobile current status", isMobile);
+  }, [isMobile]);
+  useEffect(() => {
+    console.log("isMobileOpen current status", isMobileOpen);
+  }, [isMobileOpen]);
+  useEffect(() => {
+    console.log("isExpanded crrent status", isExpanded);
+  }, [isExpanded]);
 
   return (
     <SidebarContext.Provider

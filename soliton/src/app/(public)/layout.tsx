@@ -12,10 +12,10 @@ export default function AdminLayout({
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
   const mainContentMargin = isMobileOpen
-    ? isExpanded || isHovered
+    ? styles.ml0
+    : isExpanded || isHovered
       ? styles.ml290
-      : styles.ml90
-    : styles.ml0;
+      : styles.ml90;
 
   console.log(
     "mainContentMargin-->",
@@ -27,6 +27,7 @@ export default function AdminLayout({
   );
   return (
     <div className={styles.shell}>
+      <AppSidebar />
       <div className={`${styles.main} ${mainContentMargin}`}>
         <AppHeader />
         <main className={styles.content}>{children}</main>

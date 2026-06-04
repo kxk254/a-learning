@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
-import { BarsStaggered, CrossIcon } from "@/src/icons/index";
+import {
+  BarsStaggered,
+  CrossIcon,
+  ThreeDotsIcon,
+  SearchIcon,
+} from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
 import Image from "next/image";
@@ -11,8 +16,10 @@ import { useSidebar } from "@/src/context/SidebarContext";
 
 export const AppHeader = () => {
   const { theme, toggleTheme } = useTheme();
+  const [isApplicationMenuOpen, setIsApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar, isExpanded } =
     useSidebar();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleToggle = () => {
     let screenSize = window.innerWidth;
@@ -20,8 +27,10 @@ export const AppHeader = () => {
     console.log("screen size :", screenSize, isLargeScreen);
     if (isLargeScreen) {
       toggleSidebar();
+      console.log("handle toggle togglesidebar activated");
     } else {
       toggleMobileSidebar();
+      console.log("handle toggle toggleMOBILEsidebar activated");
     }
   };
 
@@ -31,6 +40,10 @@ export const AppHeader = () => {
   useEffect(() => {
     console.log("isMobileOpen changed =>", isMobileOpen);
   }, [isMobileOpen]);
+
+  const toggleApplicationMenu = () => {
+    setIsApplicationMenuOpen(!isApplicationMenuOpen);
+  };
 
   return (
     <header className={styles.header}>
@@ -42,9 +55,9 @@ export const AppHeader = () => {
             aria-label="Toggle Sidebar"
           >
             {isMobileOpen ? (
-              <BarsStaggered className={styles.barsStaggered} />
-            ) : (
               <CrossIcon className={styles.barsStaggered} />
+            ) : (
+              <BarsStaggered className={styles.barsStaggered} />
             )}
           </button>
           <Link href="/" className={styles.logo}>
@@ -67,16 +80,37 @@ export const AppHeader = () => {
             )}
           </Link>
           {/* Three Dots for small screen hidden large */}
-          {/*only large search input field
-          <div>
+          <button
+            onClick={toggleApplicationMenu}
+            className={styles.threeDotsBtn}
+          >
+            <ThreeDotsIcon className={styles.threeDotsIcon} />
+          </button>
+          {/*only large search input field */}
+          <div className={styles.searchSection}>
             <form>
-              <div></div>
+              <div className={styles.searchInnerDiv}>
+                <span className={styles.searchIconField}>
+                  <SearchIcon className={styles.searchIcon} />
+                </span>
+                <input
+                  className={styles.searchInput}
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search or type command..."
+                />
+                <button className={styles.searchBtn}>
+                  <span>⌘</span>
+                  <span>K</span>
+                </button>
+              </div>
             </form>
           </div>
-	  only large search input field */}
         </div>
         {/* Application meny open  userDropDown*/}
-        <div className={styles.headerRight}>
+        <div
+          className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose}`}
+        >
           <ThemeToggleBtn />
         </div>
         {/* Application meny open */}
