@@ -109,7 +109,7 @@ export const AppHeader = () => {
         </div>
         {/* Application meny open  userDropDown*/}
         <div
-          className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose}`}
+          className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose} ${styles.appOpenLg}`}
         >
           <ThemeToggleBtn />
         </div>
