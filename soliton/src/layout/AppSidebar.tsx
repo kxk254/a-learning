@@ -11,6 +11,12 @@ import {
   UserCircleIcon,
   PieChartIcon,
   PlugInIcon,
+  HorizontalDots,
+  GridIcon,
+  ListIcon,
+  TableIcon,
+  PageIcon,
+  ChevronDownIcon,
 } from "@/src/icons/index";
 
 type NavItem = {
@@ -22,23 +28,38 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <BoxCubeIcon />,
+    icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/" }],
+    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
     icon: <CalendarIcon />,
     name: "Calendar",
-    subItems: [
-      { name: "Month", path: "/" },
-      { name: "Year", path: "/" },
-      { name: "Day", path: "/" },
-    ],
+    path: "/calendar",
   },
   {
     icon: <UserCircleIcon />,
-    name: "User",
-    path: "/",
+    name: "User Profile",
+    path: "/profile",
+  },
+
+  {
+    name: "Forms",
+    icon: <ListIcon />,
+    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  },
+  {
+    name: "Tables",
+    icon: <TableIcon />,
+    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+  },
+  {
+    name: "Pages",
+    icon: <PageIcon />,
+    subItems: [
+      { name: "Blank Page", path: "/blank", pro: false },
+      { name: "404 Error", path: "/error-404", pro: false },
+    ],
   },
 ];
 
@@ -95,6 +116,18 @@ export const AppSidebar = () => {
                 <span>{nav.icon}</span>
               </Link>
             )
+          )}
+
+          {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
+            <div>
+              <ul>
+                {nav.subItems.map((subItem) => (
+                  <li key={subItem.name}>
+                    <Link href={subItem.path}></Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </li>
       ))}
@@ -192,8 +225,43 @@ export const AppSidebar = () => {
             )}
           </Link>
         </div>
-        {renderMenuItems(navItems, "main")}
-        <h2 className={styles.logo}>Soliton Core</h2>
+        {/* Menu Bar */}
+        <div className={styles.menuBarOne}>
+          <nav className={styles.nav}>
+            <div className={styles.menuBarTwo}>
+              <div>
+                <h2
+                  className={`${styles.menuH2} ${
+                    !isExpanded && !isHovered
+                      ? styles.justifyCenter
+                      : styles.justifyStart
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Menu"
+                  ) : (
+                    <HorizontalDots />
+                  )}
+                </h2>
+                {renderMenuItems(navItems, "main")}
+              </div>
+              <h2
+                className={`${styles.menuH2} ${
+                  !isExpanded && !isHovered
+                    ? styles.justifyCenter
+                    : styles.justifyStart
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Others"
+                ) : (
+                  <HorizontalDots />
+                )}
+              </h2>
+              <div></div>
+            </div>
+          </nav>
+        </div>
       </aside>
     </>
   );

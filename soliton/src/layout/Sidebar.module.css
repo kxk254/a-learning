@@ -7,7 +7,7 @@
 .asideLogoWrapper {
   display: none;
   padding-top: 20px;
-  padding-bottom: 32px;
+  padding-bottom: 44px;
 }
 
 /* SIDEBAR RETURN ITEM */
@@ -43,20 +43,53 @@
   color: var(--sidebar-text);
 }
 
+/* SIDEBAR RETURN MENU ITEM */
+
+.menuBarOne {
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  margin-top: 24px;
+}
+
+.nav {
+  margin-bottom: 24px;
+}
+
+.menuBarTwo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menuH2 {
+  display: flex;
+  line-height: 20px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--sidebar-text);
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+.justifyStart {
+  justify-content: start;
+}
+
 @media (min-width: 1024px) {
   .sidebar {
     margin-top: 0;
     transform: translateX(0);
   }
-  .justifyCenter {
-    justify-content: center;
-  }
-  .justifyStart {
-    justify-content: start;
-  }
   .asideLogoWrapper {
     display: flex;
     justify-content: center;
+  }
+  .menuBarOne {
+    margin-top: 0;
   }
 }
 
