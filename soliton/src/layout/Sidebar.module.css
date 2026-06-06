@@ -91,6 +91,20 @@
   transform: rotate(180deg);
 }
 
+/* Sidebar Sub Items */
+.subItemsDiv {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.subItemsUl {
+  margin-top: 8px;
+  margin-left: 36px;
+}
+.subItemsUl > * + * {
+  margin-top: 4px;
+}
+
 @media (min-width: 1024px) {
   .sidebar {
     margin-top: 0;
@@ -131,7 +145,6 @@
 
 .menuItemInactive {
   color: var(--foreground-muted);
-  background: var(--surface-dark);
   /* @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300; */
 }
 .menuItemInactive:hover {
@@ -152,15 +165,16 @@
 }
 
 .menuItemIconActive {
-  color: var(--foreground);
+  background: var(--sidebar-bg);
   /* @apply text-brand-500 dark:text-brand-400; */
 }
 
-.menu-item-icon-inactive {
-  color: var(--foreground-muted);
+.menuItemIconInactive {
+  color: var(--sidebar-text-muted);
+  background: var(--sidebar-bg);
   /* @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300; */
 }
-.group:hover .menu-item-icon-inactive {
+.group:hover .menuItemIconInactive {
   color: var(--foreground);
 }
 
@@ -184,7 +198,7 @@
   color: var(--foreground);
 }
 
-.menu-dropdown-item {
+.menuDropdownItem {
   position: relative;
   display: flex;
   align-items: center;
@@ -196,22 +210,28 @@
   padding-bottom: 10px;
   color: var(--foreground);
   font-weight: 500;
-  font-size: 12px;
+  font-size: 16px;
+  cursor: pointer;
   /* @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium; */
 }
 
-.menu-dropdown-item-active {
-  background: var(--primary);
+.menuDropdownItemActive {
+  color: var(--accent);
+  font-weight: 900;
+  font-size: 18px;
   /* @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400; */
 }
+.menuDropdownItemActive:hover {
+  opacity: 0.8;
+}
 
-.menu-dropdown-item-inactive {
-  color: var(--foreground);
-  background: var(--background);
+.menuDropdownItemInactive {
+  color: var(--sidebar-text-muted);
   /* @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5; */
 }
-.menu-dropdown-item-inactive:hover {
-  background: var(--surface-secondary);
+.menuDropdownItemInactive:hover {
+  opacity: 0.7;
+  background: var(--sidebar-hover);
 }
 
 .menu-dropdown-badge {

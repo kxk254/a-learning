@@ -32,10 +32,10 @@ const navItems: NavItem[] = [
     name: "Dashboard",
     subItems: [
       { name: "Ecommerce", path: "/", pro: false },
-      { name: "Shopping", path: "/", pro: false },
-      { name: "On-Line", path: "/", pro: false },
-      { name: "Amazon", path: "/", pro: false },
-      { name: "Google Shop", path: "/", pro: false },
+      { name: "Shopping", path: "/b", pro: false },
+      { name: "On-Line", path: "/c", pro: false },
+      { name: "Amazon", path: "/d", pro: false },
+      { name: "Google Shop", path: "/e", pro: false },
     ],
   },
   {
@@ -54,14 +54,14 @@ const navItems: NavItem[] = [
     icon: <ListIcon />,
     subItems: [
       { name: "Form Elements", path: "/form-elements", pro: false },
-      { name: "New Elements", path: "/form-elements", pro: false },
-      { name: "Old Elements", path: "/form-elements", pro: false },
+      { name: "New Elements", path: "/form-elementsa", pro: false },
+      { name: "Old Elements", path: "/form-elementsb", pro: false },
     ],
   },
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+    subItems: [{ name: "Basic Tables", path: "/basic-tablesa", pro: false }],
   },
   {
     name: "Pages",
@@ -155,8 +155,26 @@ ${
             </button>
           ) : (
             nav.path && (
-              <Link href={nav.path}>
-                <span>{nav.icon}</span>
+              <Link
+                href={nav.path}
+                className={`menuItem group ${
+                  isActive(nav.path)
+                    ? styles.menuItemActive
+                    : styles.menuItemInactive
+                }`}
+              >
+                <span
+                  className={`${
+                    isActive(nav.path)
+                      ? styles.menuItemIconActive
+                      : styles.menuItemIconInactive
+                  }`}
+                >
+                  {nav.icon}
+                </span>
+                {(isExpanded || isHovered || isMobileOpen) && (
+                  <span className={styles.menuItemText}>{nav.name}</span>
+                )}
               </Link>
             )
           )}
@@ -166,11 +184,27 @@ ${
               ref={(el) => {
                 subMenuRefs.current[`${menuType}-${index}`] = el;
               }}
+              className={styles.subItemsDiv}
+              style={{
+                height:
+                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                    : "0px",
+              }}
             >
-              <ul>
+              <ul className={styles.subItemsUl}>
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
-                    <Link href={subItem.path}>{subItem.name}</Link>
+                    <Link
+                      href={subItem.path}
+                      className={`menuDropdownItem ${
+                        isActive(subItem.path)
+                          ? styles.menuDropdownItemActive
+                          : styles.menuDropdownItemInactive
+                      }`}
+                    >
+                      {subItem.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -299,20 +333,22 @@ ${
                 </h2>
                 {renderMenuItems(navItems, "main")}
               </div>
-              <h2
-                className={`${styles.menuH2} ${
-                  !isExpanded && !isHovered && !isMobileOpen
-                    ? styles.justifyCenter
-                    : styles.justifyStart
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontalDots />
-                )}
-              </h2>
-              <div></div>
+              <div>
+                <h2
+                  className={`${styles.menuH2} ${
+                    !isExpanded && !isHovered && !isMobileOpen
+                      ? styles.justifyCenter
+                      : styles.justifyStart
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Others"
+                  ) : (
+                    <HorizontalDots />
+                  )}
+                </h2>
+                {renderMenuItems(othersItems, "others")}
+              </div>
             </div>
           </nav>
         </div>
