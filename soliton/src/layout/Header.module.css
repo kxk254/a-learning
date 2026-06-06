@@ -53,7 +53,13 @@
   height: var(--space-4xl);
 }
 
-.threeDotsIcon .signOutIcon {
+.threeDotsIcon {
+  background: var(--background);
+  color: var(--foreground);
+  width: var(--space-2xl);
+  height: var(--space-2xl);
+}
+.signOutIcon {
   background: var(--background);
   color: var(--foreground);
   width: var(--space-xl);
@@ -62,6 +68,7 @@
 .threeDotsIcon:hover {
   background: var(--surface-dark);
   opacity: 0.7;
+  border-radius: var(--radius-sm);
 }
 .signOutLink {
   border: 1px solid var(--foreground);

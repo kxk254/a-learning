@@ -1,0 +1,46 @@
+.smallSize {
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 14px;
+}
+.midSize {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 14px;
+}
+.primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+.primary:hover {
+  background: var(--btn-primary-bg-hover);
+}
+.outline {
+  background: transparent;
+  color: var(--btn-outline-text);
+  border: 1px solid var(--btn-outline-border);
+}
+.outline:hover {
+  background: var(--btn-outline-hover);
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  gap: 8px;
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.iconStyle {
+  display: flex;
+  align-items: center;
+}

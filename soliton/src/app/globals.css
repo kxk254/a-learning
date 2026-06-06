@@ -46,13 +46,32 @@
   --input-border: #cbd5e1;
   --input-focus: #0f3d66;
 
+  /* Button System */
+  --btn-primary-bg: var(--primary);
+  --btn-primary-bg-hover: var(--primary-hover);
+  --btn-primary-bg-active: var(--primary-active);
+  --btn-primary-text: var(--primary-foreground);
+
+  --btn-secondary-bg: var(--surface);
+  --btn-secondary-bg-hover: #f1f5f9;
+  --btn-secondary-text: var(--text);
+
+  --btn-outline-text: var(--primary);
+  --btn-outline-border: rgba(15, 61, 102, 0.2);
+  --btn-outline-hover: rgba(15, 61, 102, 0.06);
+
+  --btn-ghost-text: var(--text-muted);
+  --btn-ghost-hover: rgba(15, 23, 42, 0.06);
+
+  --btn-accent-bg: var(--accent);
+  --btn-accent-hover: var(--accent-hover);
+  --btn-accent-active: var(--accent-active);
+  --btn-accent-text: var(--accent-foreground);
+
+  --btn-disabled-bg: #e2e8f0;
+  --btn-disabled-text: #94a3b8;
+
   /* Sidebar */
-  /* --sidebar-bg: #0f172a; */
-  /* --sidebar-surface: #162033; */
-  /* --sidebar-hover: #1e293b; */
-  /* --sidebar-active: #0f3d66; */
-  /* --sidebar-text: #e2e8f0; */
-  /* --sidebar-text-muted: #94a3b8; */
 
   --sidebar-bg: #ffffff;
   --sidebar-surface: #f8fafc;
@@ -163,13 +182,32 @@
   --input-border: #334155;
   --input-focus: #3b82f6;
 
+  /* Button System */
+  --btn-primary-bg: var(--primary);
+  --btn-primary-bg-hover: var(--primary-hover);
+  --btn-primary-bg-active: var(--primary-active);
+  --btn-primary-text: var(--primary-foreground);
+
+  --btn-secondary-bg: var(--surface-secondary);
+  --btn-secondary-bg-hover: var(--surface-tertiary);
+  --btn-secondary-text: var(--text);
+
+  --btn-outline-text: var(--text);
+  --btn-outline-border: rgba(148, 163, 184, 0.25);
+  --btn-outline-hover: rgba(148, 163, 184, 0.08);
+
+  --btn-ghost-text: var(--text-muted);
+  --btn-ghost-hover: rgba(148, 163, 184, 0.1);
+
+  --btn-accent-bg: var(--accent);
+  --btn-accent-hover: var(--accent-hover);
+  --btn-accent-active: var(--accent-active);
+  --btn-accent-text: var(--accent-foreground);
+
+  --btn-disabled-bg: rgba(148, 163, 184, 0.12);
+  --btn-disabled-text: rgba(203, 213, 225, 0.4);
+
   /* Sidebar */
-  /* --sidebar-bg: #020817; */
-  /* --sidebar-surface: #0f172a; */
-  /* --sidebar-hover: #162033; */
-  /* --sidebar-active: #1d4ed8; */
-  /* --sidebar-text: #f1f5f9; */
-  /* --sidebar-text-muted: #94a3b8; */
 
   --sidebar-bg: #0f172a;
   --sidebar-surface: #1e293b;
