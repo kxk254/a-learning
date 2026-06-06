@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { styles } from "./Button.module.css";
+import styles from "./Button.module.css";
 
 interface ButtonProps {
   children: ReactNode; // Button text or content
@@ -20,11 +20,19 @@ export const Button = ({
   endIcon,
   onClick,
   className = "",
-  disable = false,
+  disabled = false,
 }) => {
   const sizeClasses = { sm: styles.smallSize, md: styles.midSize };
 
-  const variantClasses = {};
+  const variantClasses = { primary: styles.primary, outline: styles.outline };
 
-  return <button></button>;
+  return (
+    <button
+      className={`${styles.button} ${className} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? styles.disabled : ""}`}
+    >
+      {startIcon && <span className={style.iconStyle}>{startIcon}</span>}
+      {children}
+      {endIcon && <span className={style.iconStyle}>{endIcon}</span>}
+    </button>
+  );
 };
