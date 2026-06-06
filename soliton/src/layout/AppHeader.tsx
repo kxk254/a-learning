@@ -7,6 +7,7 @@ import {
   CrossIcon,
   ThreeDotsIcon,
   SearchIcon,
+  SignOutIcon,
 } from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
@@ -137,9 +138,9 @@ export const AppHeader = () => {
             <div>
               <ThemeToggleBtn />
             </div>
-            <div>
-              <ThreeDotsIcon className={styles.threeDotsIcon} />
-            </div>
+            <Link href="#" className={styles.signOutLink}>
+              <SignOutIcon className={styles.signOutIcon} />
+            </Link>
           </div>
         </div>
         {/* Application meny open */}

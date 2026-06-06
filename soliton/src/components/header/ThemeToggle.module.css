@@ -2,19 +2,19 @@
   border: 1px solid var(--foreground);
   border-radius: 50%;
   padding: var(--space-xs);
-  background: var(--surface);
+  background: var(--background);
   width: var(--space-3xl);
   height: var(--space-3xl);
   cursor: pointer;
 }
 .bright {
-  background: var(--surface);
+  background: var(--background);
   color: var(--foreground);
   width: var(--space-xl);
   height: var(--space-xl);
 }
 .moon {
-  background: var(--surface);
+  background: var(--background);
   color: var(--foreground);
   width: var(--space-xl);
   height: var(--space-xl);
