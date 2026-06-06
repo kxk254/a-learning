@@ -17,14 +17,6 @@ export default function AdminLayout({
       ? styles.ml290
       : styles.ml90;
 
-  console.log(
-    "mainContentMargin-->",
-    mainContentMargin,
-    "isMobileOpen==>:",
-    isMobileOpen,
-    "isExpanded",
-    isExpanded,
-  );
   return (
     <div className={styles.shell}>
       <AppSidebar />

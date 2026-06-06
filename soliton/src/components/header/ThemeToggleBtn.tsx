@@ -9,9 +9,9 @@ export const ThemeToggleBtn = () => {
   return (
     <button onClick={toggleTheme} className={styles.themeToggleBtn}>
       {theme === "light" ? (
-        <BrightnessIcon className={styles.bright} />
-      ) : (
         <MoonIcon className={styles.moon} />
+      ) : (
+        <BrightnessIcon className={styles.bright} />
       )}
     </button>
   );

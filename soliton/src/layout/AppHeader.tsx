@@ -7,6 +7,7 @@ import {
   CrossIcon,
   ThreeDotsIcon,
   SearchIcon,
+  SignOutIcon,
 } from "@/src/icons/index";
 import styles from "./Header.module.css";
 import { ThemeToggleBtn } from "@/src/components/header/ThemeToggleBtn";
@@ -35,18 +36,41 @@ export const AppHeader = () => {
   };
 
   useEffect(() => {
-    console.log("isExpanded changed", isExpanded);
-  }, [isExpanded]);
-  useEffect(() => {
     console.log("isMobileOpen changed =>", isMobileOpen);
   }, [isMobileOpen]);
 
   const toggleApplicationMenu = () => {
     setIsApplicationMenuOpen(!isApplicationMenuOpen);
   };
+  useEffect(() => {
+    console.log("isApplicationMenuOpen", isApplicationMenuOpen);
+  }, [isApplicationMenuOpen]);
 
   const [open, setOpen] = useState(false);
 
+  const renderSearchInput = () => (
+    <>
+      <div className={styles.searchSection}>
+        <form>
+          <div className={styles.searchInnerDiv}>
+            <span className={styles.searchIconField}>
+              <SearchIcon className={styles.searchIcon} />
+            </span>
+            <input
+              className={styles.searchInput}
+              ref={inputRef}
+              type="text"
+              placeholder="Search or type command..."
+            />
+            <button className={styles.searchBtn}>
+              <span>⌘</span>
+              <span>K</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
+  );
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
@@ -95,25 +119,7 @@ export const AppHeader = () => {
             <ThreeDotsIcon className={styles.threeDotsIcon} />
           </button>
           {/*only large search input field */}
-          <div className={styles.searchSection}>
-            <form>
-              <div className={styles.searchInnerDiv}>
-                <span className={styles.searchIconField}>
-                  <SearchIcon className={styles.searchIcon} />
-                </span>
-                <input
-                  className={styles.searchInput}
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Search or type command..."
-                />
-                <button className={styles.searchBtn}>
-                  <span>⌘</span>
-                  <span>K</span>
-                </button>
-              </div>
-            </form>
-          </div>
+          {renderSearchInput()}
         </div>
         {/* Application meny open  userDropDown*/}
         <div
@@ -124,7 +130,18 @@ export const AppHeader = () => {
             setIsApplicationMenuOpen(false);
           }}
         >
-          <ThemeToggleBtn />
+          <div
+            className={`${
+              isApplicationMenuOpen ? styles.appMenuOpen : styles.appMenuClose
+            }`}
+          >
+            <div>
+              <ThemeToggleBtn />
+            </div>
+            <Link href="#" className={styles.signOutLink}>
+              <SignOutIcon className={styles.signOutIcon} />
+            </Link>
+          </div>
         </div>
         {/* Application meny open */}
       </div>
