@@ -35,15 +35,15 @@ export const AppHeader = () => {
   };
 
   useEffect(() => {
-    console.log("isExpanded changed", isExpanded);
-  }, [isExpanded]);
-  useEffect(() => {
     console.log("isMobileOpen changed =>", isMobileOpen);
   }, [isMobileOpen]);
 
   const toggleApplicationMenu = () => {
     setIsApplicationMenuOpen(!isApplicationMenuOpen);
   };
+  useEffect(() => {
+    console.log("isApplicationMenuOpen", isApplicationMenuOpen);
+  }, [isApplicationMenuOpen]);
 
   const [open, setOpen] = useState(false);
 
@@ -129,7 +129,18 @@ export const AppHeader = () => {
             setIsApplicationMenuOpen(false);
           }}
         >
-          <ThemeToggleBtn />
+          <div
+            className={`${
+              isApplicationMenuOpen ? styles.appMenuOpen : styles.appMenuClose
+            }`}
+          >
+            <div>
+              <ThemeToggleBtn />
+            </div>
+            <div>
+              <ThreeDotsIcon className={styles.threeDotsIcon} />
+            </div>
+          </div>
         </div>
         {/* Application meny open */}
       </div>
