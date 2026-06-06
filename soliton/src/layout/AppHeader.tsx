@@ -45,10 +45,18 @@ export const AppHeader = () => {
     setIsApplicationMenuOpen(!isApplicationMenuOpen);
   };
 
+  const [open, setOpen] = useState(false);
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
-        <div className={styles.toolbar}>
+        <div
+          className={styles.toolbar}
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => {
+            setOpen(false);
+          }}
+        >
           <button
             onClick={handleToggle}
             className={styles.handleBtn}
@@ -109,7 +117,12 @@ export const AppHeader = () => {
         </div>
         {/* Application meny open  userDropDown*/}
         <div
-          className={`${isApplicationMenuOpen ? styles.appOpen : styles.appClose} ${styles.appOpenLg}`}
+          className={`${isApplicationMenuOpen && open ? styles.appOpen : styles.appClose} ${styles.appOpenLg}`}
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => {
+            setOpen(false);
+            setIsApplicationMenuOpen(false);
+          }}
         >
           <ThemeToggleBtn />
         </div>
