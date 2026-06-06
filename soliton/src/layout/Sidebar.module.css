@@ -24,6 +24,8 @@
   color: var(--sidebar-text);
   transition: all 0.3s ease;
   height: 100vh;
+  border-color: var(--border);
+  border-right: solid 0.25px;
 }
 
 .wide {
@@ -132,50 +134,53 @@
   padding-top: 8px;
   padding-bottom: 8px;
   border-radius: var(--radius-md);
+  border-color: var(--sidebar-border);
+  border: solid 0.25px;
   font-weight: 500;
   color: var(--foreground);
   font-size: 14px;
+  background: var(--sidebar-surface);
   /* @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm; */
 }
 
 .menuItemActive {
-  background: var(--background);
+  color: var(--primary);
+  font-size: 18px;
   /* @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400; */
+}
+.menuItemActive:hover {
+  background: var(--sidebar-hover);
+  opacity: 0.8;
 }
 
 .menuItemInactive {
-  color: var(--foreground-muted);
+  color: var(--sidebar-text-muted);
   /* @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300; */
 }
 .menuItemInactive:hover {
+  background: var(--sidebar-hover);
   opacity: 0.8;
 }
 .group:hover .menuItemInactive {
-  background: var(--surface);
   opacity: 0.9;
 }
 
 .menuItemIcon {
-  color: var(--foreground);
   /* @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400; */
 }
 .group:hover .menuItemIcon {
-  color: var(--foreground);
   opacity: 0.9;
 }
 
 .menuItemIconActive {
-  background: var(--sidebar-bg);
+  color: var(--primary);
   /* @apply text-brand-500 dark:text-brand-400; */
 }
 
 .menuItemIconInactive {
-  color: var(--sidebar-text-muted);
-  background: var(--sidebar-bg);
   /* @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300; */
 }
 .group:hover .menuItemIconInactive {
-  color: var(--foreground);
 }
 
 .menu-item-arrow {
@@ -195,7 +200,6 @@
 }
 
 .group:hover .menu-item-arrow-inactive {
-  color: var(--foreground);
 }
 
 .menuDropdownItem {
@@ -210,13 +214,13 @@
   padding-bottom: 10px;
   color: var(--foreground);
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   /* @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium; */
 }
 
 .menuDropdownItemActive {
-  color: var(--accent);
+  color: var(--primary);
   font-weight: 900;
   font-size: 18px;
   /* @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400; */

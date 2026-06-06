@@ -47,12 +47,24 @@
   --input-focus: #0f3d66;
 
   /* Sidebar */
-  --sidebar-bg: #0f172a;
-  --sidebar-surface: #162033;
-  --sidebar-hover: #1e293b;
-  --sidebar-active: #0f3d66;
-  --sidebar-text: #e2e8f0;
-  --sidebar-text-muted: #94a3b8;
+  /* --sidebar-bg: #0f172a; */
+  /* --sidebar-surface: #162033; */
+  /* --sidebar-hover: #1e293b; */
+  /* --sidebar-active: #0f3d66; */
+  /* --sidebar-text: #e2e8f0; */
+  /* --sidebar-text-muted: #94a3b8; */
+
+  --sidebar-bg: #ffffff;
+  --sidebar-surface: #f8fafc;
+  --sidebar-hover: #eef2f7;
+  --sidebar-active: #dbeafe;
+
+  --sidebar-text: #0f172a;
+  --sidebar-text-muted: #64748b;
+
+  --sidebar-border: #e2e8f0;
+  --sidebar-icon: #475569;
+  --sidebar-icon-active: #2563eb;
 
   /* Cards */
   --card: #ffffff;
@@ -152,12 +164,24 @@
   --input-focus: #3b82f6;
 
   /* Sidebar */
-  --sidebar-bg: #020817;
-  --sidebar-surface: #0f172a;
-  --sidebar-hover: #162033;
+  /* --sidebar-bg: #020817; */
+  /* --sidebar-surface: #0f172a; */
+  /* --sidebar-hover: #162033; */
+  /* --sidebar-active: #1d4ed8; */
+  /* --sidebar-text: #f1f5f9; */
+  /* --sidebar-text-muted: #94a3b8; */
+
+  --sidebar-bg: #0f172a;
+  --sidebar-surface: #1e293b;
+  --sidebar-hover: #334155;
   --sidebar-active: #1d4ed8;
-  --sidebar-text: #f1f5f9;
+
+  --sidebar-text: #f8fafc;
   --sidebar-text-muted: #94a3b8;
+
+  --sidebar-border: #334155;
+  --sidebar-icon: #cbd5e1;
+  --sidebar-icon-active: #ffffff;
 
   /* Cards */
   --card: #0f172a;

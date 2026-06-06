@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "../context/ThemeContext";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Sidebar.module.css";
@@ -107,6 +108,7 @@ const othersItems: NavItem[] = [
 export const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
+  const theme = useTheme();
 
   const renderMenuItems = (
     navItems: NavItem[],
@@ -157,7 +159,7 @@ ${
             nav.path && (
               <Link
                 href={nav.path}
-                className={`menuItem group ${
+                className={`${styles.menuItem} ${styles.group} ${
                   isActive(nav.path)
                     ? styles.menuItemActive
                     : styles.menuItemInactive
@@ -197,7 +199,7 @@ ${
                   <li key={subItem.name}>
                     <Link
                       href={subItem.path}
-                      className={`menuDropdownItem ${
+                      className={`${styles.menuDropdownItem} ${
                         isActive(subItem.path)
                           ? styles.menuDropdownItemActive
                           : styles.menuDropdownItemInactive
@@ -272,11 +274,11 @@ ${
       ) {
         return null;
       }
-      console.log("handlesubmenuToggle");
       return { type: menuType, index };
     });
   };
 
+  console.log("theme === ", theme.theme);
   return (
     <>
       <aside
@@ -296,7 +298,23 @@ ${
         {/* Logo Link */}
         <div className={styles.asideLogoWrapper}>
           <Link href="/">
-            {isExpanded || isHovered ? (
+            {theme.theme === "light" ? (
+              isExpanded || isHovered ? (
+                <Image
+                  src="/images/logo/text-logo.svg"
+                  alt="logo"
+                  width={154}
+                  height={40}
+                />
+              ) : (
+                <Image
+                  src="/images/logo/logo.svg"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                />
+              )
+            ) : isExpanded || isHovered ? (
               <Image
                 src="/images/logo/text-logo-dark.svg"
                 alt="logo"
