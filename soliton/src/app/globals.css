@@ -4,6 +4,7 @@
   --surface: #ffffff;
   --surface-secondary: #eef2f7;
   --surface-tertiary: #e4e9f2;
+  --surface-dark: #c5d0e3;
 
   /* Typography */
   --foreground: #0f172a;
@@ -108,6 +109,7 @@
   --surface: #0f172a;
   --surface-secondary: #162033;
   --surface-tertiary: #1e293b;
+  --surface-dark: #1e293b;
 
   /* Typography */
   --foreground: #f8fafc;
@@ -221,4 +223,14 @@ ul {
   html {
     color-scheme: dark;
   }
+}
+
+/* NO Scroll Bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

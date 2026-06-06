@@ -79,6 +79,18 @@
   justify-content: start;
 }
 
+/* Render Menu Item */
+.chevronDownIcon {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+.chevronDownIconRotate {
+  font-weight: 500;
+  transform: rotate(180deg);
+}
+
 @media (min-width: 1024px) {
   .sidebar {
     margin-top: 0;
@@ -95,7 +107,8 @@
 
 /* SIDEBAR GLOBAL CSS */
 
-.menu-item {
+.menuItem {
+  display: flex;
   position: relative;
   align-items: center;
   width: 100%;
@@ -107,38 +120,38 @@
   border-radius: var(--radius-md);
   font-weight: 500;
   color: var(--foreground);
-  font-size: 12px;
+  font-size: 14px;
   /* @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm; */
 }
 
-.menu-item-active {
-  background: var(--primary);
+.menuItemActive {
+  background: var(--background);
   /* @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400; */
 }
 
-.menu-item-inactive {
+.menuItemInactive {
   color: var(--foreground-muted);
+  background: var(--surface-dark);
   /* @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300; */
 }
-.menu-item-inactive:hover {
-  background: var(--surface);
-  opacity: 0.9;
+.menuItemInactive:hover {
+  opacity: 0.8;
 }
-.group:hover .menu-item-inactive {
+.group:hover .menuItemInactive {
   background: var(--surface);
   opacity: 0.9;
 }
 
-.menu-item-icon {
+.menuItemIcon {
   color: var(--foreground);
   /* @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400; */
 }
-.group:hover .menu-item-icon {
+.group:hover .menuItemIcon {
   color: var(--foreground);
   opacity: 0.9;
 }
 
-.menu-item-icon-active {
+.menuItemIconActive {
   color: var(--foreground);
   /* @apply text-brand-500 dark:text-brand-400; */
 }

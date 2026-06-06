@@ -30,7 +30,13 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    subItems: [
+      { name: "Ecommerce", path: "/", pro: false },
+      { name: "Shopping", path: "/", pro: false },
+      { name: "On-Line", path: "/", pro: false },
+      { name: "Amazon", path: "/", pro: false },
+      { name: "Google Shop", path: "/", pro: false },
+    ],
   },
   {
     icon: <CalendarIcon />,
@@ -46,7 +52,11 @@ const navItems: NavItem[] = [
   {
     name: "Forms",
     icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+    subItems: [
+      { name: "Form Elements", path: "/form-elements", pro: false },
+      { name: "New Elements", path: "/form-elements", pro: false },
+      { name: "Old Elements", path: "/form-elements", pro: false },
+    ],
   },
   {
     name: "Tables",
@@ -106,9 +116,42 @@ export const AppSidebar = () => {
       {navItems.map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
-            <button>
-              <span>{nav.icon}</span>
-              <span>{nav.name}</span>
+            <button
+              onClick={() => handleSubmenuToggle(index, menuType)}
+              className={`${styles.menuItem} ${styles.group} 
+${
+  openSubmenu?.type === menuType && openSubmenu?.index === index
+    ? styles.menuItemActive
+    : styles.menuItemInactive
+}
+		      ${
+            !isExpanded && !isHovered && !isMobileOpen
+              ? styles.justifyCenter
+              : styles.justifyStart
+          }`}
+            >
+              <span
+                className={`${
+                  openSubmenu?.type === menuType && openSubmenu?.index === index
+                    ? styles.menuItemIconActive
+                    : styles.menuItemIconInactive
+                }`}
+              >
+                {nav.icon}
+              </span>
+              {(isExpanded || isHovered || isMobileOpen) && (
+                <span>{nav.name}</span>
+              )}
+              {(isExpanded || isHovered || isMobileOpen) && (
+                <ChevronDownIcon
+                  className={`${styles.chevronDownIcon} ${
+                    openSubmenu?.type === menuType &&
+                    openSubmenu?.index === index
+                      ? styles.chevronDownIconRotate
+                      : null
+                  }`}
+                />
+              )}
             </button>
           ) : (
             nav.path && (
@@ -119,11 +162,15 @@ export const AppSidebar = () => {
           )}
 
           {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-            <div>
+            <div
+              ref={(el) => {
+                subMenuRefs.current[`${menuType}-${index}`] = el;
+              }}
+            >
               <ul>
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
-                    <Link href={subItem.path}></Link>
+                    <Link href={subItem.path}>{subItem.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -143,6 +190,7 @@ export const AppSidebar = () => {
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
+  // Open Submenu and Close Previous Submenu
   useEffect(() => {
     let subMenuMatched = false;
     ["main", "others"].forEach((menuType) => {
@@ -164,13 +212,18 @@ export const AppSidebar = () => {
     }
   }, [pathname, isActive]);
 
+  // Measures haw tall the open submenu is and stores that height for animations
   useEffect(() => {
     if (openSubmenu !== null) {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
-      if (subMenuRefs.current[key]) {
+      const el = subMenuRefs.current[key];
+      console.log("open submenu -->", key, "submenu refs elements :", el);
+      if (el) {
+        const height = el.scrollHeight || 0;
+        console.log("submenu height ==", height);
         setSubMenuHeight((prevHeights) => ({
           ...prevHeights,
-          [key]: subMenuRefs.current[key]?.scrollHeight || 0,
+          [key]: height,
         }));
       }
     }
@@ -185,6 +238,7 @@ export const AppSidebar = () => {
       ) {
         return null;
       }
+      console.log("handlesubmenuToggle");
       return { type: menuType, index };
     });
   };
@@ -201,7 +255,7 @@ export const AppSidebar = () => {
         : styles.narrow
   }
 	${isMobileOpen ? styles.mobileVisible : styles.mobileHidden}
-	      `}
+	     `}
         onMouseEnter={() => !isExpanded && setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -226,13 +280,13 @@ export const AppSidebar = () => {
           </Link>
         </div>
         {/* Menu Bar */}
-        <div className={styles.menuBarOne}>
+        <div className={`${styles.menuBarOne} no-scrollbar`}>
           <nav className={styles.nav}>
             <div className={styles.menuBarTwo}>
               <div>
                 <h2
                   className={`${styles.menuH2} ${
-                    !isExpanded && !isHovered
+                    !isExpanded && !isHovered && !isMobileOpen
                       ? styles.justifyCenter
                       : styles.justifyStart
                   }`}
@@ -247,7 +301,7 @@ export const AppSidebar = () => {
               </div>
               <h2
                 className={`${styles.menuH2} ${
-                  !isExpanded && !isHovered
+                  !isExpanded && !isHovered && !isMobileOpen
                     ? styles.justifyCenter
                     : styles.justifyStart
                 }`}
