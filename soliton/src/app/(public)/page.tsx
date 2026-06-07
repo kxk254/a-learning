@@ -1,6 +1,8 @@
 import { Button } from "@/src/components/ui/button/Button";
 import { Label } from "@/src/components/form/Label";
+import { Checkbox } from "@/src/components/form/input/Checkbox";
 import styles from "./Page.module.css";
+
 export default function Admin() {
   return (
     <>
@@ -10,6 +12,7 @@ export default function Admin() {
           Sign In{" "}
         </Button>
         <Label>LABEL</Label>
+        <Checkbox>chbox</Checkbox>
       </div>
     </>
   );

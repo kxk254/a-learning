@@ -1,0 +1,49 @@
+/* Checkbox */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkboxLabelDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkboxDiv {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+.checkboxInput {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  cursor: pointer;
+  border: 1px;
+  border-radius: var(--radius-md);
+}
+.checkboxIconChecked {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% -50%);
+  pointer-events: none;
+  color: var(--foreground);
+}
+
+.chgeckboxIconDisabled {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% -50%);
+  pointer-events: none;
+  color: var(--foreground-muted);
+}
+
+.checkboxSpan {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
