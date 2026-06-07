@@ -1,0 +1,61 @@
+.label {
+  margin-bottom: 6px;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Multi Select  */
+
+.msDivOne {
+}
+.msLabel {
+}
+.msDivTwo {
+}
+.msDivThree {
+}
+.msDivFour {
+}
+.msDivFive {
+}
+.msDivSix {
+}
+.msDivSeven {
+}
+.msSpanOne {
+}
+.msDivEight {
+}
+.msDivNine {
+}
+.msIconOne {
+  width: 14px;
+  height: 14px;
+  color: var(--foreground);
+}
+.msInput {
+}
+.msDivTenforButton {
+}
+.msButton {
+}
+.msIconTwo {
+  width: 20px;
+  height: 20px;
+  color: var(--foreground);
+}
+.msDivTenisOpen {
+}
+.msDivEleven {
+}
+.msDivTwelve {
+}
+.msDivThirteen {
+}
+.msDivFourteen {
+}
+.rotate {
+  transform: rotate(180deg);
+}

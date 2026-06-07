@@ -21,6 +21,7 @@ export const Checkbox = ({
   onChange,
   disabled = false,
 }) => {
+  console.log("checked and disabled", checked, "disabled", disabled);
   return (
     <label className={`${styles.checkboxLabel}${styles.checkboxLabelDisabled}`}>
       <div className={styles.checkboxDiv}>
@@ -29,17 +30,17 @@ export const Checkbox = ({
           type="checkbox"
           className={`${styles.checkboxInput}${className}`}
           checked={checked}
-          onChange={(e) => onChange?.(e.target.checked)}
+          onChange={(e) => onChange(e.target.checked)}
           disabled={disabled}
         />
-        <CheckLineIcon
-          className={clsx(
-            checked && styles.checkboxIconChecked,
-            disabled && styles.chgeckboxIconDisabled,
-          )}
-        />
+        {(checked || disabled) && (
+          <CheckLineIcon className={styles.checkboxIconChecked} />
+        )}
       </div>
       {label && <span className={styles.checkboxSpan}>{label}</span>}
     </label>
   );
 };
+// className={clsx(
+//   checked && styles.checkboxIconChecked,
+//   disabled && styles.checkboxIconDisabled,
