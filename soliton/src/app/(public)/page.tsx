@@ -3,7 +3,8 @@ import { Button } from "@/src/components/ui/button/Button";
 import { Label } from "@/src/components/form/Label";
 import { Checkbox } from "@/src/components/form/input/Checkbox";
 import { Input } from "@/src/components/form/input/InputField";
-import { MultiSelect } from "@/src/components/form/MultiSelect";
+import { Select } from "@/src/components/form/Select";
+import { DatePicker } from "@/src/components/form/DatePicker";
 import styles from "./Page.module.css";
 import { useState } from "react";
 
@@ -16,15 +17,17 @@ export default function Admin() {
         <Button className={styles.button} size="sm">
           Sign In{" "}
         </Button>
-        <Input
-          placeholder={"placeholder here ..."}
-          hint={
-            "ヒントを記載する項目　ここで入力の補助をすることができる限られた箇所で使用する予定"
-          }
-        />
+        <Input placeholder={"placeholder here ..."} />
         <Label>LABEL</Label>
         <Checkbox checked={checked} onChange={setChecked} disabled={false} />
-        <MultiSelect />
+        <Select
+          options={[
+            { value: "apple", label: "Apple" },
+            { value: "banana", label: "Banana" },
+            { value: "orange", label: "Orange" },
+          ]}
+        />
+        <DatePicker id="abc" />
       </div>
     </>
   );

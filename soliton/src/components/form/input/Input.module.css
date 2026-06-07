@@ -78,7 +78,7 @@
   color: var(--foreground-muted);
 }
 .inputClasses:focus {
-  outline: hidden;
+  outline: none;
   box-shadow: var(--shadow-md);
 }
 

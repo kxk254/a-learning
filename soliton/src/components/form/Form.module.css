@@ -6,56 +6,67 @@
   color: var(--foreground);
 }
 
-/* Multi Select  */
+/* Select */
+.select {
+  height: 44px;
+  width: 100%;
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  padding-right: 44px;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+.selectTrue {
+  color: var(--foreground);
+}
+.selectFalse {
+  color: var(--foreground-muted);
+}
+.optionOne {
+  color: var(--foreground);
+}
+.optionTwo {
+  color: var(--foreground);
+}
 
-.msDivOne {
+/* Date Picker */
+
+.dateDiv {
+  position: relative;
 }
-.msLabel {
+.dateInput {
+  height: 44px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  appearance: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+  background: transparent;
 }
-.msDivTwo {
+.dateInput::placeholder {
+  color: var(--foreground-muted);
 }
-.msDivThree {
+.dateInput:focus {
+  outline: none;
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
 }
-.msDivFour {
+.dateSpan {
+  position: absolute;
+  pointer-events: none;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-.msDivFive {
-}
-.msDivSix {
-}
-.msDivSeven {
-}
-.msSpanOne {
-}
-.msDivEight {
-}
-.msDivNine {
-}
-.msIconOne {
-  width: 14px;
-  height: 14px;
-  color: var(--foreground);
-}
-.msInput {
-}
-.msDivTenforButton {
-}
-.msButton {
-}
-.msIconTwo {
-  width: 20px;
-  height: 20px;
-  color: var(--foreground);
-}
-.msDivTenisOpen {
-}
-.msDivEleven {
-}
-.msDivTwelve {
-}
-.msDivThirteen {
-}
-.msDivFourteen {
-}
-.rotate {
-  transform: rotate(180deg);
+.dateIcon {
+  width: 24px;
+  height: 24px;
 }
