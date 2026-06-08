@@ -26,13 +26,15 @@ export const Button = ({
 
   const variantClasses = { primary: styles.primary, outline: styles.outline };
 
+  console.log("className", className);
+
   return (
     <button
-      className={`${styles.button} ${className} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? styles.disabled : ""}`}
+      className={`${styles.button}  ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? styles.disabled : ""} ${className}`}
     >
-      {startIcon && <span className={style.iconStyle}>{startIcon}</span>}
+      {startIcon && <span className={styles.iconStyle}>{startIcon}</span>}
       {children}
-      {endIcon && <span className={style.iconStyle}>{endIcon}</span>}
+      {endIcon && <span className={styles.iconStyle}>{endIcon}</span>}
     </button>
   );
 };
