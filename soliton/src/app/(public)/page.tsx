@@ -8,6 +8,8 @@ import { DatePicker } from "@/src/components/form/DatePicker";
 import { TextArea } from "@/src/components/form/input/TextArea";
 import { RadioSm } from "@/src/components/form/input/RadioSm";
 import { FileInput } from "@/src/components/form/input/FileInput";
+import { DropZone } from "@/src/components/form/input/DropZone";
+import { ChartTab } from "@/src/components/common/ChartTab";
 import styles from "./Page.module.css";
 import { useState } from "react";
 
@@ -43,6 +45,8 @@ export default function Admin() {
           onChange={setRadio}
         />
         <FileInput />
+        <DropZone />
+        <ChartTab />
       </div>
     </>
   );
