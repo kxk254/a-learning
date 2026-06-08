@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Label.module.css";
+import styles from "./Form.module.css";
 
 interface LabelProps {
   htmlFor?: string;

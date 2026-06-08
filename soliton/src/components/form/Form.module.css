@@ -1,0 +1,72 @@
+.label {
+  margin-bottom: 6px;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Select */
+.select {
+  height: 44px;
+  width: 100%;
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  padding-right: 44px;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+.selectTrue {
+  color: var(--foreground);
+}
+.selectFalse {
+  color: var(--foreground-muted);
+}
+.optionOne {
+  color: var(--foreground);
+}
+.optionTwo {
+  color: var(--foreground);
+}
+
+/* Date Picker */
+
+.dateDiv {
+  position: relative;
+}
+.dateInput {
+  height: 44px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  appearance: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+  background: transparent;
+}
+.dateInput::placeholder {
+  color: var(--foreground-muted);
+}
+.dateInput:focus {
+  outline: none;
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+.dateSpan {
+  position: absolute;
+  pointer-events: none;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.dateIcon {
+  width: 24px;
+  height: 24px;
+}

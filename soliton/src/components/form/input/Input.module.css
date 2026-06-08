@@ -1,0 +1,125 @@
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
+
+/* Checkbox */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkboxLabelDisabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkboxDiv {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+.checkboxInput {
+  appearance: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-color: var(--border);
+  border: solid 0.5px;
+  border-radius: var(--radius-sm);
+}
+.checkboxInput:disabled {
+  background: var(--surface-dark);
+  color: var(--foreground-muted);
+  pointer-events: none;
+}
+.checkboxIconChecked {
+  position: absolute;
+}
+.checkboxIconChecked {
+  position: absolute;
+}
+
+.chgeckboxIconDisabled {
+  position: absolute;
+  pointer-events: none;
+}
+
+.checkboxSpan {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Input Field */
+
+.inputClasses {
+  height: 44px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: solid 0.5px var(--border);
+  appearance: none;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.inputClasses::placeholder {
+  color: var(--foreground-muted);
+}
+.inputClasses:focus {
+  outline: none;
+  box-shadow: var(--shadow-md);
+}
+
+.disabled {
+  color: var(--foreground-muted);
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--warning);
+}
+.error:focus {
+  box-shadow: var(--shadow-md);
+}
+.success {
+  color: var(--success);
+}
+.success:focus {
+  box-shadow: var(--shadow-md);
+}
+
+.others {
+  background: transparent;
+}
+
+.p {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.pError {
+  color: var(--warning);
+}
+
+.pSuccess {
+  color: var(--success);
+}
+
+.pOther {
+  color: var(--foreground-subtle);
+}
+.inputDiv {
+  position: relative;
+}
