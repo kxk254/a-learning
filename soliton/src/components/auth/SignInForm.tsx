@@ -16,6 +16,12 @@ export function SignInForm() {
   return (
     <div className={styles.signDiv1}>
       <div className={styles.signDiv2}>
+        <div className={styles.backToDash}>
+          <Link href="/" className={styles.backToDashLink}>
+            <ChevronLeftIcon />
+            Back to dashboard
+          </Link>
+        </div>
         <div className={styles.signDiv3}>
           <div className={styles.signDiv4}>
             <h1 className={styles.signH1}>Sign in</h1>

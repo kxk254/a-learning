@@ -6,7 +6,6 @@
   flex-shrink: 1;
   flex-basis: 0%;
   width: 100%;
-  padding-top: 48px;
 }
 .signDiv2 {
   width: 100%;
@@ -23,6 +22,7 @@
   flex-basis: 0%;
   width: 100%;
   margin: 0 auto;
+  margin-top: 80px;
 }
 .signDiv4 {
   margin-bottom: 20px;
@@ -61,6 +61,19 @@
 }
 .signButton {
   width: 100%;
+}
+.backToDash {
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+.backToDashLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+.backToDashLink:hover {
+  opacity: 0.7;
 }
 @media (min-width: 1024px) {
   .signDiv1 {
