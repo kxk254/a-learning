@@ -3,6 +3,7 @@ import { Noto_Sans_JP, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/src/context/ThemeContext";
 import { SidebarProvider } from "@/src/context/SidebarContext";
+import Script from "next/script";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
@@ -26,6 +27,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${notoSansJP.variable} ${geistMono.variable}`}>
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            (function () {
+              try {
+                const theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                }
+              } catch (e) {}
+            })();
+          `}
+        </Script>
+      </head>
       <body>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
