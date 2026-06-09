@@ -17,6 +17,7 @@ export default function Admin() {
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState("");
   const [radio, setRadio] = useState(false);
+  const [input, setInput] = useState("");
   return (
     <>
       <div className={styles.parent}>
@@ -24,7 +25,11 @@ export default function Admin() {
         <Button className={styles.button} size="sm">
           Sign In{" "}
         </Button>
-        <Input placeholder={"placeholder here ..."} />
+        <Input
+          placeholder={"placeholder here ..."}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
         <Label>LABEL</Label>
         <Checkbox checked={checked} onChange={setChecked} disabled={false} />
         <Select

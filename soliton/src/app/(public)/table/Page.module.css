@@ -1,0 +1,8 @@
+.headerRight {
+  text-align: center;
+  color: var(--warning);
+}
+
+.cellRight {
+  text-align: center;
+}
