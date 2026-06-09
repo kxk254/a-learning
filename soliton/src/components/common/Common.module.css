@@ -13,12 +13,12 @@
 .componentH3 {
   margin-top: 4px;
   font-size: 14px;
-  color: var(--foreground);
+  color: var(--primary);
 }
 .componentP {
   margin-top: 4px;
   font-size: 14px;
-  color: var(--foreground);
+  color: var(--primary);
 }
 .componentDiv3 {
   padding: 16px;
@@ -32,11 +32,13 @@
 /* Chart Tab */
 .chartOptionTrue {
   box-shadow: var(--shadow-sm);
-  color: var(--foreground);
-  background: var(--surface);
+  color: var(--primary);
+  background: var(--surface-teritary);
 }
 .chartOptionFalse {
-  color: var(--foreground-muted);
+  color: var(--accent-muted);
+  background: var(--surface-secondary);
+  opacity: 0.6;
 }
 .chartDiv {
   display: flex;

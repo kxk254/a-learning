@@ -174,8 +174,8 @@
   --danger-soft: rgba(239, 68, 68, 0.12);
 
   /* Borders */
-  --border: #243244;
-  --border-strong: #334155;
+  --border: rgba(255, 255, 255, 0.2);
+  --border-strong: rgba(255, 255, 255, 0.34);
 
   /* Inputs */
   --input: #0f172a;
