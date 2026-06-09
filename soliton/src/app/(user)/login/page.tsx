@@ -1,5 +1,6 @@
 import { SignInForm } from "@/src/components/auth/SignInForm";
 import { MetaData } from "next";
+import styles from "./Page.module.css";
 
 export const metadata: Metadata = {
   title: "Soliton Core SignIn Page | Dashboard",
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function SignIn() {
-  return <SignInForm />;
+  return (
+    <div className={styles.mainDiv}>
+      <SignInForm />
+    </div>
+  );
 }

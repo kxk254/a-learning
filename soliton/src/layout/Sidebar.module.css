@@ -26,6 +26,7 @@
   height: 100vh;
   border-color: var(--border);
   border-right: solid 0.25px;
+  z-index: 2;
 }
 
 .wide {
@@ -150,7 +151,7 @@
 }
 .menuItemActive:hover {
   background: var(--sidebar-hover);
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 
 .menuItemInactive {

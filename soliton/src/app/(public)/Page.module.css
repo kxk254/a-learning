@@ -2,6 +2,15 @@
   width: 100%;
 }
 .parent {
-  width: 400px;
+  max-width: 600px;
   height: 100vh;
+}
+@media (max-width: 768px) {
+  .parent {
+    max-width: 100%;
+    padding: 20px;
+  }
+  .button {
+    width: 100%;
+  }
 }
