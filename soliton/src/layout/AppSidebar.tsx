@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
     name: "Dashboard",
     subItems: [
       { name: "Ecommerce", path: "/", pro: false },
-      { name: "Shopping", path: "/b", pro: false },
+      { name: "Chart", path: "/chart", pro: false },
       { name: "On-Line", path: "/c", pro: false },
       { name: "Amazon", path: "/d", pro: false },
       { name: "Google Shop", path: "/e", pro: false },
@@ -67,7 +67,7 @@ const navItems: NavItem[] = [
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tablesa", pro: false }],
+    subItems: [{ name: "Basic Tables", path: "/table", pro: false }],
   },
   {
     name: "Pages",

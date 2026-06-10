@@ -20,12 +20,10 @@
   background: var(--btn-primary-bg-hover);
 }
 .outline {
-  background: transparent;
-  color: var(--btn-outline-text);
-  border: 1px solid var(--btn-outline-border);
+  outline: 1px solid var(--btn-outline-border);
 }
 .outline:hover {
-  background: var(--btn-outline-hover);
+  opacity: 0.8;
 }
 .button {
   display: inline-flex;

@@ -1,0 +1,18 @@
+/* Bar Charts */
+
+.barchartDiv1 {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.barchartDiv2 {
+  min-width: 1000px;
+}
+
+/* Line Charts */
+.linechartDiv1 {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.linechartDiv2 {
+  min-width: 1000px;
+}

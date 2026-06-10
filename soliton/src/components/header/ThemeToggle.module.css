@@ -1,5 +1,5 @@
 .themeToggleBtn {
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--primary);
   border-radius: 50%;
   padding: var(--space-xs);
   background: var(--background);
@@ -9,13 +9,13 @@
 }
 .bright {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--primary);
   width: var(--space-xl);
   height: var(--space-xl);
 }
 .moon {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--primary);
   width: var(--space-xl);
   height: var(--space-xl);
 }

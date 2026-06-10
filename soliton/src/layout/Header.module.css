@@ -42,7 +42,7 @@
 
 .barsStaggered {
   background: var(--surface);
-  color: var(--foreground);
+  color: var(--primary);
   width: var(--space-xl);
   height: var(--space-xl);
 }
@@ -61,10 +61,11 @@
   color: var(--foreground);
   width: var(--space-2xl);
   height: var(--space-2xl);
+  color: var(--primary);
 }
 .signOutIcon {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--primary);
   width: var(--space-xl);
   height: var(--space-xl);
 }
@@ -74,7 +75,7 @@
   border-radius: var(--radius-sm);
 }
 .signOutLink {
-  border: 1px solid var(--foreground);
+  border: 1px solid var(--primary);
   border-radius: 50%;
   padding: var(--space-xs);
   background: var(--background);
@@ -134,7 +135,7 @@
 }
 .searchIcon {
   background: var(--surface);
-  color: var(--foreground);
+  color: var(--primary);
   width: var(--space-xl);
   height: var(--space-xl);
 }
@@ -148,6 +149,7 @@
   padding-right: 64px;
   font-size: 14px;
   background: var(--input);
+  color: var(--primary);
 }
 
 .searchInput:focus-visible {
@@ -169,7 +171,7 @@
   font-size: 12px;
   letter-spacing: 2px;
   background: var(--input);
-  color: var(--foreground);
+  color: var(--primary);
   cursor: pointer;
 }
 

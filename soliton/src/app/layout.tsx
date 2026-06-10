@@ -3,6 +3,7 @@ import { Noto_Sans_JP, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/src/context/ThemeContext";
 import { SidebarProvider } from "@/src/context/SidebarContext";
+import Script from "next/script";
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
@@ -25,7 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${notoSansJP.variable} ${geistMono.variable}`}>
+    <html
+      lang="jp"
+      suppressHydrationWarning
+      className={`${notoSansJP.variable} ${geistMono.variable}`}
+    >
+      <head></head>
       <body>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>

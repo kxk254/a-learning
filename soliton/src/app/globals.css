@@ -149,17 +149,17 @@
   --foreground-inverse: #0f172a;
 
   /* Brand */
-  --primary: #3b82f6;
-  --primary-hover: #60a5fa;
-  --primary-active: #2563eb;
-  --primary-foreground: #ffffff;
+  --primary: #00e5ff;
+  --primary-hover: #33ebff;
+  --primary-active: #00b4cc;
+  --primary-foreground: #001018;
 
   /* Accent */
-  --accent: #00e5ff;
-  --accent-hover: #33ebff;
-  --accent-active: #00b4cc;
-  --accent-soft: rgba(0, 229, 255, 0.16);
-  --accent-foreground: #001018;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-active: #2563eb;
+  --accent-soft: rgba(59, 130, 246, 0.16);
+  --accent-foreground: #ffffff;
 
   /* Success */
   --success: #22c55e;
@@ -174,8 +174,8 @@
   --danger-soft: rgba(239, 68, 68, 0.12);
 
   /* Borders */
-  --border: #243244;
-  --border-strong: #334155;
+  --border: rgba(255, 255, 255, 0.2);
+  --border-strong: rgba(255, 255, 255, 0.34);
 
   /* Inputs */
   --input: #0f172a;
