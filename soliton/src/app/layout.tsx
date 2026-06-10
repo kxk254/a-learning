@@ -26,21 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${notoSansJP.variable} ${geistMono.variable}`}>
-      <head>
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-            (function () {
-              try {
-                const theme = localStorage.getItem('theme');
-                if (theme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                }
-              } catch (e) {}
-            })();
-          `}
-        </Script>
-      </head>
+    <html
+      lang="jp"
+      suppressHydrationWarning
+      className={`${notoSansJP.variable} ${geistMono.variable}`}
+    >
+      <head></head>
       <body>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
