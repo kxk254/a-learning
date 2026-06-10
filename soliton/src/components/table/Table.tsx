@@ -9,14 +9,14 @@ export type Column<T> = {
   cellClassName?: string;
 };
 
-export type TableProps<T> = {
+export type TableProps<T extends Record<string, unknown>> = {
   columns: Column<T>[];
   data: T[];
   onCellUpdate?: (rowIndex: number, key: keyof T, value: string) => void;
   rowHeight?: string;
 };
 
-export default function Table<T>({
+export default function Table<T extends Record<string, unkown>>({
   columns,
   data,
   onCellUpdate,
@@ -24,14 +24,10 @@ export default function Table<T>({
 }: TableProps<T>) {
   const [editingCell, setEditingCell] = useState<{
     row: number;
-    key: string;
+    key: keyof T;
   } | null>(null);
 
-  const updateCell = (rowIndex: number, key: keyof User, value: string) => {
-    setUsers((prev) =>
-      prev.map((row, i) => (i === rowIndex ? { ...row, [key]: value } : row)),
-    );
-  };
+  const [editValue, setEditValue] = useState("");
 
   return (
     <table className="table">

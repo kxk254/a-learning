@@ -4,10 +4,6 @@ import type { Column } from "@/src/components/table/Table";
 import styles from "./Page.module.css";
 import { useState } from "react";
 
-const [users, setUsers] = useState([
-  { name: "John", age: 25 },
-  { name: "Jane", age: 30 },
-]);
 type Row = { name: string; age: number; city: string };
 const columns = [
   {
@@ -33,13 +29,20 @@ const columns = [
   },
 ] satisfies Column<Row>[];
 
-const updateCell = (rowIndex: number, key: keyof User, value: string) => {
-  setUsers((prev) =>
-    prev.map((row, i) => (i === rowIndex ? { ...row, [key]: value } : row)),
-  );
-};
-
 export default function Page() {
+  const [users, setUsers] = useState<Row[]>([
+    { name: "John", age: 25, city: "New York" },
+    { name: "Jane", age: 30, city: "Toronto" },
+  ]);
+  const updateCell = (rowIndex: number, key: keyof Row, value: string) => {
+    setUsers((prev) =>
+      prev.map((row, i) =>
+        i === rowIndex
+          ? { ...row, [key]: key === "age" ? Number(value) : value }
+          : row,
+      ),
+    );
+  };
   return (
     <Table
       columns={columns}
