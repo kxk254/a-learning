@@ -9,7 +9,7 @@ interface ButtonProps {
   endIcon?: ReactNode; // Icon after the text
   onClick?: () => void; // Click handler
   disabled?: boolean; // Disabled state
-  className?: string; // Disabled state
+  className?: string;
 }
 
 export const Button = ({
@@ -21,7 +21,7 @@ export const Button = ({
   onClick,
   className = "",
   disabled = false,
-}) => {
+}: ButtonProps) => {
   const sizeClasses = { sm: styles.smallSize, md: styles.midSize };
 
   const variantClasses = { primary: styles.primary, outline: styles.outline };

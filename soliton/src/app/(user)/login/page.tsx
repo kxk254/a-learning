@@ -1,5 +1,5 @@
 import { SignInForm } from "@/src/components/auth/SignInForm";
-import { MetaData } from "next";
+import { Metadata } from "next";
 import styles from "./Page.module.css";
 
 export const metadata: Metadata = {

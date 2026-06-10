@@ -6,12 +6,12 @@ interface FormProps {
   className?: string;
 }
 
-export const Form = ({ onSubmit, children, className }) => {
+export const Form = ({ onSubmit, children, className }: FormProps) => {
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit(event);
+        onSubmit(e);
       }}
       className={`${className}`}
     >

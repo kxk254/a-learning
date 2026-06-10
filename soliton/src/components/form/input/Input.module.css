@@ -268,7 +268,7 @@
 /* Drop Zone */
 .dropDiv {
   transition: all 0.3s ease;
-  border: 1px solid var(--border);
+  border: 1px solid var(--primary);
   border-style: dashed;
   cursor: pointer;
   border-radius: var(--radius-xl);

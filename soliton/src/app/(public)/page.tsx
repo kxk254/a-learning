@@ -16,7 +16,7 @@ import { useState } from "react";
 export default function Admin() {
   const [checked, setChecked] = useState(false);
   const [text, setText] = useState("");
-  const [radio, setRadio] = useState(false);
+  const [radio, setRadio] = useState("apple");
   const [input, setInput] = useState("");
   return (
     <>
@@ -46,7 +46,7 @@ export default function Admin() {
           name="fruit"
           value="apple"
           label="Apple"
-          checked={radio}
+          checked={radio === "apple"}
           onChange={setRadio}
         />
         <FileInput />

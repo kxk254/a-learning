@@ -12,15 +12,11 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 export default function BarChartOne() {
-  const { theme, _ } = useTheme();
-  let col;
+  const { theme, toggleTheme } = useTheme();
   console.log("bar chart theme", theme);
 
-  if (theme === "light") {
-    col = "#0f3d66";
-  } else {
-    col = "#00e5ff";
-  }
+  const col = theme === "light" ? "#0f3d66" : "#00e5ff";
+
   const options: ApexOptions = {
     colors: [col],
     chart: {

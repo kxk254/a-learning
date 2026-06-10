@@ -26,8 +26,9 @@ export const useSidebar = () => {
   }
   return context;
 };
+type SidebarProviderProps = { children: React.ReactNode };
 
-export const SidebarProvider = ({ children }) => {
+export const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

@@ -22,7 +22,7 @@ import {
 
 type NavItem = {
   name: string;
-  icon: react.ReactNode;
+  icon: React.ReactNode;
   path?: string;
   subItems?: { name: string; path: string }[];
 };
@@ -32,11 +32,11 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     subItems: [
-      { name: "Ecommerce", path: "/", pro: false },
-      { name: "Chart", path: "/chart", pro: false },
-      { name: "On-Line", path: "/c", pro: false },
-      { name: "Amazon", path: "/d", pro: false },
-      { name: "Google Shop", path: "/e", pro: false },
+      { name: "Ecommerce", path: "/" },
+      { name: "Chart", path: "/chart" },
+      { name: "On-Line", path: "/c" },
+      { name: "Amazon", path: "/d" },
+      { name: "Google Shop", path: "/e" },
     ],
   },
   {
@@ -59,22 +59,22 @@ const navItems: NavItem[] = [
     name: "Forms",
     icon: <ListIcon />,
     subItems: [
-      { name: "Form Elements", path: "/form-elements", pro: false },
-      { name: "New Elements", path: "/form-elementsa", pro: false },
-      { name: "Old Elements", path: "/form-elementsb", pro: false },
+      { name: "Form Elements", path: "/form-elements" },
+      { name: "New Elements", path: "/form-elementsa" },
+      { name: "Old Elements", path: "/form-elementsb" },
     ],
   },
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/table", pro: false }],
+    subItems: [{ name: "Basic Tables", path: "/table" }],
   },
   {
     name: "Pages",
     icon: <PageIcon />,
     subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
+      { name: "Blank Page", path: "/blank" },
+      { name: "404 Error", path: "/error-404" },
     ],
   },
 ];
@@ -84,28 +84,28 @@ const othersItems: NavItem[] = [
     icon: <PieChartIcon />,
     name: "Charts",
     subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
+      { name: "Line Chart", path: "/line-chart" },
+      { name: "Bar Chart", path: "/bar-chart" },
     ],
   },
   {
     icon: <BoxCubeIcon />,
     name: "UI Elements",
     subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
+      { name: "Alerts", path: "/alerts" },
+      { name: "Avatar", path: "/avatars" },
+      { name: "Badge", path: "/badge" },
+      { name: "Buttons", path: "/buttons" },
+      { name: "Images", path: "/images" },
+      { name: "Videos", path: "/videos" },
     ],
   },
   {
     icon: <PlugInIcon />,
     name: "Authentication",
     subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
+      { name: "Sign In", path: "/signin" },
+      { name: "Sign Up", path: "/signup" },
     ],
   },
 ];

@@ -13,12 +13,12 @@ export const ComponentCard = ({
   children,
   className = "",
   desc = "",
-}) => {
+}: ComponentCardProps) => {
   return (
     <div className={styles.componentDiv}>
       <div className={styles.componentDiv2}>
         <h3 className={styles.componentH3}>{title}</h3>
-        {desc && <p classname={styles.componentP}>{desc}</p>}
+        {desc && <p className={styles.componentP}>{desc}</p>}
       </div>
 
       <div className={styles.componentDiv3}>

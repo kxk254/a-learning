@@ -9,7 +9,7 @@ interface TextareaProps {
   className?: string;
   disabled?: boolean;
   error?: boolean;
-  hing?: string;
+  hint?: string;
 }
 
 export const TextArea = ({
@@ -21,7 +21,7 @@ export const TextArea = ({
   disabled = false,
   error = false,
   hint = "",
-}) => {
+}: TextareaProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     if (onChange) {

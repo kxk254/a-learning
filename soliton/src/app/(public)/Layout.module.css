@@ -9,6 +9,7 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  min-width: 0;
 }
 .header {
   position: sticky;
@@ -22,6 +23,7 @@
 
 .content {
   overflow-y: auto;
+  min-width: 0;
 }
 
 .ml0 {
