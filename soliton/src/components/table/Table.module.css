@@ -1,0 +1,7 @@
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+.isEdited {
+  background: red;
+}
