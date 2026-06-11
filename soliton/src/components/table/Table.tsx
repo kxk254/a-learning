@@ -34,6 +34,7 @@ export default function Table<T extends Record<string, unknown>>({
   const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
 
   const getCellKey = (row: number, key: keyof T) => `${row}-${String(key)}`;
+  console.log(styles);
 
   return (
     <table className="table">
@@ -60,7 +61,7 @@ export default function Table<T extends Record<string, unknown>>({
               return (
                 <td
                   key={String(col.key)}
-                  className={`${col.cellClassName ?? ""} ${isEdited ? styles.idEdited : ""}`}
+                  className={`${col.cellClassName ?? ""} ${isEdited ? styles.isEdited : ""}`}
                   style={{
                     width: col.width,
                     height: rowHeight,
