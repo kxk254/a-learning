@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import styles from "./Table.module.css";
 
 export type Column<T> = {
   key: keyof T;
@@ -29,6 +30,11 @@ export default function Table<T extends Record<string, unkown>>({
 
   const [editValue, setEditValue] = useState("");
 
+  type CellKey = string; // "row-col key"
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
+
+  const getCellKey = (row: number, key: keyof T) => `${row}-${String(key)}`;
+
   return (
     <table className="table">
       <thead>
@@ -49,9 +55,14 @@ export default function Table<T extends Record<string, unkown>>({
         {data.map((row, index) => (
           <tr key={index} style={{ height: rowHeight }}>
             {columns.map((col) => (
+		    const isEdited = editedCells[getCellKey(index, col.key)];
               <td
                 key={String(col.key)}
-                className={col.cellClassName}
+                className={`${col.cellClassName ?? ""} ${isEdited ? styles.idEdited : ""}`}
+                style={{
+                  width: col.width,
+                  height: rowHeight,
+                }}
                 onClick={() => {
                   setEditingCell({ row: index, key: String(col.key) });
                   setEditValue(String(row[col.key] ?? ""));
@@ -62,9 +73,23 @@ export default function Table<T extends Record<string, unkown>>({
                   <input
                     autoFocus
                     value={editValue}
+                    style={{
+                      flex: 1,
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                    }}
                     onChange={(e) => setEditValue(e.target.value)}
                     onBlur={() => {
-                      onCellUpdate?.(index, col.key, editValue);
+                      const original = String(data[index][col.key] ?? "");
+                      const updated = editValue;
+                      if (original !== updated) {
+                        setEditedCells((prev) => ({
+                          ...prev,
+                          [getCellKey(index, col.key)]: true,
+                        }));
+                        onCellUpdate?.(index, col.key, editValue);
+                      }
                       setEditingCell(null);
                     }}
                   />
