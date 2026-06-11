@@ -1,21 +1,27 @@
 .themeToggleBtn {
-  border: 1px solid var(--primary);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  border: 1px solid var(--border);
   border-radius: 50%;
-  padding: var(--space-xs);
-  background: var(--background);
-  width: var(--space-3xl);
-  height: var(--space-3xl);
+  background: var(--base);
+  width: var(--space-10);
+  height: var(--space-10);
   cursor: pointer;
 }
+.themeToggleBtn:hover {
+  color: var(--text-subtle);
+  background: var(--base-subtle);
+}
 .bright {
-  background: var(--background);
-  color: var(--primary);
-  width: var(--space-xl);
-  height: var(--space-xl);
+  color: var(--text);
+  width: var(--space-5);
+  height: var(--space-5);
 }
 .moon {
-  background: var(--background);
-  color: var(--primary);
-  width: var(--space-xl);
-  height: var(--space-xl);
+  color: var(--text);
+  width: var(--space-5);
+  height: var(--space-5);
 }
