@@ -4,8 +4,9 @@
   display: flex;
   width: 100%;
   align-items: center;
-  z-index: 100;
-  background: var(--background);
+  z-index: var(--z-sticky);
+  background: var(--base);
+  border-color: var(--border);
 }
 
 .headerInner {
@@ -16,13 +17,13 @@
   flex-grow: 1;
   border-bottom: solid 1px;
   border-color: var(--border);
-  background: var(--background);
+  background: var(--base);
 }
 
 .handleBtn {
   border: none;
   padding: var(--space-xs);
-  background: var(--background);
+  background: var(--base);
   cursor: pointer;
   width: var(--space-4xl);
   height: var(--space-4xl);
@@ -176,6 +177,9 @@
 }
 
 @media (min-width: 1024px) {
+  .header {
+    border-bottom-width: 1px;
+  }
   .headerInner {
     flex-direction: row;
   }

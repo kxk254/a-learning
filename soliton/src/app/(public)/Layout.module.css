@@ -1,33 +1,20 @@
 .shell {
   min-height: 100vh;
-  display: flex;
-  overflow: hidden;
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
   flex: 1;
-  overflow: hidden;
-  min-width: 0;
-}
-.header {
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: var(--background);
-  overflow-y: hidden;
 }
 
 .content {
-  overflow-y: auto;
-  min-width: 0;
+  padding: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1536px;
 }
 
 .ml0 {
-  margin-left: var(--aside-zero);
+  margin-left: 0;
 }
 
 @media (min-width: 1024px) {
@@ -35,9 +22,15 @@
     display: flex;
   }
   .ml290 {
-    margin-left: var(--aside-wide);
+    margin-left: 290px;
   }
   .ml90 {
-    margin-left: var(--aside-narrow);
+    margin-left: 90px;
+  }
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    padding: 24px;
   }
 }
