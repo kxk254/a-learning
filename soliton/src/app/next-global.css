@@ -1,0 +1,351 @@
+:root {
+  /* =========================================================
+     BACKBONE — Warm Neutral Scale
+  ========================================================= */
+
+  --base-50: #f8f7f4;
+  --base-100: #f1efe9;
+  --base-200: #e6e2da;
+  --base-300: #d4cec3;
+  --base-400: #b8b1a6;
+  --base-500: #9c958a;
+  --base-600: #7f786e;
+  --base-700: #625c54;
+  --base-800: #4a453f;
+  --base-900: #2f2c28;
+  --base-950: #1c1a17;
+
+  --base: var(--base-50);
+  --base-content: var(--base-900);
+  --base-muted: var(--base-600);
+  --base-subtle: var(--base-200);
+  --base-disabled: var(--base-300);
+
+  /* =========================================================
+     TEXT SYSTEM (Backgrounds use base-*, not text colors)
+  ========================================================= */
+
+  --text: var(--base-900); /* Default body text */
+  --text-muted: var(--base-600); /* Secondary text */
+  --text-subtle: var(--base-500); /* Captions / metadata */
+  --text-disabled: var(--base-400);
+
+  --text-inverse: #ffffff; /* On dark/primary backgrounds */
+  --text-on-primary: #ffffff;
+  --text-on-success: #ffffff;
+  --text-on-warning: #1c1a17;
+  --text-on-error: #ffffff;
+  --text-on-info: #ffffff;
+
+  /* Optional — stronger hierarchy */
+  --text-heading: var(--base-950);
+  --text-body: var(--base-800);
+
+  /* =========================================================
+     SURFACES
+  ========================================================= */
+  --surface: var(--base-50);
+  --surface-1: #ffffff;
+  --surface-2: var(--base-100);
+
+  /* =========================================================
+     SIDEBAR (slight warmth + depth shift)
+  ========================================================= */
+
+  --sidebar: #f3f1ec;
+  --sidebar-content: var(--base-800);
+  --sidebar-border: var(--base-200);
+  --sidebar-hover: var(--base-200);
+  --sidebar-active: var(--base-300);
+  --sidebar-muted: var(--base-500);
+
+  /* =====================================================
+     BORDERS
+  ===================================================== */
+
+  --border: var(--base-200);
+  --border-strong: var(--base-300);
+  --border-muted: var(--base-100);
+  --border-subtle: color-mix(in srgb, var(--base-300) 40%, transparent);
+
+  /* =====================================================
+     FOCUS STATES
+  ===================================================== */
+
+  --focus: var(--primary);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent);
+  --focus-ring-strong: 0 0 0 4px
+    color-mix(in srgb, var(--primary) 35%, transparent);
+
+  /* =========================================================
+     PRIMARY (Brand Core)
+  ========================================================= */
+
+  --primary-50: #eef4f9;
+  --primary-100: #d9e6f2;
+  --primary-200: #b7cfe4;
+  --primary-300: #8fb3d1;
+  --primary-400: #5f8fb8;
+  --primary-500: #3b6f9c;
+  --primary-600: #0f3d66; /* LOCKED */
+  --primary-700: #0c3254;
+  --primary-800: #092743;
+  --primary-900: #061c31;
+  --primary-950: #04121f;
+  --primary: var(--primary-600);
+  --primary-content: #ffffff;
+  --primary-hover: var(--primary-700);
+  --primary-active: var(--primary-800);
+  --primary-muted: var(--primary-200);
+  --primary-subtle: var(--primary-50);
+  --primary-outline: var(--primary-600);
+
+  /* =========================================================
+     SECONDARY (Muted Slate Accent)
+  ========================================================= */
+
+  --secondary-500: #5f6b7a;
+  --secondary: var(--secondary-500);
+  --secondary-content: #ffffff;
+
+  /* =========================================================
+     SEMANTICS (Muted & Earthy)
+  ========================================================= */
+
+  /* Success — Sage */
+  --success-500: #5f7d63;
+  --success: var(--success-500);
+  --success-content: #ffffff;
+  --success-subtle: #edf4ee;
+
+  /* Warning — Mustard */
+  --warning-500: #b38a2e;
+  --warning: var(--warning-500);
+  --warning-content: #1c1a17;
+  --warning-subtle: #faf3df;
+
+  /* Error — Brick */
+  --error-500: #a14b42;
+  --error: var(--error-500);
+  --error-content: #ffffff;
+  --error-subtle: #f6e9e7;
+
+  /* Info — Slate Teal */
+  --info-500: #3f6e75;
+  --info: var(--info-500);
+  --info-content: #ffffff;
+  --info-subtle: #e7f2f3;
+
+  /* =========================================================
+     GLOBAL LEAVES
+  ========================================================= */
+
+  --overlay: rgba(28, 26, 23, 0.6);
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+
+  --gradient-subtle: linear-gradient(
+    to bottom,
+    var(--base-50),
+    var(--base-100)
+  );
+
+  /* =====================================================
+ * SPACING
+ * ====================================================*/
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+    --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+   --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+
+  /* Line heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* Font weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+/* Layering */
+  --z-base: 0;
+  --z-elevated: 10;
+  --z-sticky: 20;
+  --z-dropdown: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+
+
+ .dark {
+  /* =========================================================
+     BACKBONE — Cool Neutral Scale
+  ========================================================= */
+
+  --base-50: #0f1115;
+  --base-100: #14171c;
+  --base-200: #1b1f25;
+  --base-300: #242a33;
+  --base-400: #303844;
+  --base-500: #3f4a59;
+  --base-600: #5a6676;
+  --base-700: #7b8796;
+  --base-800: #a5b0bd;
+  --base-900: #d2d8df;
+  --base-950: #eef2f6;
+
+  --base: var(--base-50);
+  --base-content: var(--base-900);
+  --base-muted: var(--base-600);
+  --base-subtle: var(--base-200);
+  --base-disabled: var(--base-400);
+
+  /* =========================================================
+     TEXT SYSTEM
+  ========================================================= */
+
+  --text: var(--base-900); /* Light gray */
+  --text-muted: var(--base-700);
+  --text-subtle: var(--base-600);
+  --text-disabled: var(--base-500);
+
+  --text-inverse: #0f1115; /* Used on bright primary */
+  --text-on-primary: #001014;
+  --text-on-success: #08110b;
+  --text-on-warning: #1a1405;
+  --text-on-error: #160807;
+  --text-on-info: #051316;
+
+  --text-heading: var(--base-950);
+  --text-body: var(--base-800);
+
+  /* =========================================================
+     SURFACES
+  ========================================================= */
+
+  --surface: var(--base-100);
+  --surface-1: var(--base-200);
+  --surface-2: var(--base-300);
+
+  /* =========================================================
+     SIDEBAR
+  ========================================================= */
+
+  --sidebar: #0c0f13;
+  --sidebar-content: var(--base-800);
+  --sidebar-border: var(--base-200);
+  --sidebar-hover: var(--base-200);
+  --sidebar-active: var(--base-300);
+  --sidebar-muted: var(--base-500);
+
+  /* =====================================================
+     BORDERS
+  ===================================================== */
+
+  --border: var(--base-200);
+  --border-strong: var(--base-300);
+  --border-muted: var(--base-100);
+  --border-subtle: color-mix(in srgb, var(--base-300) 40%, transparent);
+
+  /* =====================================================
+     FOCUS STATES
+  ===================================================== */
+
+  --focus: var(--primary);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent);
+  --focus-ring-strong: 0 0 0 4px
+    color-mix(in srgb, var(--primary) 35%, transparent);
+
+  /* =========================================================
+     PRIMARY — LOCKED CORE
+  ========================================================= */
+
+  --primary-50: #001f24;
+  --primary-100: #00343b;
+  --primary-200: #004f59;
+  --primary-300: #00707c;
+  --primary-400: #00a4b5;
+  --primary-500: #00cfe6;
+  --primary-600: #00e5ff; /* LOCKED */
+  --primary-700: #33ebff;
+  --primary-800: #66f1ff;
+  --primary-900: #a3f8ff;
+  --primary-950: #e6fdff;
+
+  --primary: var(--primary-600);
+  --primary-content: #001014;
+  --primary-hover: var(--primary-500);
+  --primary-active: var(--primary-400);
+  --primary-muted: #00343b;
+  --primary-subtle: #00262c;
+  --primary-outline: var(--primary-600);
+
+  /* =========================================================
+     SEMANTICS — Dark Adjusted
+  ========================================================= */
+
+  --success-500: #6fa877;
+  --success: var(--success-500);
+  --success-content: #08110b;
+  --success-subtle: #112018;
+
+  --warning-500: #d4a63f;
+  --warning: var(--warning-500);
+  --warning-content: #1a1405;
+  --warning-subtle: #2a220b;
+
+  --error-500: #c06258;
+  --error: var(--error-500);
+  --error-content: #160807;
+  --error-subtle: #2a1412;
+
+  --info-500: #56a6b2;
+  --info: var(--info-500);
+  --info-content: #051316;
+  --info-subtle: #102327;
+
+  /* =========================================================
+     GLOBAL LEAVES
+  ========================================================= */
+
+  --overlay: rgba(0, 0, 0, 0.7);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.6);
+
+  --gradient-subtle: linear-gradient(
+    to bottom,
+    var(--base-100),
+    var(--base-200)
+  );
+}

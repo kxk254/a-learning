@@ -35,7 +35,7 @@ export const Input = ({
   success = false,
   error = false,
   hint,
-}) => {
+}: InputProps) => {
   const [isHover, setIsHover] = useState(false);
 
   let inputClasses = `${styles.inputClasses} ${className}`;

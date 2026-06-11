@@ -10,7 +10,7 @@ interface Option {
 interface MultiSelectProps {
   options: Option[];
   placeholder?: string;
-  onChange?: (value: string[]) => void;
+  onChange?: (value: string) => void;
   className?: string;
   defaultValue?: string;
 }
@@ -21,7 +21,7 @@ export const Select = ({
   onChange,
   className = "",
   defaultValue = "",
-}) => {
+}: MultiSelectProps) => {
   console.log("option ---", options[0]);
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
 

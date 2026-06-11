@@ -1,5 +1,5 @@
 "use client";
-import type React from "React";
+import type React from "react";
 import styles from "./Input.module.css";
 import clsx from "clsx";
 import { CheckLineIcon } from "@/src/icons/index";
@@ -20,7 +20,7 @@ export const Checkbox = ({
   id,
   onChange,
   disabled = false,
-}) => {
+}: CheckboxProps) => {
   console.log("checked and disabled", checked, "disabled", disabled);
   return (
     <label className={`${styles.checkboxLabel}${styles.checkboxLabelDisabled}`}>

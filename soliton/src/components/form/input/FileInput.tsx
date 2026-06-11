@@ -6,7 +6,7 @@ interface FileInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const FileInput = ({ className = "", onChange }) => {
+export const FileInput = ({ className = "", onChange }: FileInputProps) => {
   return (
     <input
       type="file"

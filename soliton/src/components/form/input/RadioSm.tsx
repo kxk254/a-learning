@@ -19,7 +19,7 @@ export const RadioSm = ({
   label,
   onChange,
   className = "",
-}) => {
+}: RadioProps) => {
   return (
     <label htmlFor={id} className={`${styles.label} ${className}`}>
       <span className={styles.span}>
@@ -27,13 +27,16 @@ export const RadioSm = ({
           type="radio"
           id={id}
           name={name}
+          value={value}
           checked={checked}
           onChange={() => onChange(value)}
           className={styles.input}
         />
+        {/* Styled Radio Circle */}
         <span
           className={`${styles.span2} ${checked ? styles.span2checked : styles.span2checkedno}`}
         >
+          {/* Inner Dot */}
           <span
             className={`${styles.span3} ${checked ? styles.span3checked : styles.span3checkedno}`}
           ></span>

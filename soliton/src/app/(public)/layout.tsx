@@ -21,7 +21,9 @@ export default function AdminLayout({
     <div className={styles.shell}>
       <AppSidebar />
       <div className={`${styles.main} ${mainContentMargin}`}>
-        <AppHeader className={styles.header} />
+        <div className={styles.header}>
+          <AppHeader />
+        </div>
         <main className={styles.content}>{children}</main>
       </div>
     </div>

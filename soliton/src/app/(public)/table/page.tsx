@@ -1,6 +1,10 @@
+"use client";
 import Table from "@/src/components/table/Table";
+import type { Column } from "@/src/components/table/Table";
 import styles from "./Page.module.css";
+import { useState } from "react";
 
+type Row = { name: string; age: number; city: string };
 const columns = [
   {
     key: "name",
@@ -23,13 +27,28 @@ const columns = [
     headerClassName: "headerRight",
     cellClassName: "cellRight",
   },
-];
-
-const data = [
-  { name: "John", age: 25, city: "Tokyo" },
-  { name: "Alice", age: 30, city: "Osaka" },
-];
+] satisfies Column<Row>[];
 
 export default function Page() {
-  return <Table columns={columns} data={data} rowHeight="20px" />;
+  const [users, setUsers] = useState<Row[]>([
+    { name: "John", age: 25, city: "New York" },
+    { name: "Jane", age: 30, city: "Toronto" },
+  ]);
+  const updateCell = (rowIndex: number, key: keyof Row, value: string) => {
+    setUsers((prev) =>
+      prev.map((row, i) =>
+        i === rowIndex
+          ? { ...row, [key]: key === "age" ? Number(value) : value }
+          : row,
+      ),
+    );
+  };
+  return (
+    <Table
+      columns={columns}
+      data={users}
+      onCellUpdate={updateCell}
+      rowHeight="20px"
+    />
+  );
 }

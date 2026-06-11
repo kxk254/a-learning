@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Charts.module.css";
 import { useTheme } from "@/src/context/ThemeContext";
 
@@ -12,15 +12,12 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 export default function LineChartOne() {
-  const { theme, _ } = useTheme();
-  let col;
+  const { theme, toggleTheme } = useTheme();
   console.log("bar chart theme", theme);
 
-  if (theme === "light") {
-    col = ["#0f3d66", "#00e5ff"];
-  } else {
-    col = ["#00e5ff", "#3b82f6"];
-  }
+  const col =
+    theme === "light" ? ["#0f3d66", "#00e5ff"] : ["#00e5ff", "#3b82f6"];
+
   const options: ApexOptions = {
     legend: {
       show: false, // Hide legend
