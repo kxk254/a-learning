@@ -38,15 +38,15 @@
   border-radius: var(--radius-sm);
 }
 .checkboxInput:disabled {
-  background: var(--surface-dark);
-  color: var(--foreground-muted);
+  background: var(--base-muted);
+  color: var(--text-muted);
   pointer-events: none;
 }
 .checkboxIconChecked {
   position: absolute;
   background: var(--primary);
   border-radius: var(--radius-sm);
-  color: var(--foreground-inverse);
+  color: var(--text);
 }
 
 .chgeckboxIconDisabled {
@@ -57,7 +57,7 @@
 .checkboxSpan {
   font-size: 14px;
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--text);
 }
 
 /* Input Field */
@@ -74,29 +74,29 @@
   padding-bottom: 10px;
   font-size: 16px;
   box-shadow: var(--shadow-sm);
-  color: var(--foreground);
+  color: var(--text);
 }
 .inputClasses::placeholder {
-  color: var(--primary);
+  color: var(--text);
 }
 .inputClasses:focus {
-  outline: none;
+  outline: 1px solid var(--primary);
   border-color: var(--primary);
 }
 
 .disabled {
-  color: var(--foreground-muted);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
 .error {
-  color: var(--warning);
+  color: var(--text-on-warning);
 }
 .error:focus {
   box-shadow: var(--shadow-md);
 }
 .success {
-  color: var(--success);
+  color: var(--text-on-success);
 }
 .success:focus {
   box-shadow: var(--shadow-md);
@@ -112,15 +112,15 @@
 }
 
 .pError {
-  color: var(--warning);
+  color: var(--text-on-warning);
 }
 
 .pSuccess {
-  color: var(--success);
+  color: var(--text-on-success);
 }
 
 .pOther {
-  color: var(--foreground-subtle);
+  color: var(--text-subtle);
 }
 .inputDiv {
   position: relative;
@@ -139,25 +139,25 @@
   padding-bottom: 10px;
   font-size: 16px;
   box-shadow: var(--shadow-md);
-  color: var(--primary);
+  color: var(--text);
 }
 
 .textareaClasses:focus {
   outline: none;
 }
 .disabled {
-  background: var(--surface-dark);
+  background: var(--base-muted);
   opacity: 0.5;
-  color: var(--foreground-muted);
+  color: var(--text-subtle);
   cursor: not-allowed;
 }
 .error {
   background: transparent;
-  color: var(--danger);
-  border-color: var(--danger);
+  color: var(--text-on-error);
+  border-color: var(--border);
 }
 .error:focus {
-  border-color: var(--danger);
+  border-color: var(--focus);
 }
 .other {
   background: transparent;
@@ -171,10 +171,10 @@
 .hint {
   margin-top: 8px;
   font-size: 14px;
-  color: var(--primary);
+  color: var(--text);
 }
 .hintError {
-  color: var(--danger);
+  color: var(--text-on-error);
 }
 
 /* Radio Sm */
@@ -186,7 +186,7 @@
 }
 .span {
   position: relative;
-  color: var(--primary);
+  color: var(--text);
 }
 .input {
   position: absolute;
