@@ -49,6 +49,14 @@ export default function Admin() {
           checked={radio === "apple"}
           onChange={setRadio}
         />
+        <RadioSm
+          id="banana"
+          name="fruit"
+          value="banana"
+          label="Banana"
+          checked={radio === "banana"}
+          onChange={setRadio}
+        />
         <FileInput />
         <DropZone />
         <ChartTab />

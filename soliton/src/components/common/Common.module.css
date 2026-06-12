@@ -2,7 +2,7 @@
 .componentDiv {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: var(--background);
+  background: var(--base);
 }
 .componentDiv2 {
   padding-left: 24px;
@@ -13,12 +13,12 @@
 .componentH3 {
   margin-top: 4px;
   font-size: 14px;
-  color: var(--primary);
+  color: var(--text);
 }
 .componentP {
   margin-top: 4px;
   font-size: 14px;
-  color: var(--primary);
+  color: var(--text);
 }
 .componentDiv3 {
   padding: 16px;
@@ -33,11 +33,11 @@
 .chartOptionTrue {
   box-shadow: var(--shadow-sm);
   color: var(--primary);
-  background: var(--surface-teritary);
+  background: var(--base);
 }
 .chartOptionFalse {
-  color: var(--accent-muted);
-  background: var(--surface-secondary);
+  color: var(--text-muted);
+  background: var(--base-muted);
   opacity: 0.6;
 }
 .chartDiv {
@@ -45,7 +45,7 @@
   align-items: center;
   gap: 2px;
   border-radius: var(--radius-lg);
-  background: var(--background);
+  background: var(--base);
 }
 .chartButton {
   padding-left: 12px;
@@ -57,6 +57,5 @@
   border-radius: var(--radius-md);
 }
 .chartButton:hover {
-  font-weight: 700;
   opacity: 0.8;
 }
