@@ -272,10 +272,10 @@
      BORDERS
   ===================================================== */
 
-  --border: var(--base-200);
-  --border-strong: var(--base-300);
-  --border-muted: var(--base-100);
-  --border-subtle: color-mix(in srgb, var(--base-300) 40%, transparent);
+  --border: var(--base-500); /* 200 */
+  --border-strong: var(--base-600); /* 300 */
+  --border-muted: var(--base-400); /* 100 */
+  --border-subtle: color-mix(in srgb, var(--base-500) 40%, transparent);
 
   /* =====================================================
      FOCUS STATES

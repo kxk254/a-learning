@@ -2,7 +2,6 @@
 import { Button } from "@/src/components/ui/button/Button";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { Dropdown } from "@/src/components/ui/button/Dropdown";
-import { DropdownItem } from "@/src/components/ui/button/DropdownItem";
 import { Label } from "@/src/components/form/Label";
 import { Checkbox } from "@/src/components/form/input/Checkbox";
 import { Input } from "@/src/components/form/input/InputField";
@@ -21,7 +20,6 @@ export default function Admin() {
   const [text, setText] = useState("");
   const [radio, setRadio] = useState("apple");
   const [input, setInput] = useState("");
-  const [isDrop, setIsDrop] = useState(false);
   return (
     <>
       <div className={styles.parent}>
@@ -67,11 +65,7 @@ export default function Admin() {
         <Badge variant="solid" size="sm" color="success">
           BADGE
         </Badge>
-        <div onClick={() => setIsDrop((prev) => !prev)}>dropdown</div>
-        <Dropdown isOpen={isDrop} onClose={() => setIsDrop(false)}>
-          DROPDOWN
-        </Dropdown>
-        <DropdownItem tag="a">dropdown item</DropdownItem>
+        <Dropdown isOpen="true", onClose={()=>{}} >DROPDOWN</Dropdown>
       </div>
     </>
   );

@@ -45,3 +45,86 @@
   display: flex;
   align-items: center;
 }
+
+/* Badge */
+.baseStyles {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  justify-content: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+}
+.sizeSm {
+  font-size: var(--text-xs);
+}
+.sizeMd {
+  font-size: var(--text-sm);
+}
+.badgePrimary {
+  background: rgb(from var(--primary) r g b / 0.15);
+  color: var(--primary);
+}
+.badgeSuccess {
+  background: rgb(from var(--success) r g b / 0.15);
+  color: var(--sucess);
+}
+.badgeError {
+  background: rgb(from var(--error) r g b / 0.15);
+  color: var(--error);
+}
+.badgeWarning {
+  background: rgb(from var(--warning) r g b / 0.15);
+  color: var(--warning);
+}
+
+.badgePrimaryS {
+  background: var(--primary);
+  color: var(--primary-content);
+}
+.badgeSuccessS {
+  background: var(--success);
+  color: var(--sucess-content);
+}
+.badgeErrorS {
+  background: var(--error);
+  color: var(--error-content);
+}
+.badgeWarningS {
+  background: var(--warning);
+  color: var(--warning-content);
+}
+
+.mr1 {
+  margin-right: var(--space-1);
+}
+.ml1 {
+  margin-left: var(--space-1);
+}
+
+/* DropDown */
+.dropdownDiv {
+  position: absolute;
+  z-index: var(--z-overlay);
+  /* right: 0; */
+  margin-top: var(--sapce-2);
+  border-radius: var(--radius-xl);
+  border-color: var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Dropdown Item */
+
+.baseClassName {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+.baseClassName:hover {
+  background: var(--base-subtle);
+  opacity: 0.8;
+}
