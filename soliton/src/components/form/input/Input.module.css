@@ -34,19 +34,19 @@
   cursor: pointer;
   border-width: 1px;
   border-style: solid;
-  border-color: var(--primary);
+  border-color: var(--border);
   border-radius: var(--radius-sm);
 }
 .checkboxInput:disabled {
-  background: var(--surface-dark);
-  color: var(--foreground-muted);
+  background: var(--base-muted);
+  color: var(--text-muted);
   pointer-events: none;
 }
 .checkboxIconChecked {
   position: absolute;
   background: var(--primary);
   border-radius: var(--radius-sm);
-  color: var(--foreground-inverse);
+  color: var(--text-on-primary);
 }
 
 .chgeckboxIconDisabled {
@@ -57,7 +57,7 @@
 .checkboxSpan {
   font-size: 14px;
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--text);
 }
 
 /* Input Field */
@@ -74,29 +74,29 @@
   padding-bottom: 10px;
   font-size: 16px;
   box-shadow: var(--shadow-sm);
-  color: var(--foreground);
+  color: var(--text);
 }
 .inputClasses::placeholder {
-  color: var(--primary);
+  color: var(--text);
 }
 .inputClasses:focus {
-  outline: none;
+  outline: 1px solid var(--primary);
   border-color: var(--primary);
 }
 
 .disabled {
-  color: var(--foreground-muted);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
 .error {
-  color: var(--warning);
+  color: var(--text-on-warning);
 }
 .error:focus {
   box-shadow: var(--shadow-md);
 }
 .success {
-  color: var(--success);
+  color: var(--text-on-success);
 }
 .success:focus {
   box-shadow: var(--shadow-md);
@@ -112,15 +112,15 @@
 }
 
 .pError {
-  color: var(--warning);
+  color: var(--text-on-warning);
 }
 
 .pSuccess {
-  color: var(--success);
+  color: var(--text-on-success);
 }
 
 .pOther {
-  color: var(--foreground-subtle);
+  color: var(--text-subtle);
 }
 .inputDiv {
   position: relative;
@@ -139,25 +139,25 @@
   padding-bottom: 10px;
   font-size: 16px;
   box-shadow: var(--shadow-md);
-  color: var(--primary);
+  color: var(--text);
 }
 
 .textareaClasses:focus {
   outline: none;
 }
 .disabled {
-  background: var(--surface-dark);
+  background: var(--base-muted);
   opacity: 0.5;
-  color: var(--foreground-muted);
+  color: var(--text-subtle);
   cursor: not-allowed;
 }
 .error {
   background: transparent;
-  color: var(--danger);
-  border-color: var(--danger);
+  color: var(--text-on-error);
+  border-color: var(--border);
 }
 .error:focus {
-  border-color: var(--danger);
+  border-color: var(--focus);
 }
 .other {
   background: transparent;
@@ -171,10 +171,10 @@
 .hint {
   margin-top: 8px;
   font-size: 14px;
-  color: var(--primary);
+  color: var(--text);
 }
 .hintError {
-  color: var(--danger);
+  color: var(--text-on-error);
 }
 
 /* Radio Sm */
@@ -186,7 +186,7 @@
 }
 .span {
   position: relative;
-  color: var(--primary);
+  color: var(--text);
 }
 .input {
   position: absolute;
@@ -210,7 +210,7 @@
   border: 1px solid var(--border);
 }
 .span2checked {
-  border-color: var(--primary-foreground);
+  border-color: var(--border);
   background: var(--primary);
 }
 .span2checkedno {
@@ -223,10 +223,10 @@
   border-radius: 50%;
 }
 .span3checked {
-  background: var(--surface);
+  background: var(--base);
 }
 .span3checkedno {
-  background: var(--surface);
+  background: var(--base);
 }
 
 /* File Input */
@@ -238,7 +238,7 @@
   border: 1px solid var(--border);
   background: transparent;
   font-size: 12px;
-  color: var(--primary);
+  color: var(--text);
   box-shadow: var(--shadow-md);
   transition: border-color 0.2s ease;
 }
@@ -247,14 +247,14 @@
   outline: none;
 }
 .fileInput::placeholder {
-  color: var(--foreground-muted);
+  color: var(--base-subtle);
 }
 .fileInput:hover::file-selector-button {
   background: var(--primary-hover);
 }
 
 .fileInput::file-selector-button {
-  color: var(--primary-foreground);
+  color: var(--text-on-primary);
   background: var(--primary);
   margin-right: 20px;
   border: none;
@@ -284,11 +284,10 @@
 }
 .dropFormisActive {
   border-color: var(--primary);
-  background: var(--background);
+  background: var(--base);
 }
 .dropFormInActive {
-  border-color: var(--foreground-muted);
-  background: var(--surface-secondary);
+  border-color: var(--border);
 }
 .dropDiv2 {
   display: flex;
@@ -308,7 +307,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--background);
+  background: var(--base);
   color: var(--primary);
 }
 .dropIcon {

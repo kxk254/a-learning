@@ -13,26 +13,29 @@
   font-size: 14px;
 }
 .primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
+  background: var(--primary);
+  color: var(--text-on-primary);
 }
 .primary:hover {
-  background: var(--btn-primary-bg-hover);
+  background: var(--primary-hover);
+  outline: 1px solid var(--primary-outline);
 }
-.outline {
-  outline: 1px solid var(--btn-outline-border);
-}
-.outline:hover {
-  opacity: 0.8;
-}
+/* .outline { */
+/*   outline: 1px solid var(--btn-outline-border); */
+/* } */
+/* .outline:hover { */
+/*   opacity: 0.8; */
+/* } */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   gap: 8px;
   border-radius: var(--radius-lg);
+  border: none;
   transition: all 0.3s ease;
+  outline: none;
 }
 .disabled {
   cursor: not-allowed;
