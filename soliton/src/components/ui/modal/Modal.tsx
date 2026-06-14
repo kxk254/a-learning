@@ -18,7 +18,7 @@ export const Modal = ({
   children,
   className,
   showCloseButton = true,
-  isFullscrren = false,
+  isFullscreen = false,
 }: ModalPropos) => {
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
