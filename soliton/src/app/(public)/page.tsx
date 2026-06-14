@@ -1,78 +1,19 @@
 "use client";
-import { Button } from "@/src/components/ui/button/Button";
-import { Badge } from "@/src/components/ui/button/Badge";
-import { Dropdown } from "@/src/components/ui/button/Dropdown";
-import { DropdownItem } from "@/src/components/ui/button/DropdownItem";
-import { Label } from "@/src/components/form/Label";
-import { Checkbox } from "@/src/components/form/input/Checkbox";
-import { Input } from "@/src/components/form/input/InputField";
-import { Select } from "@/src/components/form/Select";
-import { DatePicker } from "@/src/components/form/DatePicker";
-import { TextArea } from "@/src/components/form/input/TextArea";
-import { RadioSm } from "@/src/components/form/input/RadioSm";
-import { FileInput } from "@/src/components/form/input/FileInput";
-import { DropZone } from "@/src/components/form/input/DropZone";
-import { ChartTab } from "@/src/components/common/ChartTab";
 import styles from "./Page.module.css";
 import { useState } from "react";
+import { GridLayout1 } from "@/src/components/grid/GridLayout1";
 
 export default function Admin() {
-  const [checked, setChecked] = useState(false);
-  const [text, setText] = useState("");
-  const [radio, setRadio] = useState("apple");
-  const [input, setInput] = useState("");
-  const [isDrop, setIsDrop] = useState(false);
+  console.log("styles", styles.grid);
   return (
-    <>
-      <div className={styles.parent}>
-        My App
-        <Button className={styles.button} size="sm">
-          Sign In{" "}
-        </Button>
-        <Input
-          placeholder={"placeholder here ..."}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <Label>LABEL</Label>
-        <Checkbox checked={checked} onChange={setChecked} disabled={false} />
-        <Select
-          options={[
-            { value: "apple", label: "Apple" },
-            { value: "banana", label: "Banana" },
-            { value: "orange", label: "Orange" },
-          ]}
-        />
-        <DatePicker id="abc" />
-        <TextArea value={text} onChange={setText} rows={5} hint="HINT" />
-        <RadioSm
-          id="apple"
-          name="fruit"
-          value="apple"
-          label="Apple"
-          checked={radio === "apple"}
-          onChange={setRadio}
-        />
-        <RadioSm
-          id="banana"
-          name="fruit"
-          value="banana"
-          label="Banana"
-          checked={radio === "banana"}
-          onChange={setRadio}
-        />
-        <FileInput />
-        <DropZone />
-        <ChartTab />
-        <Badge variant="solid" size="sm" color="success">
-          BADGE
-        </Badge>
-        <div onClick={() => setIsDrop((prev) => !prev)}>dropdown</div>
-        <Dropdown isOpen={isDrop} onClose={() => setIsDrop(false)}>
-          DROPDOWN
-        </Dropdown>
-        <DropdownItem tag="a">dropdown item</DropdownItem>
-      </div>
-    </>
+    <main>
+      <section className={styles.grid}>
+        <GridLayout1 title="Admin Page">Profile1</GridLayout1>
+        <GridLayout1 title="RE Management">Profile1</GridLayout1>
+        <GridLayout1 title="Invoice">Profile1</GridLayout1>
+        <GridLayout1 title="Receipt">Profile1</GridLayout1>
+        <GridLayout1 title="5">Profile1</GridLayout1>
+      </section>
+    </main>
   );
 }

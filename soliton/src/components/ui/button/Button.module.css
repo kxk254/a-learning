@@ -81,19 +81,19 @@
 
 .badgePrimaryS {
   background: var(--primary);
-  color: var(--primary-content);
+  color: var(--text-on-primary);
 }
 .badgeSuccessS {
   background: var(--success);
-  color: var(--sucess-content);
+  color: var(--text-on-success);
 }
 .badgeErrorS {
   background: var(--error);
-  color: var(--error-content);
+  color: var(--text-on-error);
 }
 .badgeWarningS {
   background: var(--warning);
-  color: var(--warning-content);
+  color: var(--text-on-warning);
 }
 
 .mr1 {
