@@ -8,8 +8,8 @@ interface BadgeProps {
   variant?: BadgeVariant;
   size?: BadgeSize;
   color?: BadgeColor;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
+  startIcon?: ElementType;
+  endIcon?: ElementType;
   children: React.ReactNode;
 }
 
@@ -17,8 +17,8 @@ export const Badge = ({
   variant = "light",
   color = "primary",
   size = "md",
-  startIcon,
-  endIcon,
+  startIcon: StartIcon,
+  endIcon: EndIcon,
   children,
 }: BadgeProps) => {
   const baseStyles = styles.baseStyles;
@@ -43,9 +43,17 @@ export const Badge = ({
 
   return (
     <span className={`${baseStyles} ${sizeClass} ${colorStyles}`}>
-      {startIcon && <span className={styles.mr1}>{startIcon}</span>}
+      {StartIcon && (
+        <span className={styles.mr1}>
+          <StartIcon className={styles.startIcon} />
+        </span>
+      )}
       {children}
-      {endIcon && <span className={styles.ml1}>{endIcon}</span>}
+      {EndIcon && (
+        <span className={styles.ml1}>
+          <EndIcon className={styles.endIcon} />
+        </span>
+      )}
     </span>
   );
 };
