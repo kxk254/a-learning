@@ -32,12 +32,12 @@
 /* Chart Tab */
 .chartOptionTrue {
   box-shadow: var(--shadow-sm);
-  color: var(--primary);
-  background: var(--base);
+  color: var(--text-on-primary);
+  background: var(--primary);
 }
 .chartOptionFalse {
   color: var(--text-muted);
-  background: var(--base-muted);
+  background: var(--base-300);
   opacity: 0.6;
 }
 .chartDiv {

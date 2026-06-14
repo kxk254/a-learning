@@ -44,9 +44,9 @@
   /* =========================================================
      SURFACES
   ========================================================= */
-  --surface: var(--base-50);
+  --surface: var(--base-100);
   --surface-1: #ffffff;
-  --surface-2: var(--base-100);
+  --surface-2: var(--base-200);
 
   /* =========================================================
      SIDEBAR (slight warmth + depth shift)
@@ -272,10 +272,10 @@
      BORDERS
   ===================================================== */
 
-  --border: var(--base-200);
-  --border-strong: var(--base-300);
-  --border-muted: var(--base-100);
-  --border-subtle: color-mix(in srgb, var(--base-300) 40%, transparent);
+  --border: var(--base-500); /* 200 */
+  --border-strong: var(--base-600); /* 300 */
+  --border-muted: var(--base-400); /* 100 */
+  --border-subtle: color-mix(in srgb, var(--base-500) 40%, transparent);
 
   /* =====================================================
      FOCUS STATES

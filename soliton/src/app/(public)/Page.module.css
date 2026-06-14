@@ -1,16 +1,9 @@
-.button {
-  width: 100%;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-5);
+  background: var(--base);
 }
-.parent {
-  max-width: 600px;
-  min-height: 100vh;
-}
-@media (max-width: 768px) {
-  .parent {
-    max-width: 100%;
-    padding: 20px;
-  }
-  .button {
-    width: 100%;
-  }
+.grid > :nth-child(5) {
+  grid-column: 1/-1;
 }

@@ -65,7 +65,17 @@ import GoogleIcon from "./google-icon.svg";
 import TwitterXIcon from "./twitter-x.svg";
 import ChevronRightIcon from "./chevron-right.svg";
 import MasterCardIcon from "./master-card.svg";
+import AccountingIcon from "./accounting.svg";
 import UploadIcon from "./upload.svg";
+import PhotoUploadIcon from "./photo-upload.svg";
+import RealEstateIcon from "./real-estate.svg";
+import ReceiptIcon from "./receipt.svg";
+import PdfIcon from "./pdf.svg";
+import CloseCircleIcon from "./close-circle.svg";
+import SaveIcon from "./save.svg";
+import BranchIcon from "./branch.svg";
+import StarIcon from "./star.svg";
+import ProjectIcon from "./project.svg";
 
 export {
   DownloadIcon,
@@ -136,4 +146,14 @@ export {
   ChevronRightIcon,
   MasterCardIcon,
   UploadIcon,
+  AccountingIcon,
+  PhotoUploadIcon,
+  RealEstateIcon,
+  ReceiptIcon,
+  PdfIcon,
+  CloseCircleIcon,
+  SaveIcon,
+  BranchIcon,
+  StarIcon,
+  ProjectIcon,
 };
