@@ -1,0 +1,15 @@
+/* .calendarWrapper :global(.fc) { */
+/*   color: var(--text); */
+/* } */
+/**/
+/* .calendarWrapper :global(.fc-theme-standard td), */
+/* .calendarWrapper :global(.fc-theme-standard th) { */
+/*   border-color: var(--border); */
+/* } */
+
+.calendarWrapper {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text);
+}

@@ -2,6 +2,7 @@
 import styles from "./Page.module.css";
 import { useState } from "react";
 import { GridLayout1 } from "@/src/components/grid/GridLayout1";
+import Calendar from "@/src/components/calendar/Calendar";
 import {
   RealEstateIcon,
   AdminIcon,
@@ -31,7 +32,7 @@ export default function Admin() {
         <GridLayout1 title="Receipt" icon={PhotoUploadIcon} disabled={true}>
           Profile1
         </GridLayout1>
-        <GridLayout1 title="5">Profile1</GridLayout1>
+        <Calendar />
       </section>
     </main>
   );
