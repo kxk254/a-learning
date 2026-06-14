@@ -43,15 +43,18 @@ export const Modal = ({
     } else {
       document.body.style.overflow = "unset";
     }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [isOpen]);
 
-  if (isOpen) return null;
+  if (!isOpen) return null;
 
   const contentClasses = isFullscreen ? styles.fullScreen : styles.noFullScreen;
 
   return (
     <div className={styles.modalDiv1}>
-      {isFullscreen && (
+      {!isFullscreen && (
         <div onClick={onClose} className={styles.modalDiv2}></div>
       )}
       <div

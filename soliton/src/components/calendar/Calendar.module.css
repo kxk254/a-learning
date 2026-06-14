@@ -13,3 +13,11 @@
   background: var(--surface-1);
   color: var(--text);
 }
+.calendarSection {
+  z-index: var(--z-base);
+}
+.modal {
+  z-index: var(--modal);
+  max-width: 700px;
+  padding: var(--space-6);
+}
