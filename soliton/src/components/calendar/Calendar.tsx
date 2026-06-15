@@ -25,11 +25,11 @@ export default function Calendar() {
     null,
   );
   const [eventTitle, setEventTitle] = useState("");
+  const [eventAllday, setEventAllday] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
-  const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
-  const [eventEndTime, setEventEndTime] = useState("");
   const [eventLevel, setEventLevel] = useState("");
+  const [selectedIDEvent, setSelectedIDEvent] = useState<any | null>(null);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
   const { isOpen, openModal, closeModal } = useModal();
@@ -46,48 +46,62 @@ export default function Calendar() {
       {
         id: "1",
         title: "Event Conf.",
-        start: new Date().toISOString().split("T")[0],
+        start: new Date(Date.now()),
+        end: new Date(Date.now() + 500000),
+        allday: false,
         extendedProps: { calendar: "Danger" },
       },
       {
         id: "2",
         title: "Meeting",
-        start: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        start: new Date(Date.now() + 86400000),
+        end: new Date(Date.now() + 86408000),
+        allday: false,
         extendedProps: { calendar: "Success" },
       },
       {
         id: "3",
         title: "Workshop",
-        start: new Date(Date.now() + 172800000).toISOString().split("T")[0],
-        end: new Date(Date.now() + 259200000).toISOString().split("T")[0],
+        start: new Date(Date.now() + 172800000),
+        end: new Date(Date.now() + 259200000),
+        allday: true,
         extendedProps: { calendar: "Primary" },
       },
     ]);
   }, []);
 
-  const formatDateForInput = (date: Date) => {
+  const formatDateTimeForInput = (date?: Date | null) => {
+    if (!date) return "";
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     resetModalFields();
-    setEventStartDate(selectInfo.startStr);
-    setEventEndDate(selectInfo.endStr || selectInfo.startStr);
+
+    const start = selectInfo.start;
+    const end = selectInfo.end ?? selectInfo.start;
+
+    setEventStartDate(formatDateTimeForInput(start));
+    setEventEndDate(formatDateTimeForInput(end));
+
     openModal();
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     const e = clickInfo.event;
+    console.log("handleIDEventClick", e);
     setSelectedEvent(e as unknown as CalendarEvent);
+    setSelectedIDEvent(e);
     setEventTitle(e.title);
-    setEventStartDate(e.start ? formatDateForInput(e.start) : "");
-    setEventStartTime(e.start?.toTimeString().slice(0, 5) || "");
-    setEventEndDate(e.end ? formatDateForInput(e.end) : "");
-    setEventEndTime(e.end?.toTimeString().slice(0, 5) || "");
+    setEventStartDate(formatDateTimeForInput(e.start) || "");
+    setEventEndDate(formatDateTimeForInput(e.end) || "");
+    setEventAllday(e.allDay);
     setEventLevel(e.extendedProps.calendar);
     openModal();
   };
@@ -100,9 +114,10 @@ export default function Calendar() {
           event.id === selectedEvent.id
             ? {
                 ...event,
-                titl: eventTitle,
-                start: start,
-                end: end,
+                title: eventTitle,
+                start: eventStartDate,
+                end: eventEndDate,
+                allDay: eventAllday,
                 extendedProps: { calendar: eventLevel },
               }
             : event,
@@ -113,9 +128,9 @@ export default function Calendar() {
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
-        start: start,
-        end: end,
-        allDay: false,
+        start: eventStartDate,
+        end: eventEndDate,
+        allDay: eventAllday,
         extendedProps: { calendar: eventLevel },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
@@ -124,20 +139,24 @@ export default function Calendar() {
     resetModalFields();
   };
 
+  const deleteModalFields = (id: string) => {
+    setEvents((prev) => prev.filter((e) => e.id !== id));
+    console.log("delete modal fields", id);
+  };
+
   const resetModalFields = () => {
     setEventTitle("");
     setEventStartDate("");
     setEventEndDate("");
     setEventLevel("");
+    setEventAllday(false);
     setSelectedEvent(null);
   };
 
-  const start = `${eventStartDate}T${eventStartTime}:00`;
-  const end = `${eventEndDate}T${eventEndTime}:00`;
-
   useEffect(() => {
-    console.log("open-Modal", openModal);
-  }, [openModal]);
+    console.log("event start date", eventStartDate);
+    console.log("event end date", eventEndDate);
+  }, [eventStartDate]);
 
   useEffect(() => {
     console.log("close-Modal", closeModal);
@@ -193,6 +212,13 @@ export default function Calendar() {
                   onChange={(e) => setEventTitle(e.target.value)}
                 />
               </div>
+              <label>Full Day</label>
+              <input
+                type="checkbox"
+                id="fullday-checkbox"
+                checked={eventAllday}
+                onClick={(e) => setEventAllday(e.target.checked)}
+              />
             </div>
             <div>
               <label>Event Color</label>
@@ -226,11 +252,10 @@ export default function Calendar() {
               <div>
                 <input
                   id="event-start-date"
-                  type="date"
+                  type="datetime-local"
                   value={eventStartDate}
                   onChange={(e) => setEventStartDate(e.target.value)}
                 />
-                <input id="event-start-time" type="time" />
               </div>
             </div>
 
@@ -239,11 +264,10 @@ export default function Calendar() {
               <div>
                 <input
                   id="event-end-date"
-                  type="date"
+                  type="datetime-local"
                   value={eventEndDate}
                   onChange={(e) => setEventEndDate(e.target.value)}
                 />
-                <input id="event-end-time" type="time" />
               </div>
             </div>
           </div>
@@ -255,6 +279,14 @@ export default function Calendar() {
             <button onClick={handleAddOrUpdateEvent} type="button">
               {selectedEvent ? "Update Changes" : "Add Event"}
             </button>
+            <button
+              onClick={() =>
+                selectedEvent && deleteModalFields(selectedEvent.id)
+              }
+              type="button"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </Modal>
@@ -263,14 +295,18 @@ export default function Calendar() {
 }
 
 const renderEventContent = (eventInfo: EventContentArg) => {
-  const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
+  console.log(
+    "color class",
+    eventInfo.event.extendedProps.calendar.toLowerCase(),
+  );
+  const colorClass =
+    styles[eventInfo.event.extendedProps.calendar.toLowerCase()];
+  console.log("colorClass==", colorClass);
   return (
-    <div
-      className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
-    >
-      <div className="fc-daygrid-event-dot"></div>
-      <div className="fc-event-time">{eventInfo.timeText}</div>
-      <div className="fc-event-title">{eventInfo.event.title}</div>
+    <div className={`${styles.renderEventFirst} ${colorClass} `}>
+      <div className={styles.renderEventSecond}></div>
+      <div className={styles.renderEventThird}>{eventInfo.timeText}</div>
+      <div className={styles.renderEventFourth}>{eventInfo.event.title}</div>
     </div>
   );
 };
