@@ -12,12 +12,12 @@
   border: 1px solid var(--border);
   background: var(--surface-1);
   color: var(--text);
+  z-index: var(--z-base);
 }
 .calendarSection {
   z-index: var(--z-base);
 }
 .modal {
-  z-index: var(--modal);
   max-width: 700px;
   padding: var(--space-6);
 }

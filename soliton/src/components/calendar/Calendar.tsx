@@ -26,7 +26,9 @@ export default function Calendar() {
   );
   const [eventTitle, setEventTitle] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
+  const [eventStartTime, setEventStartTime] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
+  const [eventEndTime, setEventEndTime] = useState("");
   const [eventLevel, setEventLevel] = useState("");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
@@ -63,6 +65,14 @@ export default function Calendar() {
     ]);
   }, []);
 
+  const formatDateForInput = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     resetModalFields();
     setEventStartDate(selectInfo.startStr);
@@ -74,8 +84,10 @@ export default function Calendar() {
     const e = clickInfo.event;
     setSelectedEvent(e as unknown as CalendarEvent);
     setEventTitle(e.title);
-    setEventStartDate(e.start?.toISOString().split("T")[0] || "");
-    setEventEndDate(e.end?.toISOString().split("T")[0] || "");
+    setEventStartDate(e.start ? formatDateForInput(e.start) : "");
+    setEventStartTime(e.start?.toTimeString().slice(0, 5) || "");
+    setEventEndDate(e.end ? formatDateForInput(e.end) : "");
+    setEventEndTime(e.end?.toTimeString().slice(0, 5) || "");
     setEventLevel(e.extendedProps.calendar);
     openModal();
   };
@@ -89,8 +101,8 @@ export default function Calendar() {
             ? {
                 ...event,
                 titl: eventTitle,
-                start: eventStartDate,
-                end: eventEndDate,
+                start: start,
+                end: end,
                 extendedProps: { calendar: eventLevel },
               }
             : event,
@@ -101,9 +113,9 @@ export default function Calendar() {
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
-        start: eventStartDate,
-        end: eventEndDate,
-        allDay: true,
+        start: start,
+        end: end,
+        allDay: false,
         extendedProps: { calendar: eventLevel },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
@@ -119,6 +131,9 @@ export default function Calendar() {
     setEventLevel("");
     setSelectedEvent(null);
   };
+
+  const start = `${eventStartDate}T${eventStartTime}:00`;
+  const end = `${eventEndDate}T${eventEndTime}:00`;
 
   useEffect(() => {
     console.log("open-Modal", openModal);
@@ -140,6 +155,11 @@ export default function Calendar() {
             listPlugin,
             multiMonthPlugin,
           ]}
+          eventTimeFormat={{
+            hour: "2-digit",
+            minute: "2-digit",
+            meridiem: false,
+          }}
           initialView="dayGridMonth"
           headerToolbar={{
             left: "prev,next addEventButton",
@@ -210,6 +230,7 @@ export default function Calendar() {
                   value={eventStartDate}
                   onChange={(e) => setEventStartDate(e.target.value)}
                 />
+                <input id="event-start-time" type="time" />
               </div>
             </div>
 
@@ -222,6 +243,7 @@ export default function Calendar() {
                   value={eventEndDate}
                   onChange={(e) => setEventEndDate(e.target.value)}
                 />
+                <input id="event-end-time" type="time" />
               </div>
             </div>
           </div>
