@@ -102,6 +102,17 @@
 .ml1 {
   margin-left: var(--space-1);
 }
+.startIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+.endIcon {
+  width: 20px;
+  height: 20px;
+  align-items: center;
+}
 
 /* DropDown */
 .dropdownDiv {

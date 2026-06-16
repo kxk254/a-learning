@@ -1,0 +1,65 @@
+/* .calendarWrapper :global(.fc) { */
+/*   color: var(--text); */
+/* } */
+/**/
+/* .calendarWrapper :global(.fc-theme-standard td), */
+/* .calendarWrapper :global(.fc-theme-standard th) { */
+/*   border-color: var(--border); */
+/* } */
+
+.calendarWrapper {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text);
+  z-index: var(--z-base);
+}
+.calendarSection {
+  z-index: var(--z-base);
+}
+.modal {
+  max-width: 700px;
+  padding: var(--space-6);
+}
+
+/* Color Class */
+
+.danger {
+  background: var(--error);
+  color: var(--text-on-error);
+}
+.success {
+  background: var(--success);
+  color: var(--text-on-success);
+}
+.primary {
+  background: var(--primary);
+  color: var(--text-on-primary);
+}
+.warning {
+  background: var(--warning);
+  color: var(--text-on-warning);
+}
+
+.renderEventFirst {
+  display: flex;
+  align-items: center;
+  padding: var(--spacce-1);
+  border-radius: var(--radius-sm);
+}
+.renderEventSecond {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+  margin-right: 6px;
+}
+.renderEventThird {
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.renderEventFourth {
+  font-size: 13px;
+  font-weight: 500;
+}

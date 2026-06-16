@@ -76,6 +76,10 @@ import SaveIcon from "./save.svg";
 import BranchIcon from "./branch.svg";
 import StarIcon from "./star.svg";
 import ProjectIcon from "./project.svg";
+import AdminIcon from "./admin.svg";
+import NetworkIcon from "./network.svg";
+import ConfigIcon from "./config.svg";
+import DisabledIcon from "./disabled.svg";
 
 export {
   DownloadIcon,
@@ -156,4 +160,8 @@ export {
   BranchIcon,
   StarIcon,
   ProjectIcon,
+  AdminIcon,
+  NetworkIcon,
+  ConfigIcon,
+  DisabledIcon,
 };

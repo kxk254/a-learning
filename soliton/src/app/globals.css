@@ -169,6 +169,7 @@
   --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
+  --space-9: 36px;
   --space-10: 40px;
   --space-11: 44px;
   --space-12: 48px;
@@ -205,6 +206,19 @@
   --z-modal: 50;
   --z-toast: 60;
   --z-tooltip: 70;
+
+  /* ============================================================
+ * FULL CALENDAR  
+ * ============================================================*/
+  --fc-bg: #ffffff;
+  --fc-text: #1f2937;
+  --fc-border: #e5e7eb;
+
+  --fc-today-bg: rgba(15, 61, 102, 0.08);
+  --fc-event-bg: var(--primary-600);
+  --fc-event-text: #ffffff;
+
+  --fc-hover: rgba(15, 61, 102, 0.12);
 }
 
 .dark {
@@ -349,6 +363,19 @@
     var(--base-100),
     var(--base-200)
   );
+
+  /* ============================================================
+ * FULL CALENDAR  
+ * ============================================================*/
+  --fc-bg: #0b1220;
+  --fc-text: #e2e8f0;
+  --fc-border: #1f2a3a;
+
+  --fc-today-bg: rgba(0, 229, 255, 0.08);
+  --fc-event-bg: var(--primary-600);
+  --fc-event-text: #0b1220;
+
+  --fc-hover: rgba(0, 229, 255, 0.12);
 }
 
 html,
@@ -396,4 +423,43 @@ ul {
 .flatpickr-wrapper {
   display: block !important;
   width: 100%;
+}
+
+/* ============================================================
+ * FULL CALENDAR  
+ * ============================================================*/
+.fc-theme-standard .fc-list-day-cushion {
+  background: var(--fc-bg);
+  color: var(--fc-text);
+}
+
+.fc-list-event:hover td {
+  background: var(--base-100) !important;
+  cursor: pointer;
+}
+.fc-multimonth-title {
+  background: var(--fc-bg);
+  color: var(--fc-text);
+}
+.fc .fc-daygrid-day-frame {
+  background: var(--fc-bg);
+  color: var(--fc-text);
+}
+
+.fc .fc-daygrid-day-frame:hover {
+  background: var(--base-100) !important;
+  cursor: pointer;
+}
+.fc-scrollgrid-sync-inner {
+  background: var(--fc-bg);
+  color: var(--fc-text);
+}
+.fc .fc-toolbar-title {
+  font-size: var(--text-md);
+}
+.fc .fc-button {
+  font-size: var(--text-sm);
+}
+.fc .fc-media-screen {
+  padding: var(--space-2);
 }
