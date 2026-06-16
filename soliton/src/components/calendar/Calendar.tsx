@@ -162,6 +162,8 @@ export default function Calendar() {
     console.log("close-Modal", closeModal);
   }, [closeModal]);
 
+  console.log("date time input", styles.dateTimeInput1);
+
   return (
     <div className={styles.calendarWrapper}>
       <div className={styles.calendarSection}>
@@ -254,6 +256,7 @@ export default function Calendar() {
                   id="event-start-date"
                   type="datetime-local"
                   value={eventStartDate}
+                  className={styles.dateTimeInput1}
                   onChange={(e) => setEventStartDate(e.target.value)}
                 />
               </div>
@@ -266,6 +269,7 @@ export default function Calendar() {
                   id="event-end-date"
                   type="datetime-local"
                   value={eventEndDate}
+                  className={styles.dateTimeInput1}
                   onChange={(e) => setEventEndDate(e.target.value)}
                 />
               </div>
