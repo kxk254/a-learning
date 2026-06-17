@@ -3,6 +3,7 @@ import styles from "./Layout.module.css";
 import { AppHeader } from "@/src/layout/AppHeader";
 import { AppSidebar } from "@/src/layout/AppSidebar";
 import { useSidebar } from "@/src/context/SidebarContext";
+import { navItems, othersItems } from "@/src/data/nav-items";
 
 export default function AdminLayout({
   children,
@@ -19,7 +20,7 @@ export default function AdminLayout({
 
   return (
     <div className={styles.shell}>
-      <AppSidebar />
+      <AppSidebar navItems={navItems} othersItems={othersItems} />
       <div className={`${styles.main} ${mainContentMargin}`}>
         <AppHeader />
         <main className={styles.content}>{children}</main>
