@@ -25,26 +25,19 @@ export const AppHeader = () => {
   const handleToggle = () => {
     let screenSize = window.innerWidth;
     const isLargeScreen = screenSize >= 1024;
-    console.log("screen size :", screenSize, isLargeScreen);
     if (isLargeScreen) {
       toggleSidebar();
-      console.log("handle toggle togglesidebar activated");
     } else {
       toggleMobileSidebar();
-      console.log("handle toggle toggleMOBILEsidebar activated");
     }
   };
 
-  useEffect(() => {
-    console.log("isMobileOpen changed =>", isMobileOpen);
-  }, [isMobileOpen]);
+  useEffect(() => {}, [isMobileOpen]);
 
   const toggleApplicationMenu = () => {
     setIsApplicationMenuOpen(!isApplicationMenuOpen);
   };
-  useEffect(() => {
-    console.log("isApplicationMenuOpen", isApplicationMenuOpen);
-  }, [isApplicationMenuOpen]);
+  useEffect(() => {}, [isApplicationMenuOpen]);
 
   const [open, setOpen] = useState(false);
 

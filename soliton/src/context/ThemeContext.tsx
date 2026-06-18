@@ -19,20 +19,17 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
     setTheme(initialTheme);
     setIsInitialized(true);
-    console.log("if initialized --->", isInitialized);
   }, []);
 
   useEffect(() => {
     if (isInitialized) {
       localStorage.setItem("theme", theme);
       document.documentElement.classList.toggle("dark", theme === "dark");
-      console.log("Theme Context useEffect inside ", theme);
     }
   }, [theme, isInitialized]);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-    console.log("toggle theme called");
   };
 
   return (

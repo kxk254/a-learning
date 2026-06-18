@@ -168,10 +168,8 @@ ${
     if (openSubmenu !== null) {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
       const el = subMenuRefs.current[key];
-      console.log("open submenu -->", key, "submenu refs elements :", el);
       if (el) {
         const height = el.scrollHeight || 0;
-        console.log("submenu height ==", height);
         setSubMenuHeight((prevHeights) => ({
           ...prevHeights,
           [key]: height,
@@ -193,7 +191,6 @@ ${
     });
   };
 
-  console.log("theme === ", theme.theme);
   return (
     <>
       <aside
