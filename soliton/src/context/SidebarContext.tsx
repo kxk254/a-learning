@@ -64,21 +64,6 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const toggleSubmenu = (item: string) => {
     setOpenSubmenu((prev) => (prev === item ? null : item));
   };
-  useEffect(() => {
-    console.log(
-      "--sidebarcontext--change if isMobileOpen current status",
-      isMobileOpen,
-    );
-  }, [isMobileOpen]);
-  useEffect(() => {
-    console.log(
-      "--sidebar context--change if isMobile current status",
-      isMobile,
-    );
-  }, [isMobile]);
-  useEffect(() => {
-    console.log("--sidebarcontext isHover", isHovered);
-  }, [isHovered]);
 
   return (
     <SidebarContext.Provider

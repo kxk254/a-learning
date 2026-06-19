@@ -1,39 +1,33 @@
 export default function dashboard() {
-  const name: string = "john";
-  const age: number = 25;
-
-  type User = { id: string; name: string; age: number };
-
-  const user: User = { id: "1", name: "Alice", age: 30 };
-
-  function identity<T>(value: T): T {
-    return value;
+  interface Options {
+    width: number;
   }
 
-  const message = identity<string>("Hello TypeScript");
-  const number = identity<number>(100);
+  function configure(x: Options | "auto") {
+    console.log("configure  ", x);
+    return x;
+  }
 
-  type Column<T> = {
-    id: string;
-    header: string;
-    accessor: (row: T) => unknown;
-  };
+  let a = configure({ width: 100 });
+  configure("auto");
+  configure("automatic");
 
-  const nameColumn: Column<User> = {
-    id: "name",
-    header: "Name",
-    accessor: (row) => {
-      return row.name;
-    },
-  };
+  a = String(a.width);
+
+  function map<Input, Output>(
+    arr: Input[],
+    func: (arg: Input) => Output,
+  ): Output[] {
+    return arr.map(func);
+  }
+
+  const parsed = map(["1", "2", "3", 4, 5], (n) => parseInt(n));
 
   return (
     <>
-      DASHBOARD
-      <p>{user.name}</p>
-      <p>{message}</p>
-      <p>{number}</p>
-      <p>Column value:{String(nameColumn.accessor(user))}</p>
+      {" "}
+      <div>{a}</div>
+      <div>{parsed}</div>
     </>
   );
 }

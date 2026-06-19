@@ -33,7 +33,7 @@ export const navItems: NavItem[] = [
   },
 
   {
-    name: "TEST",
+    name: "TESTx",
     icon: <ListIcon />,
     subItems: [
       { name: "Form Elements", path: "/form-elements" },
