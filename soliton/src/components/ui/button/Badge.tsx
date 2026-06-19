@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ElementType } from "react";
 import styles from "./Button.module.css";
 
 type BadgeVariant = "light" | "solid";

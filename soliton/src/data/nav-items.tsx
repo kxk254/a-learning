@@ -11,6 +11,7 @@ import {
   PageIcon,
   ChevronDownIcon,
 } from "@/src/icons/index";
+import { NavItem } from "./type";
 
 export const navItems: NavItem[] = [
   {
@@ -19,7 +20,7 @@ export const navItems: NavItem[] = [
     subItems: [
       { name: "Ecommerce", path: "/" },
       { name: "Chart", path: "/chart" },
-      { name: "On-Line", path: "/c" },
+      { name: "Dashboard", path: "/dashboard" },
       { name: "Amazon", path: "/d" },
       { name: "Google Shop", path: "/e" },
     ],

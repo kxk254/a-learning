@@ -19,7 +19,7 @@ export const Modal = ({
   className,
   showCloseButton = true,
   isFullscreen = false,
-}: ModalPropos) => {
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

@@ -1,12 +1,12 @@
 import styles from "./Grid.module.css";
 import { Badge } from "../ui/button/Badge";
-import React from "react";
+import React, { ElementType } from "react";
 import { DisabledIcon, CheckCircleIcon } from "@/src/icons/index";
 
 type Props = {
   title: string;
-  icon?: React.ReactNode;
-  children: ElementType;
+  icon?: ElementType;
+  children: React.ReactNode;
   path?: string;
   className?: string;
   disabled?: boolean;
