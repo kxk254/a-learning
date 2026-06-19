@@ -11,6 +11,7 @@ import {
   PageIcon,
   ChevronDownIcon,
 } from "@/src/icons/index";
+import { NavItem } from "./type";
 
 export const navItems: NavItem[] = [
   {

@@ -25,7 +25,7 @@ export default function Calendar() {
     null,
   );
   const [eventTitle, setEventTitle] = useState("");
-  const [eventAllday, setEventAllday] = useState("");
+  const [eventAllday, setEventAllday] = useState(false);
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [eventLevel, setEventLevel] = useState("");
@@ -219,7 +219,7 @@ export default function Calendar() {
                 type="checkbox"
                 id="fullday-checkbox"
                 checked={eventAllday}
-                onClick={(e) => setEventAllday(e.target.checked)}
+                onChange={(e) => setEventAllday(e.target.checked)}
               />
             </div>
             <div>
@@ -285,7 +285,7 @@ export default function Calendar() {
             </button>
             <button
               onClick={() =>
-                selectedEvent && deleteModalFields(selectedEvent.id)
+                selectedEvent?.id && deleteModalFields(selectedEvent.id)
               }
               type="button"
             >
