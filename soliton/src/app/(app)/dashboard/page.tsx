@@ -1,14 +1,15 @@
 export default function Dashboard() {
-  type TableProps<T> = { data: T[] };
+  class GenericNumber<NumType> {
+    zeroValue!: NumType;
+    add!: (x: NumType, y: NumType) => NumType;
+  }
 
-  type User = { id: number; name: string };
-
-  const props: TableProps<User> = {
-    data: [
-      { id: 1, name: "Alice" },
-      { id: 2, name: "Bob" },
-    ],
+  let myGenericNumber = new GenericNumber<number>();
+  myGenericNumber.zeroValue = 0;
+  myGenericNumber.add = function (x, y) {
+    return x + y;
   };
 
-  const badProps: TableProps<number> = { data: [1, 2, 3] };
+  let a = myGenericNumber.add(23, 55);
+  console.log(a);
 }
