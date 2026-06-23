@@ -21,7 +21,7 @@ export const navItems: NavItem[] = [
       { name: "Ecommerce", path: "/" },
       { name: "Chart", path: "/chart" },
       { name: "Dashboard", path: "/dashboard" },
-      { name: "Amazon", path: "/d" },
+      { name: "Rent", path: "/rent" },
       { name: "Google Shop", path: "/e" },
     ],
   },

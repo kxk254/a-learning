@@ -20,9 +20,14 @@ const columns = [
 
 export default function TableRevenue<T>({ columns, data }: TableProps<T>) {
   return (
-    <>
-      <div>Title</div>
-      <div>{columns[1].key}</div>
-    </>
+    <table>
+      <thead>
+        <tr>
+          {columns.map((col) => (
+            <th key={col.key}>{col.name}</th>
+          ))}
+        </tr>
+      </thead>
+    </table>
   );
 }
