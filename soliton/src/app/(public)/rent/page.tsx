@@ -1,5 +1,7 @@
 "use client";
-import TableRevenue from "@/src/components/table/TableRevenue";
+import TableRevenue, { Column } from "@/src/components/table/TableRevenue";
+
+type Data{name:string, age:number,city:string}
 
 export default function Page() {
   const columns = [
@@ -14,6 +16,6 @@ export default function Page() {
     { name: "Drew", age: 25, city: "Pittsburg" },
     { name: "Nacy", age: 45, city: "Toronto" },
     { name: "Dan", age: 35, city: "Ottawa" },
-  ];
+  ] satisfies Column<Data>;
   return <TableRevenue columns={columns} data={data} />;
 }
