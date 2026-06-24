@@ -2,7 +2,7 @@
 import React from "react";
 
 type Column<T> = {
-  key: string;
+  key: keyof T;
   name: string;
   path?: string;
 };
@@ -12,13 +12,8 @@ type TableProps<T> = {
   data: T[];
 };
 
-const columns = [
-  { key: "name", name: "Dashboard", path: "/" },
-  { key: "age", name: "Age", path: "/age" },
-  { key: "city", name: "City", path: "/city" },
-];
-
 export default function TableRevenue<T>({ columns, data }: TableProps<T>) {
+  console.log(data);
   return (
     <table>
       <thead>
@@ -28,6 +23,15 @@ export default function TableRevenue<T>({ columns, data }: TableProps<T>) {
           ))}
         </tr>
       </thead>
+      <tbody>
+        {data.map((r, index) => (
+          <tr key={index}>
+            {columns.map((col) => (
+              <td key={col.key}>{r[col.key]}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }
