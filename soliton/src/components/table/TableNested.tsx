@@ -8,11 +8,11 @@ export type Column<T> = {
 };
 
 export type TableProps<T> = {
-  columns: Column<T>;
+  columns: Column<T>[];
   data: T[];
 };
 
-export default function TableNested({ columns, data }: TableProps<T>) {
+export default function TableNested<T>({ columns, data }: TableProps<T>) {
   return (
     <table>
       <thead>
@@ -24,11 +24,11 @@ export default function TableNested({ columns, data }: TableProps<T>) {
       </thead>
 
       <tbody>
-        {data.map((r, rIndex) => (
-          <tr key={rIndex}>
+        {data.map((row, index) => (
+          <tr key={String(index)}>
             {columns.map((col) => (
               <td key={String(col.key)}>
-                {col.render ? col.render(r) : String(r[col.key])}
+                {col.render ? col.render(row) : String(row[col.key])}
               </td>
             ))}
           </tr>
