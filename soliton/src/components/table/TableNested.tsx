@@ -24,11 +24,11 @@ export default function TableNested<T>({ columns, data }: TableProps<T>) {
       </thead>
 
       <tbody>
-        {data.map((row, index) => (
-          <tr key={String(index)}>
+        {data.map((data, index) => (
+          <tr key={index}>
             {columns.map((col) => (
               <td key={String(col.key)}>
-                {col.render ? col.render(row) : String(row[col.key])}
+                {col.render ? col.render(data) : String(data[col.key])}
               </td>
             ))}
           </tr>
