@@ -1,13 +1,13 @@
 "use client";
-import TableNested from "@/src/components/table/TableNested";
+import TableNested, { Column } from "@/src/components/table/TableNested";
 import { Badge } from "@/src/components/ui/button/Badge";
 
 type Person = {
-  key: string;
-  label: string;
-  render: () => React.Reactnode;
+  name: string;
+  age: number;
+  city: string;
 };
-const columns = [
+const columns: Column<Person>[] = [
   { key: "name", label: "Name" },
   {
     key: "age",
@@ -17,7 +17,7 @@ const columns = [
   { key: "city", label: "City" },
 ];
 
-const data = [
+const data: Person[] = [
   { name: "Bob", age: 22, city: "New York" },
   { name: "Alice", age: 32, city: "Denver" },
 ];

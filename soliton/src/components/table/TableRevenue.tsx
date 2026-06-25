@@ -4,7 +4,7 @@ import React from "react";
 export type Column<T> = {
   key: keyof T;
   label: string;
-  render?: () => React.ReactNode;
+  render?: (row: T) => React.ReactNode;
 };
 
 type TableProps<T> = {
