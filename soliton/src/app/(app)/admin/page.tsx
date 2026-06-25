@@ -7,21 +7,23 @@ type Person = {
   age: number;
   city: string;
 };
-const columns: Column<Person>[] = [
-  { key: "name", label: "Name" },
-  {
-    key: "age",
-    label: "Age",
-    render: (a) => <Badge color={"primary"}>{a.age}</Badge>,
-  },
-  { key: "city", label: "City" },
-];
-
-const data: Person[] = [
-  { name: "Bob", age: 22, city: "New York" },
-  { name: "Alice", age: 32, city: "Denver" },
-];
 
 export default function Admin() {
+  const columns: Column<Person>[] = [
+    { key: "name", label: "Name" },
+    {
+      key: "age",
+      label: "Age",
+      render: (person) => <Badge color={"primary"}>{person.age}</Badge>,
+    },
+    { key: "city", label: "City" },
+  ];
+
+  const data: Person[] = [
+    { name: "Alice", age: 22, city: "New York" },
+    { name: "Bob", age: 32, city: "Denver" },
+    { name: "Roy", age: 28, city: "Toronto" },
+  ];
+
   return <TableNested columns={columns} data={data} />;
 }
