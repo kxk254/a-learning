@@ -32,8 +32,8 @@ export const navItems: NavItem[] = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
+    name: "Admin",
+    path: "/admin",
   },
   {
     icon: <UserCircleIcon />,

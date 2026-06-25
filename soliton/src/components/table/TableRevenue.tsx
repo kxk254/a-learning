@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 
-type Column<T> = {
-  key: string;
-  name: string;
-  path?: string;
+export type Column<T> = {
+  key: keyof T;
+  label: string;
+  render?: () => React.ReactNode;
 };
 
 type TableProps<T> = {
@@ -12,22 +12,28 @@ type TableProps<T> = {
   data: T[];
 };
 
-const columns = [
-  { key: "name", name: "Dashboard", path: "/" },
-  { key: "age", name: "Age", path: "/age" },
-  { key: "city", name: "City", path: "/city" },
-];
-
 export default function TableRevenue<T>({ columns, data }: TableProps<T>) {
   return (
     <table>
       <thead>
         <tr>
           {columns.map((col) => (
-            <th key={col.key}>{col.name}</th>
+            <th key={String(col.key)}>{col.label}</th>
           ))}
         </tr>
       </thead>
+
+      <tbody>
+        {data.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {columns.map((col) => (
+              <td key={String(col.key)}>
+                {col.render ? col.render(row) : String(row[col.key])}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 }
