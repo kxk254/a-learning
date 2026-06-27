@@ -113,28 +113,44 @@
   ========================================================= */
 
   /* Success — Sage */
-  --success-500: #5f7d63;
+  /* --success-500: #5f7d63; */
+  /* --success: var(--success-500); */
+  /* --success-content: #ffffff; */
+  /* --success-subtle: #edf4ee; */
+  --success-500: #00a63e;
   --success: var(--success-500);
   --success-content: #ffffff;
-  --success-subtle: #edf4ee;
+  --success-subtle: #d1fae5;
 
   /* Warning — Mustard */
-  --warning-500: #b38a2e;
+  /* --warning-500: #b38a2e; */
+  /* --warning: var(--warning-500); */
+  /* --warning-content: #1c1a17; */
+  /* --warning-subtle: #faf3df; */
+  --warning-500: #eab308;
   --warning: var(--warning-500);
-  --warning-content: #1c1a17;
-  --warning-subtle: #faf3df;
+  --warning-content: #111111;
+  --warning-subtle: #fef9c3;
 
   /* Error — Brick */
-  --error-500: #a14b42;
+  /* --error-500: #a14b42; */
+  /* --error: var(--error-500); */
+  /* --error-content: #ffffff; */
+  /* --error-subtle: #f6e9e7; */
+  --error-500: #e11d48;
   --error: var(--error-500);
   --error-content: #ffffff;
-  --error-subtle: #f6e9e7;
+  --error-subtle: #ffe4e6;
 
   /* Info — Slate Teal */
-  --info-500: #3f6e75;
+  /* --info-500: #3f6e75; */
+  /* --info: var(--info-500); */
+  /* --info-content: #ffffff; */
+  /* --info-subtle: #e7f2f3; */
+  --info-500: #0284c7;
   --info: var(--info-500);
   --info-content: #ffffff;
-  --info-subtle: #e7f2f3;
+  --info-subtle: #e0f2fe;
 
   /* =========================================================
      GLOBAL LEAVES
@@ -328,25 +344,41 @@
      SEMANTICS — Dark Adjusted
   ========================================================= */
 
-  --success-500: #6fa877;
+  /* --success-500: #6fa877; */
+  /* --success: var(--success-500); */
+  /* --success-content: #08110b; */
+  /* --success-subtle: #112018; */
+  --success-500: #4ade80;
   --success: var(--success-500);
-  --success-content: #08110b;
-  --success-subtle: #112018;
+  --success-content: #052e16;
+  --success-subtle: #064e3b;
 
-  --warning-500: #d4a63f;
+  /* --warning-500: #d4a63f; */
+  /* --warning: var(--warning-500); */
+  /* --warning-content: #1a1405; */
+  /* --warning-subtle: #2a220b; */
+  --warning-500: #facc15;
   --warning: var(--warning-500);
-  --warning-content: #1a1405;
-  --warning-subtle: #2a220b;
+  --warning-content: #422006;
+  --warning-subtle: #713f12;
 
-  --error-500: #c06258;
+  /* --error-500: #c06258; */
+  /* --error: var(--error-500); */
+  /* --error-content: #160807; */
+  /* --error-subtle: #2a1412; */
+  --error-500: #fb7185;
   --error: var(--error-500);
-  --error-content: #160807;
-  --error-subtle: #2a1412;
+  --error-content: #450a0a;
+  --error-subtle: #881337;
 
-  --info-500: #56a6b2;
+  /* --info-500: #56a6b2; */
+  /* --info: var(--info-500); */
+  /* --info-content: #051316; */
+  /* --info-subtle: #102327; */
+  --info-500: #38bdf8;
   --info: var(--info-500);
-  --info-content: #051316;
-  --info-subtle: #102327;
+  --info-content: #082f49;
+  --info-subtle: #0c4a6e;
 
   /* =========================================================
      GLOBAL LEAVES

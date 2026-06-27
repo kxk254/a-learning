@@ -89,7 +89,7 @@ export const AppHeader = () => {
             {theme === "light" ? (
               <Image
                 className={styles.logoLight}
-                src="./images/logo/text-logo.svg"
+                src="/images/logo/text-logo.svg"
                 alt="Logo"
                 width={154}
                 height={32}
@@ -97,7 +97,7 @@ export const AppHeader = () => {
             ) : (
               <Image
                 className={styles.logoDark}
-                src="./images/logo/text-logo-dark.svg"
+                src="/images/logo/text-logo-dark.svg"
                 alt="logo"
                 width={154}
                 height={32}
