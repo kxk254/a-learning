@@ -59,8 +59,8 @@ export const navItems: NavItem[] = [
     name: "Pages",
     icon: <PageIcon />,
     subItems: [
-      { name: "Blank Page", path: "/blank" },
-      { name: "404 Error", path: "/error-404" },
+      { name: "FirstTest", path: "/admin" },
+      { name: "SecondTest", path: "/admin/admin" },
     ],
   },
 ];
