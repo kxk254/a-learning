@@ -1,0 +1,103 @@
+[
+  {
+    "tenant_name": "bizak10F",
+    "floor": "10F",
+    "report_date": "2026-06-01",
+    "sales": 1346795,
+    "tax": 134679,
+    "total_sales": 1481474,
+    "pdf_issue_date": null,
+    "email_sent_date": "2026-06-15",
+    "details": [
+      {
+        "income_type": "賃料r",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-31",
+        "payment_date": null,
+        "amount": 1278230,
+        "tax": 127823,
+        "total": 1406053,
+        "invoice_id": "CB-10-26-10F-3-202606",
+        "remarks": null
+      },
+      {
+        "income_type": "電気r",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-31",
+        "payment_date": null,
+        "amount": 6672,
+        "tax": 667,
+        "total": 7339,
+        "invoice_id": "CB-10-26-10F-3-202606",
+        "remarks": null
+      },
+      {
+        "income_type": "水道r",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-30",
+        "payment_date": null,
+        "amount": 3893,
+        "tax": 389,
+        "total": 4282,
+        "invoice_id": "CB-10-26-10F-3-202606",
+        "remarks": null
+      },
+      {
+        "income_type": "諸収r",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-30",
+        "payment_date": null,
+        "amount": 58000,
+        "tax": 5800,
+        "total": 63800,
+        "invoice_id": "CB-10-26-10F-3-202606",
+        "remarks": null
+      }
+    ]
+  },
+  {
+    "tenant_name": "グレー11F",
+    "floor": "11F",
+    "report_date": "2026-06-01",
+    "sales": 1707195,
+    "tax": 170719,
+    "total_sales": 1877914,
+    "pdf_issue_date": null,
+    "email_sent_date": "2026-06-15",
+    "details": [
+      {
+        "income_type": "賃料r",
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-31",
+        "payment_date": null,
+        "amount": 1488100,
+        "tax": 148810,
+        "total": 1636910,
+        "invoice_id": "CB-11-25-11F-3-202606",
+        "remarks": null
+      },
+      {
+        "income_type": "電気r",
+        "period_start": "2026-05-01",
+        "period_end": "2026-05-31",
+        "payment_date": null,
+        "amount": 212726,
+        "tax": 21272,
+        "total": 233998,
+        "invoice_id": "CB-11-25-11F-3-202606",
+        "remarks": null
+      },
+      {
+        "income_type": "水道r",
+        "period_start": "2026-04-01",
+        "period_end": "2026-04-30",
+        "payment_date": null,
+        "amount": 6369,
+        "tax": 636,
+        "total": 7005,
+        "invoice_id": "CB-11-25-11F-3-202606",
+        "remarks": null
+      }
+    ]
+  }
+]

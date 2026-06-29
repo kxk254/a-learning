@@ -2,6 +2,7 @@
 import TableNested, { Column } from "@/src/components/table/TableNested";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
+import Soliton from "@/src/data/soliton.json";
 
 export type Product = { sku: string; name: string; price: number };
 export type Order = {
@@ -86,7 +87,7 @@ export default function AdminAdmin() {
   ];
   return (
     <>
-      <TableNested columns={userColumns} data={users} />{" "}
+      <TableNested columns={userColumns} data={users} /> <div>Soliton</div>
     </>
   );
 }
