@@ -87,7 +87,8 @@ export default function AdminAdmin() {
   ];
   return (
     <>
-      <TableNested columns={userColumns} data={users} /> <div>Soliton</div>
+      <TableNested columns={userColumns} data={users} />{" "}
+      <div>{Soliton[0].tenant_name}</div>
     </>
   );
 }
