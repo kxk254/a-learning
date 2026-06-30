@@ -10,7 +10,7 @@ export type Column<T> = {
 export type TableProp<T> = {
   columns: Column<T>[];
   data: T[];
-  renderRow?: (row: T) => ReactNode;
+  renderRow?: (row: T) => Reactnode;
 };
 
 export default function TableNestedV<T>({
@@ -28,6 +28,7 @@ export default function TableNestedV<T>({
       } else {
         next.add(index);
       }
+      console.log("next", next);
       return next;
     });
   };
@@ -37,11 +38,10 @@ export default function TableNestedV<T>({
       <thead>
         <tr>
           {columns.map((col) => (
-            <td key={String(col.key)}>{col.label}</td>
+            <th key={String(col.key)}>{col.label}</th>
           ))}
         </tr>
       </thead>
-
       <tbody>
         {data.map((row, index) => (
           <Fragment key={index}>

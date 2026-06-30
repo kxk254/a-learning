@@ -1,23 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, ReactNode, Fragment } from "react";
 
 export type Column<T> = {
   key: keyof T;
   label: string;
-  render?: (row: T) => React.ReactNode;
+  render?: (row: T) => ReactNode;
 };
 
-export type TableProps<T> = {
+export type TableProp<T> = {
   columns: Column<T>[];
   data: T[];
-  renderRow?: (row: T) => React.ReactNode;
+  renderRow?: (row: T) => ReactNode;
 };
 
 export default function TableNested<T>({
   columns,
   data,
   renderRow,
-}: TableProps<T>) {
+}: TableProp<T>) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   const toggleRow = (index: number) => {
@@ -31,39 +31,40 @@ export default function TableNested<T>({
       return next;
     });
   };
+
   return (
     <table>
       <thead>
         <tr>
           {columns.map((col) => (
-            <th key={String(col.key)}>{col.label}</th>
+            <td key={String(col.key)}>{col.label}</td>
           ))}
         </tr>
       </thead>
 
       <tbody>
-        {data.map((data, index) => (
-          <React.Fragment key={index}>
+        {data.map((row, index) => (
+          <Fragment key={index}>
             <tr>
-              <td>
-                {renderRow && (
+              {renderRow && (
+                <td>
                   <button onClick={() => toggleRow(index)}>
                     {expanded.has(index) ? "=" : "+"}
                   </button>
-                )}
-              </td>
+                </td>
+              )}
               {columns.map((col) => (
                 <td key={String(col.key)}>
-                  {col.render ? col.render(data) : String(data[col.key])}
+                  {col.render ? col.render(row) : String(row[col.key])}
                 </td>
               ))}
             </tr>
             {expanded.has(index) && (
               <tr>
-                <td colSpan={columns.length + 1}>{renderRow?.(data)}</td>
+                <td colSpan={columns.length + 1}>{renderRow?.(row)}</td>
               </tr>
             )}
-          </React.Fragment>
+          </Fragment>
         ))}
       </tbody>
     </table>
