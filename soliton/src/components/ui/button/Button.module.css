@@ -76,7 +76,7 @@
 }
 .badgeWarning {
   background: rgb(from var(--warning) r g b / 0.15);
-  color: var(--warning);
+  color: var(--warning-content);
 }
 
 .badgePrimaryS {
