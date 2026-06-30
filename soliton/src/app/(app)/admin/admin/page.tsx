@@ -15,12 +15,13 @@ export default function AdminAdmin() {
     { key: "id", label: "ID" },
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
-    {
-      key: "orders",
-      label: "Orders",
-      render: (p) => <TableNested columns={orderColumn} data={p.orders} />,
-    },
   ];
 
-  return <TableNested columns={userColumn} data={users} />;
+  return (
+    <TableNested
+      columns={userColumn}
+      data={users}
+      renderRow={(p) => <TableNested columns={orderColumn} data={p.orders} />}
+    />
+  );
 }
