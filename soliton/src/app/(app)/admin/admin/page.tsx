@@ -1,5 +1,5 @@
 "use client";
-import TableNested, { Column } from "@/src/components/table/TableNested";
+import TableNestedV, { Column } from "@/src/components/table/TableNestedV";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users, Order, User } from "@/src/data/test-data";
@@ -18,10 +18,10 @@ export default function AdminAdmin() {
   ];
 
   return (
-    <TableNested
+    <TableNestedV
       columns={userColumn}
       data={users}
-      renderRow={(p) => <TableNested columns={orderColumn} data={p.orders} />}
+      renderRow={(p) => <TableNestedV columns={orderColumn} data={p.orders} />}
     />
   );
 }
