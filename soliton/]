@@ -1,0 +1,12 @@
+"use client";
+import React, { useState, ReactNode, Fragment } from "react";
+
+export type Column<T> = {
+  key: keyof T;
+  label: sting;
+  render?: (row: T) => ReactNode;
+};
+
+export type TableProp<T> = {};
+
+export default function TableNestedV<T>({}) {}
