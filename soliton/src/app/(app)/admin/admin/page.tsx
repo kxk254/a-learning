@@ -23,12 +23,35 @@ export default function AdminAdmin() {
       prev.map((item, i) => (i === row ? { ...item, [key]: value } : item)),
     );
   };
+  const pordersUpdateCell = (
+    rowUser: React.Key,
+    rowOrder: number,
+    key: keyof Order,
+    value: string,
+  ) => {
+    setUsers((prev) =>
+      prev.map((user) => {
+        if (user.id !== rowUser) return user;
+        const updatedOrders = [...user.orders];
+        updatedOrders[rowOrder] = { ...updatedOrders[rowOrder], [key]: value };
+        return { ...user, orders: updatedOrders };
+      }),
+    );
+  };
 
   return (
     <TableNestedV
       columns={userColumn}
       data={users}
-      renderRow={(p) => <TableNestedV columns={orderColumn} data={p.orders} />}
+      renderRow={(p) => (
+        <TableNestedV
+          columns={orderColumn}
+          data={p.orders}
+          onCellUpdate={(row, key, value) =>
+            pordersUpdateCell(p.id, Number(row), key, value)
+          }
+        />
+      )}
       onCellUpdate={userUpdateCell}
     />
   );
