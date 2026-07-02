@@ -32,7 +32,7 @@ export default function TableNestedV<T>({
     key: keyof T;
   } | null>(null);
   const [editValue, setEditValue] = useState("");
-  const [editedCells, setEditedCells] = useState<Record<number, boolean>>({});
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}-${String(key)}`;
 
@@ -69,7 +69,6 @@ export default function TableNestedV<T>({
                 {columns.map((col) => {
                   const isEdited =
                     editedCells[getCellKey(rowKey, col.key)] ?? false;
-                  console.log("is edited", isEdited, editedCells);
                   return (
                     <td
                       key={String(col.key)}
@@ -113,7 +112,7 @@ export default function TableNestedV<T>({
                   );
                 })}
               </tr>
-              {expanded.has(index) && (
+              {expanded.has(rowKey) && (
                 <tr>
                   <td colSpan={columns.length + 1}>{renderRow?.(row)}</td>
                 </tr>
