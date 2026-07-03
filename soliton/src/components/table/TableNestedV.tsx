@@ -67,7 +67,7 @@ export default function TableNestedV<T>({
                   </td>
                 )}
                 {columns.map((col) => {
-                  const isEdited =
+                  const isEdit =
                     editedCells[getCellKey(rowKey, col.key)] ?? false;
                   return (
                     <td
@@ -82,26 +82,9 @@ export default function TableNestedV<T>({
                         <input
                           autoFocus
                           value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.currentTarget.blur();
-                            }
-                            if (e.key === "Escape") {
-                              setEditingCell(null);
-                            }
-                          }}
-                          onBlur={() => {
-                            const original = String(row[col.key]) ?? "";
-                            if (original !== editValue) {
-                              setEditedCells((prev) => ({
-                                ...prev,
-                                [getCellKey(rowKey, col.key)]: true,
-                              }));
-                              onCellUpdate?.(rowKey, col.key, editValue);
-                            }
-                            setEditingCell(null);
-                          }}
+                          onChange={}
+                          onKeyDown={}
+                          onBlur={}
                         />
                       ) : col.render ? (
                         col.render(row)
