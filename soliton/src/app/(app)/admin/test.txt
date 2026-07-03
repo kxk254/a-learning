@@ -26,8 +26,9 @@ export default function AdminAdmin() {
   );
 }
 
-("use client");
-import TableNestedV, { Column } from "@/src/components/table/TableNestedV";
+"use client";
+
+import TableNested, { Column } from "@/src/components/table/TableNested";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users as initialUsers, Order, User } from "@/src/data/test-data";
@@ -45,38 +46,44 @@ export default function AdminAdmin() {
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
   ];
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState(initialUsers);
   const userUpdateCell = (row: React.Key, key: keyof User, value: string) => {
     setUsers((prev) =>
-      prev.map((item, i) => (i === row ? { ...item, [key]: value } : item)),
+      prev.map((item, index) =>
+        index === row ? { ...item, [key]: value } : item,
+      ),
     );
   };
-  const pordersUpdateCell = (
-    rowUser: React.Key,
-    rowOrder: number,
+  const ordersUpdateCell = (
+    userRow: React.Key,
+    orderRow: number,
     key: keyof Order,
     value: string,
   ) => {
     setUsers((prev) =>
-      prev.map((user) => {
-        if (user.id !== rowUser) return user;
-        const updatedOrders = [...user.orders];
-        updatedOrders[rowOrder] = { ...updatedOrders[rowOrder], [key]: value };
-        return { ...user, orders: updatedOrders };
-      }),
+      prev.map((user) =>
+        user.id === Number(userRow)
+          ? {
+              ...user,
+              orders: user.orders.map((order, i) =>
+                i === orderRow ? { ...order, [key]: value } : order,
+              ),
+            }
+          : user,
+      ),
     );
   };
 
   return (
-    <TableNestedV
+    <TableNested
       columns={userColumn}
       data={users}
       renderRow={(p) => (
-        <TableNestedV
+        <TableNested
           columns={orderColumn}
           data={p.orders}
           onCellUpdate={(row, key, value) =>
-            pordersUpdateCell(p.id, Number(row), key, value)
+            ordersUpdateCell(p.id, Number(row), key, value)
           }
         />
       )}
