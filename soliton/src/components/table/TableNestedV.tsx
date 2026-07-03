@@ -32,7 +32,7 @@ export default function TableNestedV<T>({
     key: keyof T;
   } | null>(null);
   const [editValue, setEditValue] = useState("");
-  const [editedCells, setEditedCells] = useState<Record<number, boolean>>({});
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}-${String(key)}`;
 
@@ -67,9 +67,8 @@ export default function TableNestedV<T>({
                   </td>
                 )}
                 {columns.map((col) => {
-                  const isEdited =
+                  const isEdit =
                     editedCells[getCellKey(rowKey, col.key)] ?? false;
-                  console.log("is edited", isEdited, editedCells);
                   return (
                     <td
                       key={String(col.key)}
@@ -83,26 +82,9 @@ export default function TableNestedV<T>({
                         <input
                           autoFocus
                           value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.currentTarget.blur();
-                            }
-                            if (e.key === "Escape") {
-                              setEditingCell(null);
-                            }
-                          }}
-                          onBlur={() => {
-                            const original = String(row[col.key]) ?? "";
-                            if (original !== editValue) {
-                              setEditedCells((prev) => ({
-                                ...prev,
-                                [getCellKey(rowKey, col.key)]: true,
-                              }));
-                              onCellUpdate?.(rowKey, col.key, editValue);
-                            }
-                            setEditingCell(null);
-                          }}
+                          onChange={}
+                          onKeyDown={}
+                          onBlur={}
                         />
                       ) : col.render ? (
                         col.render(row)
@@ -113,7 +95,7 @@ export default function TableNestedV<T>({
                   );
                 })}
               </tr>
-              {expanded.has(index) && (
+              {expanded.has(rowKey) && (
                 <tr>
                   <td colSpan={columns.length + 1}>{renderRow?.(row)}</td>
                 </tr>
