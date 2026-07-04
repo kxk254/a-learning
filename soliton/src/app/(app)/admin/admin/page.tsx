@@ -5,6 +5,8 @@ import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users as initialUsers, Order, User } from "@/src/data/test-data";
 import { useState } from "react";
 
+type History<T> = { past: T[]; present: T; future: T[] };
+
 export default function AdminAdmin() {
   const orderColumn: Column<Order>[] = [
     { key: "orderId", label: "OrderId" },
@@ -17,42 +19,93 @@ export default function AdminAdmin() {
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
   ];
-  const [users, setUsers] = useState<User[]>(initialUsers);
-  const userUpdateCell = (row: React.Key, key: keyof User, value: string) => {
-    setUsers((prev) =>
-      prev.map((item, i) => (i === row ? { ...item, [key]: value } : item)),
+  const [state, setState] = useState<History<User[]>>({
+    past: [],
+    present: initialUsers,
+    future: [],
+  });
+  const applyChange = (newPresent: User[]) => {
+    setState((prev) => ({
+      past: [...prev.past, prev.present],
+      present: newPresent,
+      future: [],
+    }));
+  };
+  const usersUpdateCell = (row: React.Key, key: keyof User, value: string) => {
+    applyChange(
+      state.present.map((user, index) =>
+        index === row ? { ...user, [key]: value } : user,
+      ),
     );
   };
-  const pordersUpdateCell = (
-    rowUser: React.Key,
-    rowOrder: number,
+  const ordersUpdateCell = (
+    userRow: React.Key,
+    orderRow: number,
     key: keyof Order,
     value: string,
   ) => {
-    setUsers((prev) =>
-      prev.map((user) => {
-        if (user.id !== rowUser) return user;
-        const updatedOrders = [...user.orders];
-        updatedOrders[rowOrder] = { ...updatedOrders[rowOrder], [key]: value };
-        return { ...user, orders: updatedOrders };
-      }),
+    applyChange(
+      state.present.map((user) =>
+        user.id === userRow
+          ? {
+              ...user,
+              orders: user.orders.map((order, i) =>
+                i === orderRow ? { ...order, [key]: value } : order,
+              ),
+            }
+          : user,
+      ),
+    );
+  };
+
+  const addUser = () => {
+    const newUser = {
+      id: Date.now(),
+      name: "Kenji",
+      email: "a@b.com",
+      orders: [],
+    };
+    applyChange([...state.present, newUser]);
+  };
+
+  const userOnDelete = (row: React.Key) => {
+    console.log("on delete", row, typeof row);
+    applyChange(state.present.filter((user, i) => i !== Number(row)));
+  };
+
+  const orderOnDelete = (userRow: React.Key, orderRow: number) => {
+    console.log("user row", userRow, "order row", orderRow);
+    applyChange(
+      state.present.map((user, index) =>
+        user.id === userRow
+          ? {
+              ...user,
+              orders: user.orders.filter((order, i) => i !== orderRow),
+            }
+          : user,
+      ),
     );
   };
 
   return (
-    <TableNestedV
-      columns={userColumn}
-      data={users}
-      renderRow={(p) => (
-        <TableNestedV
-          columns={orderColumn}
-          data={p.orders}
-          onCellUpdate={(row, key, value) =>
-            pordersUpdateCell(p.id, Number(row), key, value)
-          }
-        />
-      )}
-      onCellUpdate={userUpdateCell}
-    />
+    <>
+      <TableNestedV
+        columns={userColumn}
+        data={state.present}
+        renderRow={(p) => (
+          <TableNestedV
+            columns={orderColumn}
+            data={p.orders}
+            onCellUpdate={(row, key, value) =>
+              ordersUpdateCell(p.id, Number(row), key, value)
+            }
+            onDelete={(orderRow) => orderOnDelete(p.id, Number(orderRow))}
+          />
+        )}
+        onCellUpdate={usersUpdateCell}
+        onDelete={userOnDelete}
+      />
+      <button onClick={addUser}>AddUser</button>
+    </>
   );
 }

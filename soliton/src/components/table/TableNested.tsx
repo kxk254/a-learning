@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, ReactNode, Fragment } from "react";
 
+// onCellUpdate,getRowKey
+// resolveRowKey, editingCell, editValue,editedCells,getCellKey
+
 export type Column<T> = {
   key: keyof T;
   label: string;
@@ -13,6 +16,7 @@ export type TableProp<T> = {
   renderRow?: (row: T) => ReactNode;
   onCellUpdate?: (row: React.Key, key: keyof T, value: string) => void;
   getRowKey?: (row: T) => React.Key;
+  onDelete?: (row: React.Key) => void;
 };
 
 export default function TableNestedV<T>({
@@ -21,26 +25,23 @@ export default function TableNestedV<T>({
   renderRow,
   onCellUpdate,
   getRowKey,
+  onDelete,
 }: TableProp<T>) {
-  const resolveRowKey = (row: T, index: number) => getRowKey?.(row) ?? index;
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
-
+  const resolveRowKey = (row: T, index: number) => getRowKey?.(row) ?? index;
   const [editingCell, setEditingCell] = useState<{
     row: React.Key;
     key: keyof T;
   } | null>(null);
-
   const [editValue, setEditValue] = useState("");
-
   const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
-
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}-${String(key)}`;
 
-  const toggleRow = (key: React.Key) => {
+  const toggleRow = (index: React.Key) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
+      next.has(index) ? next.delete(index) : next.add(index);
       return next;
     });
   };
@@ -69,14 +70,14 @@ export default function TableNestedV<T>({
                   </td>
                 )}
                 {columns.map((col) => {
-                  const isEdited =
-                    editedCells[getCellKey(index, col.key)] ?? false;
+                  const isEdit =
+                    editedCells[getCellKey(rowKey, col.key)] ?? false;
                   return (
                     <td
                       key={String(col.key)}
                       onClick={() => {
                         setEditingCell({ row: rowKey, key: col.key });
-                        setEditValue(String(row[col.key] ?? ""));
+                        setEditValue(String(row[col.key]) ?? "");
                       }}
                     >
                       {editingCell?.row === rowKey &&
@@ -94,13 +95,13 @@ export default function TableNestedV<T>({
                             }
                           }}
                           onBlur={() => {
-                            const original = String(row[col.key] ?? "");
+                            const original = String(row[col.key]) ?? "";
                             if (original !== editValue) {
-                              setEditedCells((prev) => ({
+                              (setEditedCells((prev) => ({
                                 ...prev,
                                 [getCellKey(rowKey, col.key)]: true,
-                              }));
-                              onCellUpdate?.(rowKey, col.key, editValue);
+                              })),
+                                onCellUpdate?.(rowKey, col.key, editValue));
                             }
                             setEditingCell(null);
                           }}
@@ -113,6 +114,9 @@ export default function TableNestedV<T>({
                     </td>
                   );
                 })}
+                <td>
+                  <button onClick={() => onDelete?.(rowKey)}>DEL</button>
+                </td>
               </tr>
               {expanded.has(rowKey) && (
                 <tr>

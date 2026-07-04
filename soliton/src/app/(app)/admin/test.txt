@@ -26,13 +26,21 @@ export default function AdminAdmin() {
   );
 }
 
-"use client";
 
-import TableNested, { Column } from "@/src/components/table/TableNested";
+
+
+
+
+
+
+"use client";
+import TableNestedV, { Column } from "@/src/components/table/TableNestedV";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users as initialUsers, Order, User } from "@/src/data/test-data";
 import { useState } from "react";
+
+type History<T> = { past: T[]; present: T; future: T[] };
 
 export default function AdminAdmin() {
   const orderColumn: Column<Order>[] = [
@@ -46,11 +54,22 @@ export default function AdminAdmin() {
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
   ];
-  const [users, setUsers] = useState(initialUsers);
-  const userUpdateCell = (row: React.Key, key: keyof User, value: string) => {
-    setUsers((prev) =>
-      prev.map((item, index) =>
-        index === row ? { ...item, [key]: value } : item,
+  const [state, setState] = useState<History<User[]>>({
+    past: [],
+    present: initialUsers,
+    future: [],
+  });
+  const applyChange = (newPresent: User[]) => {
+    setState((prev) => ({
+      past: [...prev.past, prev.present],
+      present: newPresent,
+      future: [],
+    }));
+  };
+  const usersUpdateCell = (row: React.Key, key: keyof User, value: string) => {
+    applyChange(
+      state.present.map((user, index) =>
+        index === row ? { ...user, [key]: value } : user,
       ),
     );
   };
@@ -60,9 +79,9 @@ export default function AdminAdmin() {
     key: keyof Order,
     value: string,
   ) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === Number(userRow)
+    applyChange(
+      state.present.map((user) =>
+        user.id === userRow
           ? {
               ...user,
               orders: user.orders.map((order, i) =>
@@ -74,20 +93,54 @@ export default function AdminAdmin() {
     );
   };
 
+  const addUser = () => {
+    const newUser = {
+      id: Date.now(),
+      name: "Kenji",
+      email: "a@b.com",
+      orders: [],
+    };
+    applyChange([...state.present, newUser]);
+  };
+
+  const userOnDelete = (row: React.Key) => {
+    console.log("on delete", row, typeof row);
+    applyChange(state.present.filter((user, i) => i !== Number(row)));
+  };
+
+  const orderOnDelete = (userRow: React.Key, orderRow: number) => {
+    console.log("user row", userRow, "order row", orderRow);
+    applyChange(
+      state.present.map((user, index) =>
+        user.id === userRow
+          ? {
+              ...user,
+              orders: user.orders.filter((order, i) => i !== orderRow),
+            }
+          : user,
+      ),
+    );
+  };
+
   return (
-    <TableNested
-      columns={userColumn}
-      data={users}
-      renderRow={(p) => (
-        <TableNested
-          columns={orderColumn}
-          data={p.orders}
-          onCellUpdate={(row, key, value) =>
-            ordersUpdateCell(p.id, Number(row), key, value)
-          }
-        />
-      )}
-      onCellUpdate={userUpdateCell}
-    />
+    <>
+      <TableNestedV
+        columns={userColumn}
+        data={state.present}
+        renderRow={(p) => (
+          <TableNestedV
+            columns={orderColumn}
+            data={p.orders}
+            onCellUpdate={(row, key, value) =>
+              ordersUpdateCell(p.id, Number(row), key, value)
+            }
+            onDelete={(orderRow) => orderOnDelete(p.id, Number(orderRow))}
+          />
+        )}
+        onCellUpdate={usersUpdateCell}
+        onDelete={userOnDelete}
+      />
+      <button onClick={addUser}>AddUser</button>
+    </>
   );
 }
