@@ -2,6 +2,35 @@
 import TableNested, { Column } from "@/src/components/table/TableNested";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
+import { users, Order, User } from "@/src/data/test-data";
+
+export default function AdminAdmin() {
+  const orderColumn: Column<Order>[] = [
+    { key: "orderId", label: "OrderId" },
+    { key: "total", label: "Total" },
+    { key: "status", label: "Status" },
+    { key: "products", label: "Products" },
+  ];
+  const userColumn: Column<User>[] = [
+    { key: "id", label: "ID" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+  ];
+
+  return (
+    <TableNested
+      columns={userColumn}
+      data={users}
+      renderRow={(p) => <TableNested columns={orderColumn} data={p.orders} />}
+    />
+  );
+}
+
+"use client";
+
+import TableNested, { Column } from "@/src/components/table/TableNested";
+import { Badge } from "@/src/components/ui/button/Badge";
+import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users as initialUsers, Order, User } from "@/src/data/test-data";
 import { useState } from "react";
 
@@ -18,7 +47,7 @@ export default function AdminAdmin() {
     { key: "email", label: "Email" },
   ];
   const [users, setUsers] = useState(initialUsers);
-  const usersUpdateCell = (row: React.Key, key: keyof User, value: string) => {
+  const userUpdateCell = (row: React.Key, key: keyof User, value: string) => {
     setUsers((prev) =>
       prev.map((item, index) =>
         index === row ? { ...item, [key]: value } : item,
@@ -26,18 +55,18 @@ export default function AdminAdmin() {
     );
   };
   const ordersUpdateCell = (
-    usersRow: React.Key,
-    ordersRow: number,
+    userRow: React.Key,
+    orderRow: number,
     key: keyof Order,
     value: string,
   ) => {
-    setUsers((users) =>
-      users.map((user) =>
-        user.id === Number(usersRow)
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.id === Number(userRow)
           ? {
               ...user,
               orders: user.orders.map((order, i) =>
-                i === ordersRow ? { ...order, [key]: value } : order,
+                i === orderRow ? { ...order, [key]: value } : order,
               ),
             }
           : user,
@@ -58,7 +87,7 @@ export default function AdminAdmin() {
           }
         />
       )}
-      onCellUpdate={usersUpdateCell}
+      onCellUpdate={userUpdateCell}
     />
   );
 }

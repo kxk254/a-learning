@@ -82,9 +82,26 @@ export default function TableNestedV<T>({
                         <input
                           autoFocus
                           value={editValue}
-                          onChange={}
-                          onKeyDown={}
-                          onBlur={}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.currentTarget.blur();
+                            }
+                            if (e.key === "Escape") {
+                              setEditingCell(null);
+                            }
+                          }}
+                          onBlur={(e) => {
+                            const original = String(row[col.key]) ?? "";
+                            if (original !== editValue) {
+                              setEditedCells((prev) => ({
+                                ...prev,
+                                [getCellKey(rowKey, col.key)]: true,
+                              }));
+                              onCellUpdate?.(rowKey, col.key, editValue);
+                            }
+                            setEditingCell(null);
+                          }}
                         />
                       ) : col.render ? (
                         col.render(row)
