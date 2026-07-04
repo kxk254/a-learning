@@ -91,3 +91,8 @@ export default function AdminAdmin() {
     />
   );
 }
+  const addUser = () => {
+    const newUser = { id: Date.now(), name: "", email: "", orders: [] };
+    setUsers((prev) => [...prev, newUser]);
+  };
+      <button onClick={addUser}>AddUser</button>

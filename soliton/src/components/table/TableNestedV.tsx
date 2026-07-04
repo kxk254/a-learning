@@ -25,8 +25,8 @@ export default function TableNestedV<T>({
   onCellUpdate,
   getRowKey,
 }: TableProp<T>) {
-  const resolveRowKey = (row: T, index: number) => getRowKey?.(row) ?? index;
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
+  const resolveRowKey = (row: T, index: number) => getRowKey?.(row) ?? index;
   const [editingCell, setEditingCell] = useState<{
     row: React.Key;
     key: keyof T;
@@ -36,10 +36,10 @@ export default function TableNestedV<T>({
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}-${String(key)}`;
 
-  const toggleRow = (key: React.Key) => {
+  const toggleRow = (index: React.Key) => {
     setExpanded((prev) => {
       const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
+      next.has(index) ? next.delete(index) : next.add(index);
       return next;
     });
   };
@@ -53,6 +53,7 @@ export default function TableNestedV<T>({
           ))}
         </tr>
       </thead>
+
       <tbody>
         {data.map((row, index) => {
           const rowKey = resolveRowKey(row, index);
@@ -91,14 +92,14 @@ export default function TableNestedV<T>({
                               setEditingCell(null);
                             }
                           }}
-                          onBlur={(e) => {
+                          onBlur={() => {
                             const original = String(row[col.key]) ?? "";
                             if (original !== editValue) {
-                              setEditedCells((prev) => ({
+                              (setEditedCells((prev) => ({
                                 ...prev,
                                 [getCellKey(rowKey, col.key)]: true,
-                              }));
-                              onCellUpdate?.(rowKey, col.key, editValue);
+                              })),
+                                onCellUpdate?.(rowKey, col.key, editValue));
                             }
                             setEditingCell(null);
                           }}

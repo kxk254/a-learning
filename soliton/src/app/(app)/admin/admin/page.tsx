@@ -18,41 +18,55 @@ export default function AdminAdmin() {
     { key: "email", label: "Email" },
   ];
   const [users, setUsers] = useState<User[]>(initialUsers);
-  const userUpdateCell = (row: React.Key, key: keyof User, value: string) => {
-    setUsers((prev) =>
-      prev.map((item, i) => (i === row ? { ...item, [key]: value } : item)),
+  const usersUpdateCell = (row: React.Key, key: keyof User, value: string) => {
+    setUsers((users) =>
+      users.map((user, index) =>
+        index === row ? { ...user, [key]: value } : user,
+      ),
     );
   };
-  const pordersUpdateCell = (
-    rowUser: React.Key,
-    rowOrder: number,
+  const ordersUpdateCell = (
+    userRow: React.Key,
+    orderRow: number,
     key: keyof Order,
-    value: string,
+    value: number,
   ) => {
-    setUsers((prev) =>
-      prev.map((user) => {
-        if (user.id !== rowUser) return user;
-        const updatedOrders = [...user.orders];
-        updatedOrders[rowOrder] = { ...updatedOrders[rowOrder], [key]: value };
-        return { ...user, orders: updatedOrders };
-      }),
+    setUsers((users) =>
+      users.map((user) =>
+        user.id === userRow
+          ? {
+              ...user,
+              orders: user.orders.map((order, i) =>
+                i === orderRow ? { ...order, [key]: value } : order,
+              ),
+            }
+          : user,
+      ),
     );
   };
 
+  const addUser = () => {
+    const newUser = { id: Date.now(), name: "", email: "", orders: [] };
+    setUsers((prev) => [...prev, newUser]);
+  };
+
   return (
-    <TableNestedV
-      columns={userColumn}
-      data={users}
-      renderRow={(p) => (
-        <TableNestedV
-          columns={orderColumn}
-          data={p.orders}
-          onCellUpdate={(row, key, value) =>
-            pordersUpdateCell(p.id, Number(row), key, value)
-          }
-        />
-      )}
-      onCellUpdate={userUpdateCell}
-    />
+    <>
+      <TableNestedV
+        columns={userColumn}
+        data={users}
+        renderRow={(p) => (
+          <TableNestedV
+            columns={orderColumn}
+            data={p.orders}
+            onCellUpdate={(row, key, value) =>
+              ordersUpdateCell(p.id, Number(row), key, value)
+            }
+          />
+        )}
+        onCellUpdate={usersUpdateCell}
+      />
+      <button onClick={addUser}>AddUser</button>
+    </>
   );
 }
