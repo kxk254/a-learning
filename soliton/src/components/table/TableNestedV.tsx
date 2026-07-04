@@ -16,6 +16,7 @@ export type TableProp<T> = {
   renderRow?: (row: T) => ReactNode;
   onCellUpdate?: (row: React.Key, key: keyof T, value: string) => void;
   getRowKey?: (row: T) => React.Key;
+  onDelete?: (row: React.Key) => void;
 };
 
 export default function TableNestedV<T>({
@@ -24,6 +25,7 @@ export default function TableNestedV<T>({
   renderRow,
   onCellUpdate,
   getRowKey,
+  onDelete,
 }: TableProp<T>) {
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
   const resolveRowKey = (row: T, index: number) => getRowKey?.(row) ?? index;
@@ -112,6 +114,9 @@ export default function TableNestedV<T>({
                     </td>
                   );
                 })}
+                <td>
+                  <button onClick={() => onDelete?.(rowKey)}>DEL</button>
+                </td>
               </tr>
               {expanded.has(rowKey) && (
                 <tr>

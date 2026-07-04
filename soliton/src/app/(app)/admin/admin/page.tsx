@@ -5,6 +5,8 @@ import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { users as initialUsers, Order, User } from "@/src/data/test-data";
 import { useState } from "react";
 
+type History<T> = { past: T[]; present: T; future: T[] };
+
 export default function AdminAdmin() {
   const orderColumn: Column<Order>[] = [
     { key: "orderId", label: "OrderId" },
@@ -17,10 +19,21 @@ export default function AdminAdmin() {
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
   ];
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [state, setState] = useState<History<User[]>>({
+    past: [],
+    present: initialUsers,
+    future: [],
+  });
+  const applyChange = (newPresent: User[]) => {
+    setState((prev) => ({
+      past: [...prev.past, prev.present],
+      present: newPresent,
+      future: [],
+    }));
+  };
   const usersUpdateCell = (row: React.Key, key: keyof User, value: string) => {
-    setUsers((users) =>
-      users.map((user, index) =>
+    applyChange(
+      state.present.map((user, index) =>
         index === row ? { ...user, [key]: value } : user,
       ),
     );
@@ -29,10 +42,10 @@ export default function AdminAdmin() {
     userRow: React.Key,
     orderRow: number,
     key: keyof Order,
-    value: number,
+    value: string,
   ) => {
-    setUsers((users) =>
-      users.map((user) =>
+    applyChange(
+      state.present.map((user) =>
         user.id === userRow
           ? {
               ...user,
@@ -46,15 +59,39 @@ export default function AdminAdmin() {
   };
 
   const addUser = () => {
-    const newUser = { id: Date.now(), name: "", email: "", orders: [] };
-    setUsers((prev) => [...prev, newUser]);
+    const newUser = {
+      id: Date.now(),
+      name: "Kenji",
+      email: "a@b.com",
+      orders: [],
+    };
+    applyChange([...state.present, newUser]);
+  };
+
+  const userOnDelete = (row: React.Key) => {
+    console.log("on delete", row, typeof row);
+    applyChange(state.present.filter((user, i) => i !== Number(row)));
+  };
+
+  const orderOnDelete = (userRow: React.Key, orderRow: number) => {
+    console.log("user row", userRow, "order row", orderRow);
+    applyChange(
+      state.present.map((user, index) =>
+        user.id === userRow
+          ? {
+              ...user,
+              orders: user.orders.filter((order, i) => i !== orderRow),
+            }
+          : user,
+      ),
+    );
   };
 
   return (
     <>
       <TableNestedV
         columns={userColumn}
-        data={users}
+        data={state.present}
         renderRow={(p) => (
           <TableNestedV
             columns={orderColumn}
@@ -62,9 +99,11 @@ export default function AdminAdmin() {
             onCellUpdate={(row, key, value) =>
               ordersUpdateCell(p.id, Number(row), key, value)
             }
+            onDelete={(orderRow) => orderOnDelete(p.id, Number(orderRow))}
           />
         )}
         onCellUpdate={usersUpdateCell}
+        onDelete={userOnDelete}
       />
       <button onClick={addUser}>AddUser</button>
     </>
