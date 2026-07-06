@@ -45,13 +45,12 @@ export default function TableFlatten<T>({
       </thead>
       <tbody>
         {data.map((row, index) => {
-          const key = getRowKey(row);
           return (
-            <Fragment key={key}>
+            <Fragment key={index}>
               <tr>
                 <td>
-                  <button onClick={() => toggleRow(Number(key))}>
-                    {expanded.has(key) ? "=" : "+"}
+                  <button onClick={() => toggleRow(Number(index))}>
+                    {expanded.has(index) ? "=" : "+"}
                   </button>
                 </td>
                 {columns.map((col) => (
@@ -63,7 +62,7 @@ export default function TableFlatten<T>({
                   <button>DEL</button>
                 </td>
               </tr>
-              {expanded.has(key) && (
+              {expanded.has(index) && (
                 <tr>
                   <td colSpan={columns.length + 1}>{renderRow?.(row)}</td>
                 </tr>
