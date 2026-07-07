@@ -28,6 +28,14 @@ export default function TableFlatten<T>({
   onDelete,
 }: TableProp<T>) {
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
+  const [editingCell, setEditingCell] = useState<{
+    row: React.Key;
+    key: keyof T;
+  } | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
+  const getCellKey = (rowKey: React.Key, key: keyof T) =>
+    `${String(rowKey)}-${String(key)}`;
 
   const toggleRow = (id: React.Key) => {
     setExpanded((prev) => {
@@ -57,11 +65,51 @@ export default function TableFlatten<T>({
                     {expanded.has(rowKey) ? "=" : "+"}
                   </button>
                 </td>
-                {columns.map((col) => (
-                  <td key={String(col.key)}>
-                    {col.render ? col.render(row) : String(row[col.key])}
-                  </td>
-                ))}
+                {columns.map((col) => {
+                  const isEdit =
+                    editedCells[getCellKey(rowKey, col.key)] ?? false;
+                  return (
+                    <td
+                      key={String(col.key)}
+                      onClick={() => {
+                        setEditingCell({ row: rowKey, key: col.key });
+                        setEditValue(String(row[col.key]) ?? "");
+                      }}
+                    >
+                      {editingCell?.row === rowKey &&
+                      editingCell?.key === col.key ? (
+                        <input
+                          autoFocus
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.currentTarget.blur();
+                            }
+                            if (e.key === "Escape") {
+                              setEditingCell(null);
+                            }
+                          }}
+                          onBlur={() => {
+                            const original = String(row[col.key]) ?? "";
+                            if (original !== editValue) {
+                              setEditedCells((prev) => ({
+                                ...prev,
+                                [getCellKey(rowKey, col.key)]: true,
+                              }));
+                              onCellUpdate?.(rowKey, col.key, editValue);
+                            }
+                            setEditingCell(null);
+                          }}
+                        />
+                      ) : col.render ? (
+                        col.render(row)
+                      ) : (
+                        String(row[col.key])
+                      )}
+                    </td>
+                  );
+                })}
                 <td>
                   <button onClick={() => onDelete?.(rowKey)}>DEL</button>
                 </td>
