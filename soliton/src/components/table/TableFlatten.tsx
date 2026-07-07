@@ -17,6 +17,7 @@ export type TableProp<T> = {
   onCellUpdate?: (row: React.Key, key: keyof T, value: string) => void;
   getRowKey: (row: T) => React.Key;
   onDelete?: (row: React.Key) => void;
+  onAdd?: (newRow: Partial<T>) => void;
 };
 
 export default function TableFlatten<T>({
@@ -26,7 +27,10 @@ export default function TableFlatten<T>({
   onCellUpdate,
   getRowKey,
   onDelete,
+  onAdd,
 }: TableProp<T>) {
+  const [adding, setAdding] = useState(false);
+  const [newRow, setNewRow] = useState<Partial<T>>({});
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
   const [editingCell, setEditingCell] = useState<{
     row: React.Key;
@@ -122,6 +126,48 @@ export default function TableFlatten<T>({
             </Fragment>
           );
         })}
+        {adding && (
+          <tr>
+            {columns.map((col) => (
+              <td key={String(col.key)}>
+                <input
+                  autoFocus
+                  value={String(newRow[col.key] ?? "")}
+                  onChange={(e) =>
+                    setNewRow((prev) => ({
+                      ...prev,
+                      [col.key]: e.target.value,
+                    }))
+                  }
+                />
+              </td>
+            ))}
+            <td>
+              <button
+                onClick={() => {
+                  onAdd?.(newRow);
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Cancell
+              </button>
+            </td>
+          </tr>
+        )}
+        <tr>
+          <td colSpan={columns.length + 2}>
+            <button onClick={() => setAdding(true)}>+</button>
+          </td>
+        </tr>
       </tbody>
     </table>
   );
@@ -133,6 +179,7 @@ export function FlattenTable<T>({
   onCellUpdate,
   getRowKey,
   onDelete,
+  onAdd,
 }: TableProp<T>) {
   return (
     <table>
