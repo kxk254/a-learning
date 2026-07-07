@@ -9,33 +9,26 @@ import { Invoice, Revenue } from "@/src/data/soliton-type";
 import { useState, useEffect } from "react";
 import { LoadingSpinner } from "@/src/components/ui/button/LoadingSpinner";
 
-type Data = {
-  invoices: Invoice[];
-  revenues: Revenue[];
-};
-type History<T> = { past: T[]; present: T; future: T[] };
+type Data = { invoices: Invoice[]; revenues: Revenue[] };
 
 export default function AdminAdmin() {
   const [data, setData] = useState<Data | null>(null);
-  const [state, setState] = useState<History<Data> | null>(null);
   useEffect(() => {
     const load = async () => {
-      const res = await fetch("/soliton.json");
-      const json = await res.json();
-      setData(json);
-      setState({ past: [], present: json, future: [] });
+      fetch("/soliton.json")
+        .then((res) => res.json())
+        .then(setData);
     };
     load();
   }, []);
-  if (!state)
+  if (!data)
     return (
       <div>
         <LoadingSpinner />
       </div>
     );
 
-  const { invoices, revenues } = state.present;
-  console.log("data invoices", invoices);
+  const { invoices, revenues } = data;
 
   const invoiceColumn: Column<Invoice>[] = [
     { key: "id", label: "Id" },

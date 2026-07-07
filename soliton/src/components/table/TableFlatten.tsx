@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, ReactNode, Fragment } from "react";
 
+// onCellUpdate,getRowKey
+// resolveRowKey, editingCell, editValue,editedCells,getCellKey
+
 export type Column<T> = {
   key: keyof T;
   label: string;
@@ -12,7 +15,7 @@ export type TableProp<T> = {
   data: T[];
   renderRow?: (row: T) => ReactNode;
   onCellUpdate?: (row: React.Key, key: keyof T, value: string) => void;
-  getRowKey?: (row: T) => React.Key;
+  getRowKey: (row: T) => React.Key;
   onDelete?: (row: React.Key) => void;
 };
 
@@ -45,13 +48,13 @@ export default function TableFlatten<T>({
       </thead>
       <tbody>
         {data.map((row, index) => {
-          const key = getRowKey(row);
+          const rowKey = getRowKey(row);
           return (
-            <Fragment key={key}>
+            <Fragment key={rowKey}>
               <tr>
                 <td>
-                  <button onClick={() => toggleRow(Number(key))}>
-                    {expanded.has(key) ? "=" : "+"}
+                  <button onClick={() => toggleRow(Number(rowKey))}>
+                    {expanded.has(rowKey) ? "=" : "+"}
                   </button>
                 </td>
                 {columns.map((col) => (
@@ -60,15 +63,50 @@ export default function TableFlatten<T>({
                   </td>
                 ))}
                 <td>
-                  <button>DEL</button>
+                  <button onClick={() => onDelete?.(rowKey)}>DEL</button>
                 </td>
               </tr>
-              {expanded.has(key) && (
+              {expanded.has(rowKey) && (
                 <tr>
-                  <td colSpan={columns.length + 1}>{renderRow?.(row)}</td>
+                  <td colSpan={columns.length + 2}>{renderRow?.(row)}</td>
                 </tr>
               )}
             </Fragment>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+export function FlattenTable<T>({
+  columns,
+  data,
+  renderRow,
+  onCellUpdate,
+  getRowKey,
+  onDelete,
+}: TableProp<T>) {
+  return (
+    <table>
+      <thead>
+        <tr>
+          {columns.map((col) => (
+            <th key={String(col.key)}>{String(col.label)}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((r, i) => {
+          const rowKey = getRowKey(r);
+          return (
+            <tr key={rowKey}>
+              {columns.map((col) => (
+                <td key={String(col.key)}>{String(r[col.key])}</td>
+              ))}
+              <td>
+                <button>DEL</button>
+              </td>
+            </tr>
           );
         })}
       </tbody>

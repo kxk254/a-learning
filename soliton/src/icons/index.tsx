@@ -80,9 +80,11 @@ import AdminIcon from "./admin.svg";
 import NetworkIcon from "./network.svg";
 import ConfigIcon from "./config.svg";
 import DisabledIcon from "./disabled.svg";
+import LoadingSpinnerIcon from "./loading-spinner.svg";
 
 export {
   DownloadIcon,
+  LoadingSpinnerIcon,
   BellIcon,
   MoreDotIcon,
   FileIcon,
