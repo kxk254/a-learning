@@ -17,6 +17,7 @@ export type TableProp<T> = {
   onCellUpdate?: (row: React.Key, key: keyof T, value: string) => void;
   getRowKey: (row: T) => React.Key;
   onDelete?: (row: React.Key) => void;
+  onAdd?: (newRow: Partial<T>) => void;
 };
 
 export default function TableFlatten<T>({
@@ -26,8 +27,19 @@ export default function TableFlatten<T>({
   onCellUpdate,
   getRowKey,
   onDelete,
+  onAdd,
 }: TableProp<T>) {
+  const [adding, setAdding] = useState(false);
+  const [newRow, setNewRow] = useState<Partial<T>>({});
   const [expanded, setExpanded] = useState<Set<React.Key>>(new Set());
+  const [editingCell, setEditingCell] = useState<{
+    row: React.Key;
+    key: keyof T;
+  } | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
+  const getCellKey = (rowKey: React.Key, key: keyof T) =>
+    `${String(rowKey)}-${String(key)}`;
 
   const toggleRow = (id: React.Key) => {
     setExpanded((prev) => {
@@ -57,11 +69,51 @@ export default function TableFlatten<T>({
                     {expanded.has(rowKey) ? "=" : "+"}
                   </button>
                 </td>
-                {columns.map((col) => (
-                  <td key={String(col.key)}>
-                    {col.render ? col.render(row) : String(row[col.key])}
-                  </td>
-                ))}
+                {columns.map((col) => {
+                  const isEdit =
+                    editedCells[getCellKey(rowKey, col.key)] ?? false;
+                  return (
+                    <td
+                      key={String(col.key)}
+                      onClick={() => {
+                        setEditingCell({ row: rowKey, key: col.key });
+                        setEditValue(String(row[col.key]) ?? "");
+                      }}
+                    >
+                      {editingCell?.row === rowKey &&
+                      editingCell?.key === col.key ? (
+                        <input
+                          autoFocus
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.currentTarget.blur();
+                            }
+                            if (e.key === "Escape") {
+                              setEditingCell(null);
+                            }
+                          }}
+                          onBlur={() => {
+                            const original = String(row[col.key]) ?? "";
+                            if (original !== editValue) {
+                              setEditedCells((prev) => ({
+                                ...prev,
+                                [getCellKey(rowKey, col.key)]: true,
+                              }));
+                              onCellUpdate?.(rowKey, col.key, editValue);
+                            }
+                            setEditingCell(null);
+                          }}
+                        />
+                      ) : col.render ? (
+                        col.render(row)
+                      ) : (
+                        String(row[col.key])
+                      )}
+                    </td>
+                  );
+                })}
                 <td>
                   <button onClick={() => onDelete?.(rowKey)}>DEL</button>
                 </td>
@@ -74,6 +126,48 @@ export default function TableFlatten<T>({
             </Fragment>
           );
         })}
+        {adding && (
+          <tr>
+            {columns.map((col) => (
+              <td key={String(col.key)}>
+                <input
+                  autoFocus
+                  value={String(newRow[col.key] ?? "")}
+                  onChange={(e) =>
+                    setNewRow((prev) => ({
+                      ...prev,
+                      [col.key]: e.target.value,
+                    }))
+                  }
+                />
+              </td>
+            ))}
+            <td>
+              <button
+                onClick={() => {
+                  onAdd?.(newRow);
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Cancell
+              </button>
+            </td>
+          </tr>
+        )}
+        <tr>
+          <td colSpan={columns.length + 2}>
+            <button onClick={() => setAdding(true)}>+</button>
+          </td>
+        </tr>
       </tbody>
     </table>
   );
@@ -85,6 +179,7 @@ export function FlattenTable<T>({
   onCellUpdate,
   getRowKey,
   onDelete,
+  onAdd,
 }: TableProp<T>) {
   return (
     <table>
