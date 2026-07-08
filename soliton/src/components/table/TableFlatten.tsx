@@ -181,6 +181,8 @@ export function FlattenTable<T>({
   onDelete,
   onAdd,
 }: TableProp<T>) {
+  const [adding, setAdding] = useState(false);
+  const [newRow, setNewRow] = useState<Partial<T>>({});
   return (
     <table>
       <thead>
@@ -204,6 +206,49 @@ export function FlattenTable<T>({
             </tr>
           );
         })}
+        {adding && (
+          <tr>
+            {columns.map((col) => (
+              <td key={String(col.key)}>
+                <input
+                  autoFocus
+                  value={String(newRow[col.key] ?? "")}
+                  onChange={(e) =>
+                    setNewRow((prev) => ({
+                      ...prev,
+                      [col.key]: e.target.value,
+                    }))
+                  }
+                />
+              </td>
+            ))}
+
+            <td>
+              <button
+                onClick={() => {
+                  onAdd?.(newRow);
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Add
+              </button>
+              <button
+                onClick={() => {
+                  setNewRow({});
+                  setAdding(false);
+                }}
+              >
+                Cancel
+              </button>
+            </td>
+          </tr>
+        )}
+        <tr>
+          <td colSpan={columns.length + 2}>
+            <button onClick={() => setAdding(true)}>+</button>
+          </td>
+        </tr>
       </tbody>
     </table>
   );
