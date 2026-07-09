@@ -183,6 +183,15 @@ export function FlattenTable<T>({
 }: TableProp<T>) {
   const [adding, setAdding] = useState(false);
   const [newRow, setNewRow] = useState<Partial<T>>({});
+  const [editingCell, setEditingCell] = useState<{
+    row: React.Key;
+    key: keyof T;
+  } | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editedCells, setEditedCells] = useState<Record<string, boolean>>({});
+  const getCellKey = (rowKey: React.Key, key: keyof T) =>
+    `${String(rowKey)}=${String(key)}`;
+
   return (
     <table>
       <thead>
@@ -197,11 +206,51 @@ export function FlattenTable<T>({
           const rowKey = getRowKey(r);
           return (
             <tr key={rowKey}>
-              {columns.map((col) => (
-                <td key={String(col.key)}>{String(r[col.key])}</td>
-              ))}
+              {columns.map((col) => {
+                const isEdit =
+                  editedCells[getCellKey(rowKey, col.key)] ?? false;
+                return (
+                  <td
+                    key={String(col.key)}
+                    onClick={() => {
+                      setEditingCell({ row: rowKey, key: col.key });
+                      setEditValue(String(r[col.key]) ?? "");
+                    }}
+                  >
+                    {editingCell?.row === rowKey &&
+                    editingCell?.key === col.key ? (
+                      <input
+                        autoFocus
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.currentTarget.blur();
+                          }
+                          if (e.key === "Escape") {
+                            setEditingCell(null);
+                          }
+                        }}
+                        onBlur={() => {
+                          const original = String(r[col.key]) ?? "";
+                          if (original !== editValue) {
+                            setEditedCells((prev) => ({
+                              ...prev,
+                              [getCellKey(rowKey, col.key)]: true,
+                            }));
+                            onCellUpdate?.(rowKey, col.key, editValue);
+                          }
+                          setEditingCell(null);
+                        }}
+                      />
+                    ) : (
+                      String(r[col.key])
+                    )}
+                  </td>
+                );
+              })}
               <td>
-                <button>DEL</button>
+                <button onClick={() => onDelete?.(rowKey)}>DEL</button>
               </td>
             </tr>
           );
@@ -222,7 +271,6 @@ export function FlattenTable<T>({
                 />
               </td>
             ))}
-
             <td>
               <button
                 onClick={() => {
