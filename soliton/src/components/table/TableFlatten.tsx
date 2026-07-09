@@ -183,7 +183,6 @@ export function FlattenTable<T>({
 }: TableProp<T>) {
   const [adding, setAdding] = useState(false);
   const [newRow, setNewRow] = useState<Partial<T>>({});
-<<<<<<< HEAD
   const [editingCell, setEditingCell] = useState<{
     row: React.Key;
     key: keyof T;
@@ -193,8 +192,6 @@ export function FlattenTable<T>({
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}=${String(key)}`;
 
-=======
->>>>>>> 2448016643e477779370fafbec4125c2530ec3af
   return (
     <table>
       <thead>
@@ -217,7 +214,7 @@ export function FlattenTable<T>({
                     key={String(col.key)}
                     onClick={() => {
                       setEditingCell({ row: rowKey, key: col.key });
-                      setEditValue(String(rowKey, col.key) ?? "");
+                      setEditValue(String(r[col.key]) ?? "");
                     }}
                   >
                     {editingCell?.row === rowKey &&
@@ -241,7 +238,7 @@ export function FlattenTable<T>({
                               ...prev,
                               [getCellKey(rowKey, col.key)]: true,
                             }));
-                            onCellUpdate(rowKey, col.key, editValue);
+                            onCellUpdate?.(rowKey, col.key, editValue);
                           }
                           setEditingCell(null);
                         }}
@@ -261,14 +258,6 @@ export function FlattenTable<T>({
         {adding && (
           <tr>
             {columns.map((col) => (
-<<<<<<< HEAD
-              <td key={String(key.col)}>
-                <input
-                  autoFocus
-                  value={String(newRow[col.key]) ?? ""}
-                  onChange={(e) =>
-                    setNewRow((prev = { ...prev, [col.key]: value }))
-=======
               <td key={String(col.key)}>
                 <input
                   autoFocus
@@ -278,15 +267,10 @@ export function FlattenTable<T>({
                       ...prev,
                       [col.key]: e.target.value,
                     }))
->>>>>>> 2448016643e477779370fafbec4125c2530ec3af
                   }
                 />
               </td>
             ))}
-<<<<<<< HEAD
-=======
-
->>>>>>> 2448016643e477779370fafbec4125c2530ec3af
             <td>
               <button
                 onClick={() => {
