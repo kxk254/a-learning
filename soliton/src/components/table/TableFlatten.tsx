@@ -183,6 +183,7 @@ export function FlattenTable<T>({
 }: TableProp<T>) {
   const [adding, setAdding] = useState(false);
   const [newRow, setNewRow] = useState<Partial<T>>({});
+<<<<<<< HEAD
   const [editingCell, setEditingCell] = useState<{
     row: React.Key;
     key: keyof T;
@@ -192,6 +193,8 @@ export function FlattenTable<T>({
   const getCellKey = (rowKey: React.Key, key: keyof T) =>
     `${String(rowKey)}=${String(key)}`;
 
+=======
+>>>>>>> 2448016643e477779370fafbec4125c2530ec3af
   return (
     <table>
       <thead>
@@ -258,16 +261,32 @@ export function FlattenTable<T>({
         {adding && (
           <tr>
             {columns.map((col) => (
+<<<<<<< HEAD
               <td key={String(key.col)}>
                 <input
                   autoFocus
                   value={String(newRow[col.key]) ?? ""}
                   onChange={(e) =>
                     setNewRow((prev = { ...prev, [col.key]: value }))
+=======
+              <td key={String(col.key)}>
+                <input
+                  autoFocus
+                  value={String(newRow[col.key] ?? "")}
+                  onChange={(e) =>
+                    setNewRow((prev) => ({
+                      ...prev,
+                      [col.key]: e.target.value,
+                    }))
+>>>>>>> 2448016643e477779370fafbec4125c2530ec3af
                   }
                 />
               </td>
             ))}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2448016643e477779370fafbec4125c2530ec3af
             <td>
               <button
                 onClick={() => {
