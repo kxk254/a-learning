@@ -241,6 +241,14 @@ export function FlattenTable<T>({
                         column={col}
                         value={editValue}
                         onChange={setEditValue}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.currentTarget.blur();
+                          }
+                          if (e.key === "Escape") {
+                            setEditingCell(null);
+                          }
+                        }}
                         onBlur={() => {
                           const original = String(r[col.key]) ?? "";
                           if (original !== editValue) {
@@ -276,41 +284,7 @@ export function FlattenTable<T>({
           );
         })}
         {adding && (
-          <tr>
-            {columns.map((col) => (
-              <td key={String(col.key)}>
-                <input
-                  autoFocus
-                  value={String(newRow[col.key] ?? "")}
-                  onChange={(e) =>
-                    setNewRow((prev) => ({
-                      ...prev,
-                      [col.key]: e.target.value,
-                    }))
-                  }
-                />
-              </td>
-            ))}
-            <td>
-              <button
-                onClick={() => {
-                  onAdd?.(newRow);
-                  setNewRow({});
-                  setAdding(false);
-                }}
-              >
-                Add
-              </button>
-              <button
-                onClick={() => {
-                  setNewRow({});
-                  setAdding(false);
-                }}
-              >
-                Cancel
-              </button>
-            </td>
-          </tr>
+          <AddingRow columns={columns} onCancel={() => setAdding(false)} />
         )}
         <tr>
           <td colSpan={columns.length + 2}>
@@ -326,16 +300,26 @@ function CellEditor<T>({
   column,
   value,
   onChange,
+  onBlur,
+  onKeyDown,
 }: {
   column: Column<T>;
   value: string;
   onChange: (value: string) => void;
+  onBlur: React.FocusEventHandler<HTMLInputElement | HTMLSelectElement>;
+  onKeyDown: React.KeyboardEventHandler<HTMLInputElement | HTMLSelectElement>;
 }) {
   const editor = column.editor;
 
   if (editor?.type === "select") {
     return (
-      <select>
+      <select
+        autoFocus
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+      >
         {editor.options?.map((option) => (
           <option key={String(option.value)} value={String(option.value)}>
             {option.label}
@@ -351,10 +335,65 @@ function CellEditor<T>({
         type="number"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
       />
     );
   }
   return (
-    <input autoFocus value={value} onChange={(e) => onChange(e.target.value)} />
+    <input
+      autoFocus
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
+    />
+  );
+}
+
+function AddingRow<T>({
+  columns,
+  onAdd,
+  onCancel,
+}: {
+  columns: Column<T>[];
+  onAdd?: (newRow: Partial<T>) => void;
+  onCancel: () => void;
+}) {
+  const [newRow, setNewRow] = useState<Partial<T>>({});
+  console.log("new row", newRow);
+  return (
+    <tr>
+      {columns.map((col) => (
+        <td key={String(col.key)}>
+          <input
+            autoFocus
+            value={String(newRow[col.key] ?? "")}
+            onChange={(e) =>
+              setNewRow((prev) => ({ ...prev, [col.key]: e.target.value }))
+            }
+          />
+        </td>
+      ))}
+      <td>
+        <button
+          onClick={() => {
+            onAdd?.(newRow);
+            setNewRow({});
+            onCancel();
+          }}
+        >
+          Save
+        </button>
+        <button
+          onClick={() => {
+            setNewRow({});
+            onCancel();
+          }}
+        >
+          Cancel
+        </button>
+      </td>
+    </tr>
   );
 }
