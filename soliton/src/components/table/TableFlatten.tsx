@@ -90,10 +90,10 @@ export default function TableFlatten<T>({
                     >
                       {editingCell?.row === rowKey &&
                       editingCell?.key === col.key ? (
-                        <input
-                          autoFocus
+                        <CellEditor
+                          column={col}
                           value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
+                          onChange={setEditValue}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               e.currentTarget.blur();
@@ -145,41 +145,7 @@ export default function TableFlatten<T>({
           );
         })}
         {adding && (
-          <tr>
-            {columns.map((col) => (
-              <td key={String(col.key)}>
-                <input
-                  autoFocus
-                  value={String(newRow[col.key] ?? "")}
-                  onChange={(e) =>
-                    setNewRow((prev) => ({
-                      ...prev,
-                      [col.key]: e.target.value,
-                    }))
-                  }
-                />
-              </td>
-            ))}
-            <td>
-              <button
-                onClick={() => {
-                  onAdd?.(newRow);
-                  setNewRow({});
-                  setAdding(false);
-                }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => {
-                  setNewRow({});
-                  setAdding(false);
-                }}
-              >
-                Cancell
-              </button>
-            </td>
-          </tr>
+          <AddingRow columns={columns} onCancel={() => setAdding(false)} />
         )}
         <tr>
           <td colSpan={columns.length + 2}>
@@ -361,7 +327,6 @@ function AddingRow<T>({
   onCancel: () => void;
 }) {
   const [newRow, setNewRow] = useState<Partial<T>>({});
-  console.log("new row", newRow);
   return (
     <tr>
       {columns.map((col) => (
@@ -381,6 +346,7 @@ function AddingRow<T>({
             onAdd?.(newRow);
             setNewRow({});
             onCancel();
+            console.log("add new row", newRow);
           }}
         >
           Save
