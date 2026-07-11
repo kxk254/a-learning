@@ -58,12 +58,6 @@ export default function AdminAdmin() {
         columns={invoiceColumn}
         getRowKey={(invoice) => invoice.id}
         onCellUpdate={(a) => {
-          setState((prev) => ({
-            ...prev.present,
-            present: prev.present.map((r) =>
-              r.id === a.row ? { ...r, [a.key]: a.value } : r,
-            ),
-          }));
           console.log("update", a);
           dispatch({ state: a, type: "UPDATE" });
         }}
@@ -112,4 +106,18 @@ function stateReducer(state: any, action: any) {
     default:
       return state;
   }
+}
+
+function applyAction(input: any, section: keyof Data) {
+  setState((state) => {
+    return {
+      ...state,
+      present: {
+        ...state.present,
+        [section]: state.present[section].map((invoice, index) =>
+          index === input.row ? {} : invoice,
+        ),
+      },
+    };
+  });
 }
