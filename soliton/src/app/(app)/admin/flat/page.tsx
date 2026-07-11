@@ -6,7 +6,7 @@ import TableFlatten, {
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
 import { Invoice, Revenue } from "@/src/data/soliton-type";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { LoadingSpinner } from "@/src/components/ui/button/LoadingSpinner";
 
 type Data = {
@@ -18,6 +18,7 @@ type History<T> = { past: T[]; present: T; future: T[] };
 export default function AdminAdmin() {
   const [data, setData] = useState<Data | null>(null);
   const [state, setState] = useState<History<Data> | null>(null);
+  const [todos, dispatch] = useReducer(stateReducer, {});
   useEffect(() => {
     const load = async () => {
       const res = await fetch("/soliton.json");
@@ -56,14 +57,53 @@ export default function AdminAdmin() {
         data={invoices}
         columns={invoiceColumn}
         getRowKey={(invoice) => invoice.id}
+        onCellUpdate={(a) => {
+          a;
+          console.log("updated", a);
+        }}
+        onDelete={(d) => {
+          d;
+          console.log("del", d);
+        }}
+        onAdd={(a) => {
+          a;
+          dispatch({ state: a, action: "CREATE" });
+          console.log("onAdd page", a);
+        }}
         renderRow={(invoice) => (
           <FlattenTable
             data={revenues.filter((r) => r.invoiceid === invoice.invoiceid)}
             columns={revenueColumn}
             getRowKey={(revenue) => revenue.id}
+            onCellUpdate={(u) => {
+              u;
+              console.log("updated", u);
+            }}
+            onDelete={(d) => {
+              d;
+              console.log("delete", d);
+            }}
+            onAdd={(a) => {
+              a;
+              console.log("on Add", a);
+            }}
           />
         )}
       />
     </>
   );
+}
+
+function stateReducer(state: any, action: any) {
+  switch (action.type) {
+    case "CREATE":
+      return "added";
+    case "UPDATE":
+      console.log("updated in reducer");
+      return "updated";
+    case "DELETE":
+      return "deleted";
+    default:
+      return state;
+  }
 }
