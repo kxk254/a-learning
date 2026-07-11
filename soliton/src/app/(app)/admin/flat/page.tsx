@@ -58,8 +58,8 @@ export default function AdminAdmin() {
         columns={invoiceColumn}
         getRowKey={(invoice) => invoice.id}
         onCellUpdate={(a) => {
-          a;
-          console.log("updated", a);
+          console.log("update", a);
+          dispatch({ state: a, type: "UPDATE" });
         }}
         onDelete={(d) => {
           d;
@@ -99,11 +99,25 @@ function stateReducer(state: any, action: any) {
     case "CREATE":
       return "added";
     case "UPDATE":
-      console.log("updated in reducer");
+      console.log("updated in reducer", state);
       return "updated";
     case "DELETE":
       return "deleted";
     default:
       return state;
   }
+}
+
+function applyAction(input: any, section: keyof Data) {
+  setState((state) => {
+    return {
+      ...state,
+      present: {
+        ...state.present,
+        [section]: state.present[section].map((invoice, index) =>
+          index === input.row ? {} : invoice,
+        ),
+      },
+    };
+  });
 }
