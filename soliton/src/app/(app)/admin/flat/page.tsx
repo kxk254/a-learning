@@ -16,15 +16,18 @@ type Data = {
 type History<T> = { past: T[]; present: T; future: T[] };
 
 export default function AdminAdmin() {
-  const [data, setData] = useState<Data | null>(null);
-  const [state, setState] = useState<History<Data> | null>(null);
-  const [todos, dispatch] = useReducer(stateReducer, {});
+  const [state, dispatch] = useReducer(
+    stateReducer,
+    null as History<Data> | null,
+  );
   useEffect(() => {
     const load = async () => {
       const res = await fetch("/soliton.json");
       const json = await res.json();
-      setData(json);
-      setState({ past: [], present: json, future: [] });
+      dispatch({
+        type: "INIT",
+        payload: json,
+      });
     };
     load();
   }, []);
@@ -34,9 +37,6 @@ export default function AdminAdmin() {
         <LoadingSpinner />
       </div>
     );
-
-  const { invoices, revenues } = state.present;
-  console.log("data invoices", invoices);
 
   const invoiceColumn: Column<Invoice>[] = [
     { key: "id", label: "Id" },
@@ -54,38 +54,43 @@ export default function AdminAdmin() {
   return (
     <>
       <TableFlatten
-        data={invoices}
+        data={state.present.invoices}
         columns={invoiceColumn}
         getRowKey={(invoice) => invoice.id}
         onCellUpdate={(a) => {
-          console.log("update", a);
-          dispatch({ state: a, type: "UPDATE" });
+          console.log("update", a, "apply action --->");
+          dispatch({ payload: a, type: "UPDATE", section: "invoices" });
         }}
         onDelete={(d) => {
-          d;
           console.log("del", d);
+          dispatch({ payload: { id: d }, type: "DELETE", section: "invoices" });
         }}
         onAdd={(a) => {
-          a;
-          dispatch({ state: a, action: "CREATE" });
           console.log("onAdd page", a);
+          dispatch({ payload: a, type: "CREATE", section: "invoices" });
         }}
         renderRow={(invoice) => (
           <FlattenTable
-            data={revenues.filter((r) => r.invoiceid === invoice.invoiceid)}
+            data={state.present.revenues.filter(
+              (r) => r.invoiceid === invoice.invoiceid,
+            )}
             columns={revenueColumn}
             getRowKey={(revenue) => revenue.id}
             onCellUpdate={(u) => {
-              u;
               console.log("updated", u);
+              dispatch({ payload: u, type: "UPDATE", section: "revenues" });
             }}
             onDelete={(d) => {
-              d;
               console.log("delete", d);
+              dispatch({
+                payload: { id: d },
+                type: "DELETE",
+                section: "revenues",
+              });
             }}
             onAdd={(a) => {
-              a;
               console.log("on Add", a);
+              dispatch({ payload: a, type: "CREATE", section: "revenues" });
             }}
           />
         )}
@@ -94,30 +99,70 @@ export default function AdminAdmin() {
   );
 }
 
-function stateReducer(state: any, action: any) {
+type Action =
+  | { type: "INIT"; payload: Data }
+  | {
+      type: "UPDATE";
+      section: keyof Data;
+      payload: { id: React.Key; key: string; value: string };
+    }
+  | {
+      type: "CREATE";
+      section: keyof Data;
+      payload: Partial<Revenue> | Partial<Invoice>;
+    }
+  | {
+      type: "DELETE";
+      section: keyof Data;
+      payload: { id: React.Key };
+    };
+function stateReducer(
+  state: History<Data> | null,
+  action: Action,
+): History<Data> | null {
+  let newState;
   switch (action.type) {
     case "CREATE":
-      return "added";
+      if (!state) return state;
+      newState = {
+        ...state,
+        present: {
+          ...state.present,
+          [action.section]: [...state.present[action.section], action.payload],
+        },
+      };
+      console.log("new state at CREATE", newState);
+      return newState;
     case "UPDATE":
-      console.log("updated in reducer", state);
-      return "updated";
+      if (!state) return state;
+      newState = {
+        ...state,
+        present: {
+          ...state.present,
+          [action.section]: state.present[action.section].map((row) =>
+            row.id === action.payload.id
+              ? { ...row, [action.payload.key]: action.payload.value }
+              : row,
+          ),
+        },
+      };
+      console.log("updated in reducer", newState);
+      return newState;
     case "DELETE":
-      return "deleted";
+      if (!state) return state;
+      newState = {
+        ...state,
+        present: {
+          ...state.present,
+          [action.section]: state.present[action.section].filter(
+            (row) => row.id !== action.payload.id,
+          ),
+        },
+      };
+      return newState;
+    case "INIT":
+      return { past: [], present: action.payload, future: [] };
     default:
       return state;
   }
-}
-
-function applyAction(input: any, section: keyof Data) {
-  setState((state) => {
-    return {
-      ...state,
-      present: {
-        ...state.present,
-        [section]: state.present[section].map((invoice, index) =>
-          index === input.row ? {} : invoice,
-        ),
-      },
-    };
-  });
 }

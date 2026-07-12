@@ -16,7 +16,7 @@ export type Column<T> = {
   };
 };
 
-export type CellUpdate<T> = { row: React.Key; key: keyof T; value: string };
+export type CellUpdate<T> = { id: React.Key; key: keyof T; value: string };
 
 export type TableProp<T> = {
   columns: Column<T>[];
@@ -110,7 +110,7 @@ export default function TableFlatten<T>({
                                 [getCellKey(rowKey, col.key)]: true,
                               }));
                               onCellUpdate?.({
-                                row: rowKey,
+                                id: rowKey,
                                 key: col.key,
                                 value: editValue,
                               });
@@ -145,7 +145,11 @@ export default function TableFlatten<T>({
           );
         })}
         {adding && (
-          <AddingRow columns={columns} onCancel={() => setAdding(false)} />
+          <AddingRow
+            columns={columns}
+            onCancel={() => setAdding(false)}
+            onAdd={onAdd}
+          />
         )}
         <tr>
           <td colSpan={columns.length + 2}>
@@ -223,7 +227,7 @@ export function FlattenTable<T>({
                               [getCellKey(rowKey, col.key)]: true,
                             }));
                             onCellUpdate?.({
-                              row: rowKey,
+                              id: rowKey,
                               key: col.key,
                               value: editValue,
                             });
@@ -250,7 +254,11 @@ export function FlattenTable<T>({
           );
         })}
         {adding && (
-          <AddingRow columns={columns} onCancel={() => setAdding(false)} />
+          <AddingRow
+            columns={columns}
+            onCancel={() => setAdding(false)}
+            onAdd={onAdd}
+          />
         )}
         <tr>
           <td colSpan={columns.length + 2}>
