@@ -89,8 +89,12 @@ export default function AdminAdmin() {
               });
             }}
             onAdd={(a) => {
-              console.log("on Add", a);
-              dispatch({ payload: a, type: "CREATE", section: "revenues" });
+              console.log("on Add", a, "invoiceid", invoice.invoiceid);
+              dispatch({
+                payload: { ...a, invoiceid: invoice.invoiceid },
+                type: "CREATE",
+                section: "revenues",
+              });
             }}
           />
         )}
