@@ -41,3 +41,7 @@ export interface Revenue {
   contract: number;
   account_code: number;
 }
+
+type Tenant = { id: number; name: string };
+
+type Bukken = { id: number; name: string };
