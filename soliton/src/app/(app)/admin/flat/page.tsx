@@ -5,7 +5,7 @@ import TableFlatten, {
 } from "@/src/components/table/TableFlatten";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
-import { Invoice, Revenue } from "@/src/data/soliton-type";
+import { Invoice, Revenue, Tenant, Bukken } from "@/src/data/soliton-type";
 import { useState, useEffect, useReducer } from "react";
 import { LoadingSpinner } from "@/src/components/ui/button/LoadingSpinner";
 

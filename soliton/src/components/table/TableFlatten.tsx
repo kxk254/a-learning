@@ -4,15 +4,14 @@ import React, { useState, ReactNode, Fragment, useEffect } from "react";
 // onCellUpdate,getRowKey
 // resolveRowKey, editingCell, editValue,editedCells,getCellKey
 
-export type Column<T> = {
+export type Column<T, L = never> = {
   key: keyof T;
   label: string;
   render?: (row: T) => ReactNode;
 
   editor?: {
     type: "text" | "select" | "number";
-    options?: { value: string | number; label: string }[];
-    optionsUrl?: string;
+    options?: keyof L;
   };
 };
 
