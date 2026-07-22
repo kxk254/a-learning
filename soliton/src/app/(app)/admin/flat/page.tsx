@@ -5,7 +5,7 @@ import TableFlatten, {
 } from "@/src/components/table/TableFlatten";
 import { Badge } from "@/src/components/ui/button/Badge";
 import { StatusDot } from "@/src/components/ui/button/StatusDot";
-import { Invoice, Revenue } from "@/src/data/soliton-type";
+import { Invoice, Revenue, Tenant, Bukken } from "@/src/data/soliton-type";
 import { useState, useEffect, useReducer } from "react";
 import { LoadingSpinner } from "@/src/components/ui/button/LoadingSpinner";
 
@@ -13,6 +13,7 @@ type Data = {
   invoices: Invoice[];
   revenues: Revenue[];
 };
+type LookupData = { tenants: Tenant[]; bukkens: Bukken[] };
 type History<T> = { past: T[]; present: T; future: T[] };
 
 export default function AdminAdmin() {
@@ -20,6 +21,7 @@ export default function AdminAdmin() {
     stateReducer,
     null as History<Data> | null,
   );
+  const [lookups, setLookups] = useState<LookupData>(null);
   useEffect(() => {
     const load = async () => {
       const res = await fetch("/soliton.json");
