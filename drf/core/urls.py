@@ -23,6 +23,7 @@ from solitonRE import views
 router = routers.DefaultRouter()
 router.register(r"tenant", views.TenantViewSet)
 router.register(r"invoiceid", views.InvoiceIdViewSet)
+router.register(r"bukken", views.BukkenViewSet)
 router.register(r"revenue", views.RevenueViewSet)
 router.register(r"invoicetaxbreakdown", views.InvoiceTaxBreakdownViewSet)
 

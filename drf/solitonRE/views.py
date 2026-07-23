@@ -15,6 +15,10 @@ class TenantViewSet(viewsets.ModelViewSet):
     serializer_class = TenantSerializer
 
 
+class BukkenViewSet(viewsets.ModelViewSet):
+    queryset = Bukken.objects.all()
+    serializer_class = BukkenSerializer
+
 class InvoiceIdViewSet(viewsets.ModelViewSet):
     queryset = InvoiceId.objects.all().order_by("-id")
     serializer_class = InvoiceIdSerializer

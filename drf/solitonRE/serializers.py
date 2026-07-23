@@ -8,6 +8,12 @@ class TenantSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BukkenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bukken
+        fields = "__all__"
+
+
 class InvoiceIdSerializer(serializers.ModelSerializer):
     tenant_name = serializers.CharField(source="tenant.name", read_only=True)
     bukken_name = serializers.CharField(source="bukken.name", read_only=True)
